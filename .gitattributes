@@ -1,0 +1,19 @@
+*       text=auto   eol=lf
+
+*.ase       binary
+*.aseprite  binary
+*.dll       binary
+*.png       binary
+*.jpeg      binary
+*.jpg       binary
+*.aup3      binary
+*.wav       binary
+*.mp3       binary
+*.ttf       binary
+*.otf       binary
+
+# For reference, see:       https://github.com/github/linguist/blob/master/docs/overrides.md
+# Ignore these folders from language statistics:
+libraries/**       linguist-vendored
+src/libraries/**   linguist-vendored
+docs/**            linguist-documentation

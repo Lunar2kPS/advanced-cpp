@@ -17,11 +17,11 @@ For now, I'm sticking with command line, libraries, and 2D projects.
 - Rendering realtime 2D pixel art
 
 ## Project Dependencies
-None yet.
+- [Json for Modern C++ v3.11.2](https://github.com/nlohmann/json/releases/tag/v3.11.2)
+    - Downloaded the `include.zip`, and deleted the `include` folder and `meson.build` file.
 
 ## Resources
 - https://github.com/skypjack/entt 
-- https://github.com/nlohmann/json
 
 - https://medium.com/@lewiscomstive/how-to-embed-c-scripting-into-your-c-application-782b2e57245a
 - https://www.mono-project.com/docs/about-mono/supported-platforms/

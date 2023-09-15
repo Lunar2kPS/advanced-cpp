@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <string>
 
 #include "nlohmann/json.hpp"
@@ -11,19 +12,27 @@ using std::getline;
 
 using std::ifstream;
 using std::string;
+using std::stringstream;
+
+using json = nlohmann::json;
 
 void testMethod() {
     cout << "JSON testing..." << endl;
 
-    ifstream file;
-    file.open("resources/Example.json");
+    ifstream file = ifstream("resources/Example.json");
+    json test = json::parse(file);
 
-    string line;
-    if (file.is_open()) {
-        while (file.good()) {
-            getline(file, line);
-            cout << line << "\n";
-        }
-        cout << endl;
-    }
+    // string line;
+    // stringstream fileText;
+    // if (file.is_open()) {
+    //     while (file.good()) {
+    //         getline(file, line);
+    //         fileText << line << "\n";
+    //     }
+    // }
+
+    // cout << "File text:\n" << fileText.str() << endl;
+    
+    cout << "json = " << test.dump(4) << endl;
+    cout << "json[\"people\"][\"Carlos\"] = " << test["people"]["Carlos"] << endl;
 }

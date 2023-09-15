@@ -18,7 +18,7 @@ For now, I'm sticking with command line, libraries, and 2D projects.
 
 ## Project Dependencies
 - [Json for Modern C++ v3.11.2](https://github.com/nlohmann/json/releases/tag/v3.11.2)
-    - Downloaded the `include.zip`, and deleted the `include` folder and `meson.build` file.
+    - Downloaded the `include.zip`, deleted the `include` folder and `meson.build` file, and changed the structure to easily `#include "nlohmann/json.hpp"`
 
 ## Resources
 - https://github.com/skypjack/entt 

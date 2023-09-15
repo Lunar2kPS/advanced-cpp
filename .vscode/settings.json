@@ -1,4 +1,12 @@
 {
     "C_Cpp.default.cStandard": "c17",
     "C_Cpp.default.cppStandard": "c++17",
+    "files.associations": {
+        "*.meta": "yaml",
+        "string": "cpp",
+        "iostream": "cpp"
+    },
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/libraries/json"
+    ]
 }

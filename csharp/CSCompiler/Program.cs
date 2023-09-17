@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.Text;
+using Microsoft.Extensions.DependencyModel;
 
 namespace CSCompiler {
     public class Program {
@@ -29,9 +30,37 @@ namespace CSCompiler {
                 Console.WriteLine(runtimeFolder);
 
                 List<MetadataReference> refs = new() {
-                    MetadataReference.CreateFromFile(runtimeFolder + "/System.Runtime.dll"),
-                    MetadataReference.CreateFromFile(runtimeFolder + "/System.Private.CoreLib.dll"),
+                    //MetadataReference.CreateFromFile(runtimeFolder + "/System.Runtime.dll"),
+                    //MetadataReference.CreateFromFile(runtimeFolder + "/System.Private.CoreLib.dll"),
                 };
+
+                //string testPath = Path.GetDirectoryName(typeof(object).Assembly.Location).Replace('\\', '/') + '/';
+
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "System.Private.CoreLib.dll"));
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "System.Runtime.dll"));
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "System.Console.dll"));
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "netstandard.dll"));
+
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "System.Text.RegularExpressions.dll")); // IMPORTANT!
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "System.Linq.dll"));
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "System.Linq.Expressions.dll")); // IMPORTANT!
+
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "System.IO.dll"));
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "System.Net.Primitives.dll"));
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "System.Net.Http.dll"));
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "System.Private.Uri.dll"));
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "System.Reflection.dll"));
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "System.ComponentModel.Primitives.dll"));
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "System.Globalization.dll"));
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "System.Collections.Concurrent.dll"));
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "System.Collections.NonGeneric.dll"));
+                //refs.Add(MetadataReference.CreateFromFile(testPath + "Microsoft.CSharp.dll"));
+
+                //foreach (string filePath in Directory.GetFiles(runtimeFolder).Where(p => p.EndsWith(".dll")
+                //&& p.Contains("System.") && !p.Contains("System.IO.Compression.Native.dll")
+                //)) {
+                //    refs.Add(MetadataReference.CreateFromFile(filePath));
+                //}
 
                 //NOTE: https://stackoverflow.com/questions/62128565/net-core-system-private-corelib-dll-vs-system-runtime
 
@@ -40,16 +69,24 @@ namespace CSCompiler {
                 Assembly.GetEntryAssembly().GetReferencedAssemblies()
                     .ToList()
                     .ForEach(a => {
-                        //Console.WriteLine(Assembly.Load(a).Location);
+                        Console.WriteLine(Assembly.Load(a).Location);
                         refs.Add(MetadataReference.CreateFromFile(Assembly.Load(a).Location));
                     });
 
-                Console.WriteLine("Exists = " + File.Exists(runtimeFolder + "/System.Private.CoreLib.dll"));
-                Assembly.LoadFile(runtimeFolder + "/System.Private.CoreLib.dll").GetReferencedAssemblies()
-                    .ToList()
-                    .ForEach(a => {
-                        Console.WriteLine("    " + Assembly.Load(a).Location);
-                    });
+                refs.AddRange(
+                    //DependencyContext.Default.CompileLibraries
+                    //    .SelectMany(c => c.ResolveReferencePaths())
+                    //    .Select(a => MetadataReference.CreateFromFile(a))
+
+                    //Absolutely ONLY .NET Core references!
+                    DependencyContext.Default.CompileLibraries
+                        .First(c => c.Name.StartsWith("Microsoft.NETCore"))
+                        .ResolveReferencePaths()
+                        .Select(a => MetadataReference.CreateFromFile(a))
+                );
+
+                foreach (CompilationLibrary c in DependencyContext.Default.CompileLibraries)
+                    Console.WriteLine("name = " + c.Name);
 
                 CSharpCompilation compilation = CSharpCompilation.Create(
                     "ExampleProgram",

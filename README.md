@@ -26,3 +26,8 @@ For now, I'm sticking with command line, libraries, and 2D projects.
 
 - https://www.baeldung.com/java-structural-design-patterns
 - (Roslyn) https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp/
+
+### .NET Hosting from Native C++
+- https://learn.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting
+- https://github.com/dotnet/samples/blob/main/core/hosting/src/NativeHost/nativehost.cpp
+- https://github.com/dotnet/samples/blob/main/core/hosting/readme.md

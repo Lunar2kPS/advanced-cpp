@@ -6,6 +6,6 @@
     },
     "C_Cpp.default.includePath": [
         "libraries/json",
-        "libraries/mono/include"
+        "libraries/nethosting"
     ]
 }

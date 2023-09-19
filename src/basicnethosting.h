@@ -24,7 +24,9 @@
 using std::cout;
 using std::cerr;
 using std::hex;
+using std::dec;
 using std::showbase;
+using std::noshowbase;
 using std::endl;
 using std::string;
 
@@ -97,21 +99,29 @@ namespace carlos {
 
     // @brief Attempts to discover the location of hostfxr and get exports, using the nethost library.
     bool loadHostfxr() {
-        char_t buffer[MAX_PATH];
+        char_t buffer[MAX_PATH]
+        #if defined(LINUX)
+            = "/snap/dotnet-sdk/current/host/fxr/7.0.11/libhostfxr.so";
+        #else
+            ;
+        #endif
+
         size_t bufferSize = sizeof(buffer) / sizeof(char_t);
-        // #if defined(__cplusplus)
-        //     01239
-        // #endif
 
-        cout << "bufferSize = " << bufferSize << " vs. " << MAX_PATH << endl;
+        //WARNING: get_hostfxr_path returns error code 0x80008083 and nothing in the buffer on Zorin Ubuntu Linux with the .NET 7+ installed via snap install!
         int result = get_hostfxr_path(buffer, &bufferSize, nullptr);
+        cout << "get_hostfxr_path result = " << hex << showbase << result << dec << noshowbase << endl;
         cout << "bufferSize = " << bufferSize << " vs. " << MAX_PATH << endl;
-
+        cout << "hostfxr path = " << ((char_t*) buffer) << endl;
         void* library = loadLibrary(buffer);
+
         initFunction = (hostfxr_initialize_for_runtime_config_fn) getExport(library, "hostfxr_initialize_for_runtime_config");
         getRuntimeDelegateFunction = (hostfxr_get_runtime_delegate_fn) getExport(library, "hostfxr_get_runtime_delegate");
         closeFunction = (hostfxr_close_fn) getExport(library, "hostfxr_close");
 
+        cout << (initFunction == nullptr ? "true" : "false") << endl;
+        cout << (getRuntimeDelegateFunction == nullptr ? "true" : "false") << endl;
+        cout << (closeFunction == nullptr ? "true" : "false") << endl;
         return initFunction != nullptr
             && getRuntimeDelegateFunction != nullptr
             && closeFunction != nullptr

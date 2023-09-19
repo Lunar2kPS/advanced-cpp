@@ -45,6 +45,12 @@ target_link_libraries("${PROJECT_NAME}" PUBLIC nethost)
 elseif (UNIX)
     # This linker option is required when using the dynamic library functions (dlfcn.h):
     target_link_options("${PROJECT_NAME}" PUBLIC -ldl)
+
+    # This linker option is required for the runtime to fully work,
+    #       Otherwise it complains failed to load libhostpolicy.so,
+    #       and undefined symbol "pthread_create".
+    target_link_options("${PROJECT_NAME}" PUBLIC -lpthread)
+    
     target_link_libraries("${PROJECT_NAME}" PUBLIC "libnethost.a")
 endif()
 

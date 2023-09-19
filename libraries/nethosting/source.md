@@ -7,3 +7,4 @@ I retrieved these files from the following sources:
     - hostfxr.h
     - nethost.dll
     - nethost.h
+    - nethost.lib

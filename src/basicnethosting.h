@@ -1,5 +1,5 @@
-#pragma comment(lib,"hostfxr.lib")
-#pragma comment(lib,"nethost.lib")
+// #pragma comment(lib,"hostfxr.lib")
+// #pragma comment(lib,"nethost.lib")
 
 //SEE: https://learn.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting
 #include "platforms.h"
@@ -11,12 +11,13 @@
 #include <Windows.h>
 #endif
 
+#define NETHOST_USE_AS_STATIC
 //Provided from: https://github.com/dotnet/runtime/blob/main/src/native/corehost/nethost/nethost.h
 //Provided from: https://github.com/dotnet/runtime/blob/main/src/native/corehost/coreclr_delegates.h
 //Provided from: https://github.com/dotnet/runtime/blob/main/src/native/corehost/hostfxr.h
-#include <nethost.h>
-#include <coreclr_delegates.h>
-#include <hostfxr.h>
+#include "nethost.h"
+#include "coreclr_delegates.h"
+#include "hostfxr.h"
 
 using std::cout;
 using std::cerr;

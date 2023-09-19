@@ -3,6 +3,15 @@ project("AdvancedC++" VERSION 1.0.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+# set(CMAKE_VERBOSE_MAKEFILE ON)
+
+include("Platforms.cmake")
+setup_platforms()
+# include_platform_directories(SRC_FILES)
+
+# if (UNIX)
+#     set(CMAKE_CXX_COMPILER g++)
+# endif()
 
 file(GLOB_RECURSE RESOURCES_FILES "resources/*")
 
@@ -20,6 +29,7 @@ endforeach()
 
 file(GLOB_RECURSE SRC_FILES "src/*.cpp")
 add_executable("${PROJECT_NAME}" "${SRC_FILES}")
+
 target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/json")
 
 # Allows us to use #include statements starting from this folder:
@@ -30,14 +40,26 @@ target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
 
 # Links against the dynamic library nethost.dll.
 # NOTE: There IS NO hostfxr.lib.
+if (WINDOWS)
 target_link_libraries("${PROJECT_NAME}" PUBLIC nethost)
-
+elseif (UNIX)
+    # This linker option is required when using the dynamic library functions (dlfcn.h):
+    target_link_options("${PROJECT_NAME}" PUBLIC -ldl)
+    target_link_libraries("${PROJECT_NAME}" PUBLIC "libnethost.a")
+endif()
 
 # NOTE: These are automatically prepended with the source dir (CMAKE_CURRENT_SOURCE_DIR)
-set(DLL_FILES
-    "libraries/nethosting/nethost.dll"
-    # Add more DLL file paths as needed here!
-)
+if (WINDOWS)
+    set(DLL_FILES
+        "libraries/nethosting/nethost.dll"
+        # Add more DLL file paths as needed here!
+    )
+elseif (UNIX)
+    set(DLL_FILES
+        "libraries/nethosting/libnethost.so"
+        # Add more DLL file paths as needed here!
+    )
+endif()
 
 add_custom_target("CopyDLLs")
 

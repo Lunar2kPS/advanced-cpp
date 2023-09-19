@@ -1,6 +1,3 @@
-// #pragma comment(lib,"hostfxr.lib")
-// #pragma comment(lib,"nethost.lib")
-
 //SEE: https://learn.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting
 #include "platforms.h"
 
@@ -8,7 +5,13 @@
 #include <string>
 
 #if defined(WINDOWS)
-#include <Windows.h>
+    #include <Windows.h>
+    #define STR(s) L ## s
+#else
+    #include <dlfcn.h>
+    #include <limits.h> //<-- This defines PATH_MAX for UNIX systems!
+    #define STR(s) s
+    #define MAX_PATH PATH_MAX
 #endif
 
 //Provided from: https://github.com/dotnet/runtime/blob/main/src/native/corehost/nethost/nethost.h
@@ -49,7 +52,7 @@ namespace carlos {
         }
 
         //STEP 2: Initialize and start the .NET runtime
-        const string_t configPath = rootPath + L"/MainCSProj.runtimeconfig.json";
+        const string_t configPath = rootPath + STR("/MainCSProj.runtimeconfig.json");
         load_assembly_and_get_function_pointer_fn netLoadAssembly = getNETLoadAssembly(configPath.c_str());
 
         if (netLoadAssembly == nullptr) {
@@ -58,9 +61,9 @@ namespace carlos {
         }
 
         //STEP 3: Load managed assembly and get pointer to a managed method
-        const string_t libraryPath = rootPath + L"/MainCSProj.dll";
-        const char_t* type = L"MainCSProjNamespace.Program, MainCSProj";
-        const char_t* method = L"SimpleMethod";
+        const string_t libraryPath = rootPath + STR("/MainCSProj.dll");
+        const char_t* type = STR("MainCSProjNamespace.Program, MainCSProj");
+        const char_t* method = STR("SimpleMethod");
 
         component_entry_point_fn entryPoint = nullptr;
         int result = netLoadAssembly(
@@ -84,7 +87,7 @@ namespace carlos {
         };
 
         LibraryArgs args = LibraryArgs {
-            L"Message from C++",
+            STR("Message from C++"),
             27
         };
         entryPoint(&args, sizeof(args));
@@ -128,7 +131,17 @@ namespace carlos {
             return func;
         }
     #else
+        void* loadLibrary(const char_t* path) {
+            void* library = dlopen(path, RTLD_LAZY | RTLD_LOCAL);
+            //assert(library != nullptr);
+            return library;
+        }
 
+        void* getExport(void* library, const char* name) {
+            void* func = dlsym(library, name);
+            //assert(func != nullptr);
+            return func;
+        }
     #endif
 
     load_assembly_and_get_function_pointer_fn getNETLoadAssembly(const char_t* configPath) {

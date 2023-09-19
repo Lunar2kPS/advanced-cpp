@@ -7,11 +7,11 @@ For now, I'm sticking with command line, libraries, and 2D projects.
 
 ## Learning Topics
 - JSON saving/loading
+- Embedding C# scripting
 - File I/O
 - Using GUI
 - Using EC/ECS
 - Cross-platform support (Win/Max/Linux/Pi)
-- Embedding C# scripting
 - HTTP Networking
 - TCP/UDP Networking
 - Rendering realtime 2D pixel art
@@ -22,9 +22,12 @@ For now, I'm sticking with command line, libraries, and 2D projects.
 
 ## Resources
 - https://github.com/skypjack/entt 
-
-- https://medium.com/@lewiscomstive/how-to-embed-c-scripting-into-your-c-application-782b2e57245a
-- https://www.mono-project.com/docs/about-mono/supported-platforms/
-- https://www.monogame.net/downloads/
+- https://github.com/dotnet/roslyn
 
 - https://www.baeldung.com/java-structural-design-patterns
+- (Roslyn) https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp/
+
+### .NET Hosting from Native C++
+- https://learn.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting
+- https://github.com/dotnet/samples/blob/main/core/hosting/src/NativeHost/nativehost.cpp
+- https://github.com/dotnet/samples/blob/main/core/hosting/readme.md

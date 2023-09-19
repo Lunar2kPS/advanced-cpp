@@ -4,6 +4,7 @@
 #include "tests/json.h"
 #include "basicnethosting.h"
 
+using std::wcout;
 using std::cout;
 using std::endl;
 
@@ -23,18 +24,14 @@ int __cdecl wmain(int argCount, wchar_t** args) {
     #endif
 
     string_t rootPathStr = rootPath;
-    int indexA = rootPathStr.find_last_of('/');
-    int indexB = rootPathStr.find_last_of('\\');
-    int index;
-    if (indexA == string::npos) {
-        index = indexB;
-    } else if (indexB == string::npos) {
-        index = indexA;
-    } else {
-        index = (indexA > indexB) ? indexA : indexB;
+    for (size_t i = 0; i < rootPathStr.length(); i++) {
+        if (rootPathStr[i] == '\\')
+            rootPathStr[i] = '/';
     }
-    rootPathStr = rootPathStr.substr(0, index + 1);
 
-    carlos::runManagedCode(rootPath);
+    int index = rootPathStr.find_last_of('/');
+    rootPathStr = rootPathStr.substr(0, index);
+
+    carlos::runManagedCode(rootPathStr);
     return 0;
 }

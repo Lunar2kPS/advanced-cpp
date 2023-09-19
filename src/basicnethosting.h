@@ -11,7 +11,6 @@
 #include <Windows.h>
 #endif
 
-#define NETHOST_USE_AS_STATIC
 //Provided from: https://github.com/dotnet/runtime/blob/main/src/native/corehost/nethost/nethost.h
 //Provided from: https://github.com/dotnet/runtime/blob/main/src/native/corehost/coreclr_delegates.h
 //Provided from: https://github.com/dotnet/runtime/blob/main/src/native/corehost/hostfxr.h
@@ -50,7 +49,7 @@ namespace carlos {
         }
 
         //STEP 2: Initialize and start the .NET runtime
-        const string_t configPath = rootPath + L"MainCSProj.runtimeconfig.json";
+        const string_t configPath = rootPath + L"/MainCSProj.runtimeconfig.json";
         load_assembly_and_get_function_pointer_fn netLoadAssembly = getNETLoadAssembly(configPath.c_str());
 
         if (netLoadAssembly == nullptr) {
@@ -59,8 +58,8 @@ namespace carlos {
         }
 
         //STEP 3: Load managed assembly and get pointer to a managed method
-        const string_t libraryPath = rootPath + L"MainCSProj.dll";
-        const char_t* type = L"MainCSProj.Program, Program";
+        const string_t libraryPath = rootPath + L"/MainCSProj.dll";
+        const char_t* type = L"MainCSProjNamespace.Program, MainCSProj";
         const char_t* method = L"SimpleMethod";
 
         component_entry_point_fn entryPoint = nullptr;

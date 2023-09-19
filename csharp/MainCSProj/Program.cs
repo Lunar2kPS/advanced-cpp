@@ -14,7 +14,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace MainCSProj {
+namespace MainCSProjNamespace {
     public class Program {
         public static void Main(string[] args) {
             Console.WriteLine("Hi from C# :)");

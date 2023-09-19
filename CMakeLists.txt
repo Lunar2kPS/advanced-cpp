@@ -22,6 +22,12 @@ file(GLOB_RECURSE SRC_FILES "src/*.cpp")
 add_executable("${PROJECT_NAME}" "${SRC_FILES}")
 target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/json")
 
-# target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
+# Allows us to use #include statements starting from this folder:
+target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
+
+# Allows us to use target_link_libraries(...) commands starting from this folder:
 target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
+
+# Links against the (static or import?) library nethost.lib.
+# NOTE: There IS NO hostfxr.lib.
 target_link_libraries("${PROJECT_NAME}" PUBLIC nethost.lib)

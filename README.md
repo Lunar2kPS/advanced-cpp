@@ -7,9 +7,17 @@ So, I'm deciding to become independent of Unity by learning an immense amount of
 
 ---
 
+## 🛠️ Platform Support
+- ✅ Windows
+- ❌ MacOS
+- ✅ Linux (tested on Zorin/Ubuntu)
+- ❌ Raspberry Pi (will test on armx64)
 
-### 🛠️ TODO's
-- ⚠️ **I need to document the setup better,** and make it easier to build. Currently, you need to copy the VS output files from the csharp project into the C++ program's output directory for the .NET hosting to work.
+
+## 🛠️ Project TODO's
+This project is very much in-progress. Here are some things I'd like to do next:
+
+- ⚠️ **I need to document the setup better for .NET hosting,** and make it easier to build. Currently, you need to copy the VS output files from the csharp project into the C++ program's output directory for the .NET hosting to work.
 - Open questions about Linux:
     - Why did linking against dl work but not against libdl?
     - Why did we need to link against pthread? Is this intentional?
@@ -35,6 +43,7 @@ So, I'm deciding to become independent of Unity by learning an immense amount of
 ## Project Dependencies
 - [Json for Modern C++ v3.11.2](https://github.com/nlohmann/json/releases/tag/v3.11.2)
     - Downloaded the `include.zip`, deleted the `include` folder and `meson.build` file, and changed the structure to easily `#include "nlohmann/json.hpp"`
+- .NET 7+ (SDK) ⚠️ _(more instructions to come soon about this)_
 
 
 ## Resources
@@ -44,4 +53,4 @@ So, I'm deciding to become independent of Unity by learning an immense amount of
 - (Roslyn) https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp/
 
 - ### [C# .NET Hosting from Native C++](https://learn.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting)
-- See their GitHub docs on [Native hosting (Calling managed function)](https://github.com/dotnet/runtime/blob/main/docs/design/features/native-hosting.md#calling-managed-function-net-5-and-above) and a brief explanation of [the components involved](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md).
+    - See their GitHub docs on [Native hosting (Calling managed function)](https://github.com/dotnet/runtime/blob/main/docs/design/features/native-hosting.md#calling-managed-function-net-5-and-above) and a brief explanation of [the components involved](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md).

@@ -41,17 +41,19 @@ target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
 # Links against the dynamic library nethost.dll.
 # NOTE: There IS NO hostfxr.lib.
 if (WINDOWS)
-target_link_libraries("${PROJECT_NAME}" PUBLIC nethost)
+    target_link_libraries("${PROJECT_NAME}" PUBLIC nethost)
 elseif (UNIX)
     # This linker option is required when using the dynamic library functions (dlfcn.h):
-    target_link_options("${PROJECT_NAME}" PUBLIC -ldl)
+    # target_link_options("${PROJECT_NAME}" PUBLIC -ldl)
+    target_link_libraries("${PROJECT_NAME}" PUBLIC dl)
 
     # This linker option is required for the runtime to fully work,
     #       Otherwise it complains failed to load libhostpolicy.so,
     #       and undefined symbol "pthread_create".
-    target_link_options("${PROJECT_NAME}" PUBLIC -lpthread)
+    # target_link_options("${PROJECT_NAME}" PUBLIC -lpthread)
+    target_link_libraries("${PROJECT_NAME}" PUBLIC pthread)
     
-    target_link_libraries("${PROJECT_NAME}" PUBLIC "libnethost.a")
+    target_link_libraries("${PROJECT_NAME}" PUBLIC "libnethost.so")
 endif()
 
 # NOTE: These are automatically prepended with the source dir (CMAKE_CURRENT_SOURCE_DIR)
@@ -69,14 +71,21 @@ endif()
 
 add_custom_target("CopyDLLs")
 
-foreach (dllFilePath "${DLL_FILES}")
+# WARNING: NO QUOTES IS IMPORTANT HERE!
+#   The list is semi-colon-separated,
+#   And the semi-colons need to be OUTSIDE of quotes to separate each iteration of the loop.
+foreach (dllFilePath ${DLL_FILES})
     # Older syntax:
     # get_filename_component(dllName "${dllFilePath}" NAME)
     cmake_path(GET dllFilePath FILENAME dllName)
+    if (IS_ABSOLUTE "${dllFilePath}")
+        set(absoluteDllFilePath "${dllFilePath}")
+    else()
+        set(absoluteDllFilePath "${CMAKE_CURRENT_SOURCE_DIR}/${dllFilePath}")
+    endif()
 
     # WARNING: For some reason, this copy command doesn't work unless we provide the absolute path:
     #       Maybe because we're calling the cmake executable, which exists under our program files/OS installation files.
-    set(absoluteDllFilePath "${CMAKE_CURRENT_SOURCE_DIR}/${dllFilePath}")
     add_custom_command(TARGET "CopyDLLs"
         PRE_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy "${absoluteDllFilePath}" "${CMAKE_CURRENT_BINARY_DIR}/${dllName}"

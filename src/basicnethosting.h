@@ -17,6 +17,7 @@
 //Provided from: https://github.com/dotnet/runtime/blob/main/src/native/corehost/nethost/nethost.h
 //Provided from: https://github.com/dotnet/runtime/blob/main/src/native/corehost/coreclr_delegates.h
 //Provided from: https://github.com/dotnet/runtime/blob/main/src/native/corehost/hostfxr.h
+// #define NETHOST_USE_AS_STATIC //<-- for use with libnethost.a instead of libnethost.so
 #include "nethost.h"
 #include "coreclr_delegates.h"
 #include "hostfxr.h"
@@ -99,19 +100,23 @@ namespace carlos {
 
     // @brief Attempts to discover the location of hostfxr and get exports, using the nethost library.
     bool loadHostfxr() {
-        char_t buffer[MAX_PATH]
-        #if defined(LINUX)
-            = "/snap/dotnet-sdk/current/host/fxr/7.0.11/libhostfxr.so";
-        #else
-            ;
-        #endif
-
+        char_t buffer[MAX_PATH];
         size_t bufferSize = sizeof(buffer) / sizeof(char_t);
 
         //WARNING: get_hostfxr_path returns error code 0x80008083 and nothing in the buffer on Zorin Ubuntu Linux with the .NET 7+ installed via snap install!
+        //WEIRD!!
+        //THIS ANSWER WAS EXACTLY IT!
+        //      https://stackoverflow.com/a/72023264/22587574
+        //      I was getting a return value of 0x80008083 (-2147450749), which, according to
+        //          this page (https://github.com/dotnet/runtime/blob/main/docs/design/features/host-error-codes.md),
+        //          is consistent with the StackOverflow answer: CoreHostLibMissingFailure
+        //  FOR SOME REASON, "sudo snap install dotnet-sdk" was incomplete.
+        //  The dotnet installation actually works by the Linux scripting install, instructions at:
+        //      /docs/Dotnet Installation.md
+        //      (https://learn.microsoft.com/en-us/dotnet/core/install/linux-scripted-manual#scripted-install)
         int result = get_hostfxr_path(buffer, &bufferSize, nullptr);
-        cout << "get_hostfxr_path result = " << hex << showbase << result << dec << noshowbase << endl;
-        cout << "bufferSize = " << bufferSize << " vs. " << MAX_PATH << endl;
+        if (result != 0)
+            cerr << "(ERROR) get_hostfxr_path result = " << hex << showbase << result << dec << noshowbase << endl;
         cout << "hostfxr path = " << ((char_t*) buffer) << endl;
         void* library = loadLibrary(buffer);
 
@@ -119,9 +124,13 @@ namespace carlos {
         getRuntimeDelegateFunction = (hostfxr_get_runtime_delegate_fn) getExport(library, "hostfxr_get_runtime_delegate");
         closeFunction = (hostfxr_close_fn) getExport(library, "hostfxr_close");
 
-        cout << (initFunction == nullptr ? "true" : "false") << endl;
-        cout << (getRuntimeDelegateFunction == nullptr ? "true" : "false") << endl;
-        cout << (closeFunction == nullptr ? "true" : "false") << endl;
+        if (initFunction == nullptr)
+            cerr << "initFunction was not found." << endl;
+        if (getRuntimeDelegateFunction == nullptr)
+            cerr << "getRuntimeDelegateFunction was not found." << endl;
+        if (closeFunction == nullptr)
+            cerr << "closeFunction was not found." << endl;
+
         return initFunction != nullptr
             && getRuntimeDelegateFunction != nullptr
             && closeFunction != nullptr

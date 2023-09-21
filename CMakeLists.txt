@@ -9,10 +9,6 @@ include("Platforms.cmake")
 setup_platforms()
 # include_platform_directories(SRC_FILES)
 
-# if (UNIX)
-#     set(CMAKE_CXX_COMPILER g++)
-# endif()
-
 file(GLOB_RECURSE RESOURCES_FILES "resources/*")
 
 message("Copying resources...")
@@ -30,12 +26,11 @@ endforeach()
 file(GLOB_RECURSE SRC_FILES "src/*.cpp")
 add_executable("${PROJECT_NAME}" "${SRC_FILES}")
 
-target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/json")
-
-# Allows us to use #include statements starting from this folder:
+# Allows our C++ (.cpp) files to use #include statements starting from this folder:
+target_include_directories("${PROJECT_NAME}" PUBLIC "libraries")
 target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
 
-# Allows us to use target_link_libraries(...) commands starting from this folder:
+# Allows our CMakeLists.txt file to use target_link_libraries(...) commands starting from this folder:
 target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
 
 # Links against the dynamic library nethost.dll.

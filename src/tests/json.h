@@ -1,1 +1,1 @@
-void testMethod();
+void testJSON();

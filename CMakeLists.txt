@@ -87,5 +87,18 @@ foreach (dllFilePath ${DLL_FILES})
         DEPENDS "${absoluteDllFilePath}"
     )
 endforeach()
-
 add_dependencies("${PROJECT_NAME}" "CopyDLLs")
+
+# WARNING: For some reason, this just doesn't work.
+#   It complains about non-existent configurations for Release|x64 and Debug|x64...
+#   Calling the C# build .sh script from command line (before/after CMake is invoked) works.
+#   No idea why.
+# add_custom_target("BuildCSharp")
+# add_custom_command(
+#     TARGET "BuildCSharp"
+#     PRE_BUILD
+#     COMMAND sh build-csharp.sh
+#     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+#     # DEPENDS build-csharp.sh "csharp/MainCSProj/Program.cs" # TODO: Specify all C# scripts under the csharp folder?
+# )
+# add_dependencies("${PROJECT_NAME}" "BuildCSharp")

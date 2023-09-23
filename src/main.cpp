@@ -2,6 +2,7 @@
 #include <string>
 
 #include "tests/json.h"
+#include "tests/entities.h"
 #include "basicnethosting.h"
 
 using std::wcout;
@@ -14,7 +15,8 @@ int __cdecl wmain(int argCount, wchar_t** args) {
 int main(int argCount, char** args) {
 #endif
     cout << "Hello world!" << endl;
-    testMethod();
+    testJSON();
+    testECS();
 
     //Get the current executable's directory
     //This assumes the managed assembly to load and its runtime configuration file are next to the host
@@ -23,7 +25,6 @@ int main(int argCount, char** args) {
         int size = GetFullPathNameW(args[0], sizeof(rootPath) / sizeof(char_t), rootPath, nullptr);
         if (size <= 0)
             return 1;
-        rootPath = windowsPath;
     #else
         char* result = realpath(args[0], rootPath);
         if (result == nullptr)

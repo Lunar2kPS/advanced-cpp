@@ -5,7 +5,7 @@
         "*.meta": "yaml"
     },
     "C_Cpp.default.includePath": [
-        "libraries/json",
+        "libraries",
         "libraries/nethosting"
     ]
 }

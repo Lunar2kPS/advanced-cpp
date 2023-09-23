@@ -16,7 +16,7 @@ using std::stringstream;
 
 using json = nlohmann::json;
 
-void testMethod() {
+void testJSON() {
     cout << "JSON testing..." << endl;
 
     ifstream file = ifstream("resources/Example.json");

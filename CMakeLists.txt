@@ -64,6 +64,14 @@ elseif (UNIX)
     )
 endif()
 
+
+# See for glm compiler options: https://chromium.googlesource.com/external/github.com/g-truc/glm/+/HEAD/manual.md
+add_compile_definitions(GLM_FORCE_LEFT_HANDED)
+add_subdirectory("libraries/glm")
+target_link_libraries("${PROJECT_NAME}" PUBLIC glm)
+target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/glm")
+
+
 add_custom_target("CopyDLLs")
 
 # WARNING: NO QUOTES IS IMPORTANT HERE!

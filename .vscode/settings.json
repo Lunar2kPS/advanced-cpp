@@ -6,6 +6,7 @@
     },
     "C_Cpp.default.includePath": [
         "libraries",
-        "libraries/nethosting"
+        "libraries/nethosting",
+        "libraries/glm"
     ]
 }

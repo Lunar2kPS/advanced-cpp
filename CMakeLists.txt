@@ -5,26 +5,17 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 # set(CMAKE_VERBOSE_MAKEFILE ON)
 
-include("Platforms.cmake")
+include("cmake/Platforms.cmake")
 setup_platforms()
 # include_platform_directories(SRC_FILES)
 
-file(GLOB_RECURSE RESOURCES_FILES "resources/*")
-
-message("Copying resources...")
-foreach(filePath ${RESOURCES_FILES})
-    string(REGEX REPLACE "${PROJECT_SOURCE_DIR}\/*" "" filePath "${filePath}")
-    message("Copying ${filePath}...")
-
-    configure_file(
-        "${PROJECT_SOURCE_DIR}/${filePath}"
-        "${PROJECT_BINARY_DIR}/${filePath}"
-        COPYONLY
-    )
-endforeach()
+include("cmake/Resources.cmake")
+copy_resources_assets()
 
 file(GLOB_RECURSE SRC_FILES "src/*.cpp")
 add_executable("${PROJECT_NAME}" "${SRC_FILES}")
+
+
 
 # Allows our C++ (.cpp) files to use #include statements starting from this folder:
 target_include_directories("${PROJECT_NAME}" PUBLIC "libraries")
@@ -33,9 +24,17 @@ target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
 # Allows our CMakeLists.txt file to use target_link_libraries(...) commands starting from this folder:
 target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
 
-# Links against the dynamic library nethost.dll.
-# NOTE: There IS NO hostfxr.lib.
+# See for glm compiler options: https://chromium.googlesource.com/external/github.com/g-truc/glm/+/HEAD/manual.md
+add_compile_definitions(GLM_FORCE_LEFT_HANDED)
+add_subdirectory("libraries/glm")
+target_link_libraries("${PROJECT_NAME}" PUBLIC glm)
+target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/glm")
+
+
+
 if (WINDOWS)
+    # Links against the dynamic library nethost.dll.
+    # NOTE: There IS NO hostfxr.lib.
     target_link_libraries("${PROJECT_NAME}" PUBLIC nethost)
 elseif (UNIX)
     # This linker option is required when using the dynamic library functions (dlfcn.h):
@@ -63,14 +62,6 @@ elseif (UNIX)
         # Add more DLL file paths as needed here!
     )
 endif()
-
-
-# See for glm compiler options: https://chromium.googlesource.com/external/github.com/g-truc/glm/+/HEAD/manual.md
-add_compile_definitions(GLM_FORCE_LEFT_HANDED)
-add_subdirectory("libraries/glm")
-target_link_libraries("${PROJECT_NAME}" PUBLIC glm)
-target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/glm")
-
 
 add_custom_target("CopyDLLs")
 

@@ -5,6 +5,7 @@
         "*.meta": "yaml"
     },
     "C_Cpp.default.includePath": [
+        "src",
         "libraries",
         "libraries/nethosting",
         "libraries/glm"

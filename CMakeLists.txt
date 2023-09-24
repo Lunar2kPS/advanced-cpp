@@ -18,6 +18,7 @@ add_executable("${PROJECT_NAME}" "${SRC_FILES}")
 
 
 # Allows our C++ (.cpp) files to use #include statements starting from this folder:
+target_include_directories("${PROJECT_NAME}" PUBLIC "src")
 target_include_directories("${PROJECT_NAME}" PUBLIC "libraries")
 target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
 

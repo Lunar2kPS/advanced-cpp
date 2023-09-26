@@ -1,32 +1,31 @@
 #include <iostream>
 
+//NOTE: Just for glm::to_string(...)
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include "entt/entt.hpp"
+#include "glm/ext.hpp" //NOTE: Just for glm::to_string(...)
+#include "Transform.h"
 
 using std::cout;
 using std::endl;
 
 using namespace entt;
-
-struct Position {
-    float x;
-    float y;
-};
+using namespace carlos;
 
 struct Velocity {
-    float x;
-    float y;
+    vec2 velocity;
 };
-
 
 
 void update(registry& registry, float dt) {
     //TODO: Figure out the data types here.
     //I think I was close?
     //  basic_view<get_t<Position, Velocity>, exclude_t<>>
-    auto view = registry.view<Position, Velocity>();
+    auto view = registry.view<Transform, Velocity>();
     
     //NOTE: The 1st parameter is optional
-    view.each([](const entity e, const Position& p, const Velocity& v) {
+    view.each([](const entity e, const Transform& p, const Velocity& v) {
         
     });
 
@@ -35,21 +34,23 @@ void update(registry& registry, float dt) {
     }
 
     for (entity e : view) {
-        Position& p = view.get<Position>(e);
+        Transform& t = view.get<Transform>(e);
         Velocity& v = view.get<Velocity>(e);
 
-        p.x += v.x * dt;
-        p.y += v.y * dt;
+        vec2 localPos = t.getLocalPosition();
+        t.setLocalPosition(localPos + v.velocity * dt);
     }
 }
 
 void test(registry& registry) {
-    auto view = registry.view<Position, Velocity>();
+    auto view = registry.view<Transform, Velocity>();
 
     for (entity e : view) {
-        Position& p = view.get<Position>(e);
-        cout << "pos = (" << p.x << ", " << p.y << ")" << endl;
+        Transform& t = view.get<Transform>(e);
+        //NOTE: https://stackoverflow.com/questions/11515469/how-do-i-print-vector-values-of-type-glmvec3-that-have-been-passed-by-referenc
+        cout << "pos = (" << glm::to_string(t.getLocalPosition()) << ")" << endl;
     }
+    cout << endl;
 }
 
 void testECS() {
@@ -65,15 +66,17 @@ void testECS() {
         
         //TODO: Compiler errors.. perhaps related to:
         //  "The component must have a proper constructor or be of aggregate type"
-        // registry.emplace<Position>(e, 0, 0);
+        // registry.emplace<Transform>(e, 0, 0);
 
-        registry.emplace<Position>(e);
+        registry.emplace<Transform>(e);
 
         if (i % 2 == 0) {
             // registry.emplace<Velocity>(e, i, (float) i / 2);
             Velocity& v = registry.emplace<Velocity>(e);
-            v.x = i;
-            v.y = (float) i / 2;
+            v.velocity = vec2(
+                i,
+                (float) i / 2
+            );
         }
     }
 

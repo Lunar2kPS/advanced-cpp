@@ -13,6 +13,12 @@ include("cmake/Resources.cmake")
 copy_resources_assets()
 
 file(GLOB_RECURSE SRC_FILES "src/*.cpp")
+
+
+# Dear ImGui
+# See: https://github.com/ocornut/imgui/wiki/Getting-Started
+file(GLOB IMGUI_FILES "libraries/imgui/*.cpp")
+list(APPEND SRC_FILES ${IMGUI_FILES})
 add_executable("${PROJECT_NAME}" "${SRC_FILES}")
 
 
@@ -31,6 +37,8 @@ add_subdirectory("libraries/glm")
 target_link_libraries("${PROJECT_NAME}" PUBLIC glm)
 target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/glm")
 
+# Dear ImGui
+target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/imgui")
 
 
 if (WINDOWS)

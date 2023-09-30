@@ -1,2 +1,9 @@
+# The final build directory
 out
+
+# From the pre-build.sh and post-build.sh scripts
 temp-cs-build-instructions.sh
+
+# TODO: Check if this should really be gitignored,
+#       It seems to be generated every time the build is run, but is not mandatory for successful startup/running of the build
+imgui.ini

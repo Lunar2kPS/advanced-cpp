@@ -50,10 +50,9 @@ This project is very much in-progress. Here are some things I'd like to do next:
     - Linked in their README, use their [webservice](https://gen.glad.sh/) to generate the files you need.
     - I had some trouble setting this up, but it turned out to be easy! See [glad issue #443](https://github.com/Dav1dde/glad/issues/443) for more details.
     - See [this screenshot](/docs/images/Glad%20v2.0.4%20Generation%20Options.png) for my exact options used!
-- ![GLFW is brought in as a git submodule](/docs/images/Git%20Icon%20(Small%20Orange).png) [GLFW v3.3.8](https://github.com/glfw/glfw/tree/3.3.8)
-- ![GLM is brought in as a git submodule](/docs/images/Git%20Icon%20(Small%20Orange).png) [GLM v0.9.9.8](https://github.com/g-truc/glm/tree/0.9.9.8)
-- ![Dear ImGui is brought in as a git submodule](/docs/images/Git%20Icon%20(Small%20Orange).png) [(Dear) ImGui v1.89.9-docking](https://github.com/ocornut/imgui/tree/v1.89.9-docking)
-
+- [![Git icon](/docs/images/Git%20Icon%20(Small%20Orange).png "GLFW is brought in as a git submodule")](https://git-scm.com/book/en/v2/Git-Tools-Submodules) [GLFW v3.3.8](https://github.com/glfw/glfw/tree/3.3.8)
+- [![Git icon](/docs/images/Git%20Icon%20(Small%20Orange).png "GLM is brought in as a git submodule")](https://git-scm.com/book/en/v2/Git-Tools-Submodules) [GLM v0.9.9.8](https://github.com/g-truc/glm/tree/0.9.9.8)
+- [![Git icon](/docs/images/Git%20Icon%20(Small%20Orange).png "Dear ImGui is brought in as a git submodule")](https://git-scm.com/book/en/v2/Git-Tools-Submodules) [(Dear) ImGui v1.89.9-docking](https://github.com/ocornut/imgui/tree/v1.89.9-docking)
 
 ## Resources
 - https://github.com/dotnet/roslyn

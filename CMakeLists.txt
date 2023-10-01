@@ -13,8 +13,18 @@ include("cmake/Resources.cmake")
 copy_resources_assets()
 
 file(GLOB_RECURSE SRC_FILES "src/*.cpp")
-add_executable("${PROJECT_NAME}" "${SRC_FILES}")
 
+
+# Dear ImGui
+# See: https://github.com/ocornut/imgui/wiki/Getting-Started
+file(GLOB IMGUI_FILES "libraries/imgui/*.cpp")
+list(APPEND IMGUI_FILES
+    "libraries/imgui/backends/imgui_impl_glfw.cpp"
+    "libraries/imgui/backends/imgui_impl_opengl3.cpp"
+    # "libraries/imgui/misc/cpp/imgui_stdlib.cpp"
+)
+list(APPEND SRC_FILES ${IMGUI_FILES})
+add_executable("${PROJECT_NAME}" "${SRC_FILES}")
 
 
 # Allows our C++ (.cpp) files to use #include statements starting from this folder:
@@ -25,12 +35,42 @@ target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
 # Allows our CMakeLists.txt file to use target_link_libraries(...) commands starting from this folder:
 target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
 
+
+# GLAD
+add_subdirectory("libraries/glad")
+target_link_libraries("${PROJECT_NAME}" PUBLIC glad)
+target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/glad/include")
+
+
+# GLFW
+# This turns OFF building the GLFW tests, examples and documentation:
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+# SEE: Note from https://www.glfw.org/docs/latest/build_guide.html#build_link_cmake_source
+# This adds a "glfw" target, from their CMakeLists.txt file.
+add_subdirectory("libraries/glfw")
+
+# This links GLFW to our executable!
+target_link_libraries("${PROJECT_NAME}" PUBLIC glfw)
+
+# We need this for our C++ program to find the .h header files when building:
+target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/glfw/include")
+
+
 # See for glm compiler options: https://chromium.googlesource.com/external/github.com/g-truc/glm/+/HEAD/manual.md
 add_compile_definitions(GLM_FORCE_LEFT_HANDED)
 add_subdirectory("libraries/glm")
 target_link_libraries("${PROJECT_NAME}" PUBLIC glm)
 target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/glm")
 
+
+# Dear ImGui
+# add_subdirectory("cmake/imgui")
+# target_link_libraries("${PROJECT_NAME}" PUBLIC imgui)
+target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/imgui")
+target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/imgui/backends")
 
 
 if (WINDOWS)

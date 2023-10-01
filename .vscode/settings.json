@@ -7,7 +7,11 @@
     "C_Cpp.default.includePath": [
         "src",
         "libraries",
-        "libraries/nethosting",
-        "libraries/glm"
+        "libraries/glad/include",
+        "libraries/glfw/include",
+        "libraries/glm",
+        "libraries/imgui",
+        "libraries/imgui/backends",
+        "libraries/nethosting"
     ]
 }

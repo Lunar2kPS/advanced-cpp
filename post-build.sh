@@ -13,16 +13,19 @@ else
 fi
 
 instructionsFile="$(pwd)/temp-cs-build-instructions.sh"
-source "$instructionsFile"
-rm "$instructionsFile"
-filesToCopy=(
-    "$csproj.exe"
-    "$csproj.dll"
-    "$csproj.pdb"
-    "$csproj.deps.json"
-    "$csproj.runtimeconfig.json"
-)
 
-for fileName in "${filesToCopy[@]}"; do
-    cp "$buildFolder/$fileName" $buildOutputFolder
-done
+if [ -f "$instructionsFile" ]; then
+    source "$instructionsFile"
+    rm "$instructionsFile"
+    filesToCopy=(
+        "$csproj.exe"
+        "$csproj.dll"
+        "$csproj.pdb"
+        "$csproj.deps.json"
+        "$csproj.runtimeconfig.json"
+    )
+
+    for fileName in "${filesToCopy[@]}"; do
+        cp "$buildFolder/$fileName" $buildOutputFolder
+    done
+fi

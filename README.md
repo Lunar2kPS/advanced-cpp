@@ -1,9 +1,9 @@
 # Advanced C++ (Learning)
 This is a learning project to help my C++ skills rival my Unity/C# skills.
 
-**Purpose:** I'm disappointed in the direction that Unity (as a game engine, and as a company) has been going for a while. I'm particularly interested in stable, extensible software with a focus on RPGs for PC and console gaming.
+**Purpose:** I'm disappointed in the direction that Unity (as a game engine, and as a company) has been going for a while. It did, however, help to inspire my interest in free, open source, stable, and extensible software with a focus on RPGs for PC and console gaming!
 
-So, I'm deciding to become independent of Unity by learning an immense amount of C++, to give me much more freedom as a developer, and perhaps even potential to contribute someday to [Godot engine](https://godotengine.org/) or use [Unreal engine](https://www.unrealengine.com). For now, I'm sticking with command line, libraries, and 2D projects.
+So, I'm deciding to become independent of Unity by learning an immense amount of C++, to give me much more freedom as a developer, and perhaps even potential to contribute someday to [Godot engine](https://godotengine.org/) or learn [Unreal engine](https://www.unrealengine.com). For now, I'm sticking with command line, libraries, and 2D projects.
 
 ---
 
@@ -40,14 +40,22 @@ This project is very much in-progress. Here are some things I'd like to do next:
 - TCP/UDP Networking
 
 
-## Project Dependencies
-- [Json for Modern C++ v3.11.2](https://github.com/nlohmann/json/releases/tag/v3.11.2)
-    - Downloaded the `include.zip`, deleted the `include` folder and `meson.build` file, and changed the structure to easily `#include "nlohmann/json.hpp"`
+## 🛠️ Project Dependencies
 - .NET 7+ (SDK) ⚠️ _(more instructions to come soon about this)_
+- [Nlohmann's Json Library v3.11.2](https://github.com/nlohmann/json/releases/tag/v3.11.2)
+    - Downloaded the `include.zip`, deleted the `include` folder and `meson.build` file, and changed the structure to easily `#include "nlohmann/json.hpp"`
+- [Entt v3.12.2](https://github.com/skypjack/entt)
+    - Downloaded their single-file header include ([entt.hpp](https://github.com/skypjack/entt/blob/v3.12.2/single_include/entt/entt.hpp))
+- [GLAD v2.0.4](https://github.com/Dav1dde/glad/tree/v2.0.4)
+    - Linked in their README, use their [webservice](https://gen.glad.sh/) to generate the files you need.
+    - I had some trouble setting this up, but it turned out to be easy! See [glad issue #443](https://github.com/Dav1dde/glad/issues/443) for more details.
+    - See [this screenshot](/docs/images/Glad%20v2.0.4%20Generation%20Options.png) for my exact options used!
+- ![GLFW is brought in as a git submodule](/docs/images/Git%20Icon%20(Small%20Orange).png) [GLFW v3.3.8](https://github.com/glfw/glfw/tree/3.3.8)
+- ![GLM is brought in as a git submodule](/docs/images/Git%20Icon%20(Small%20Orange).png) [GLM v0.9.9.8](https://github.com/g-truc/glm/tree/0.9.9.8)
+- ![Dear ImGui is brought in as a git submodule](/docs/images/Git%20Icon%20(Small%20Orange).png) [(Dear) ImGui v1.89.9-docking](https://github.com/ocornut/imgui/tree/v1.89.9-docking)
 
 
 ## Resources
-- https://github.com/skypjack/entt 
 - https://github.com/dotnet/roslyn
 - https://www.baeldung.com/java-structural-design-patterns
 - (Roslyn) https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp/

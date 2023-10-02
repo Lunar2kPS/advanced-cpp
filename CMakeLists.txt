@@ -33,15 +33,21 @@ target_include_directories("${PROJECT_NAME}" PUBLIC "libraries")
 target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
 
 # Allows our CMakeLists.txt file to use target_link_libraries(...) commands starting from this folder:
-# target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
 if (WINDOWS)
-    target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting/windows/intel64")
+    if (INTEL64)
+        target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting/windows/intel64")
+    endif()
 elseif (MACOS)
+    if (INTEL64)
+        target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting/macos/intel64")
+    endif()
     # TODO: Support M1/M2 (Apple Silicon) ARM architecture!
-    target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting/macos/intel64")
 elseif (LINUX)
-    # TODO: Support ARM architecture for embedded devices like Raspberry Pi!
-    target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting/linux/intel64")
+    if (INTEL64)
+        target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting/linux/intel64")
+    elseif (ARM64)
+        target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting/linux/arm64")
+    endif()
 endif()
 
 
@@ -114,10 +120,15 @@ elseif (MACOS)
         "libraries/nethosting/macos/intel64/libnethost.dylib"
     )
 elseif (LINUX)
-    # TODO: Support ARM architecture for embedded devices like Raspberry Pi!
-    set(DLL_FILES
-        "libraries/nethosting/linux/intel64/libnethost.so"
-    )
+    if (INTEL64)
+        set(DLL_FILES
+            "libraries/nethosting/linux/intel64/libnethost.so"
+        )
+    elseif (ARM64)
+        set(DLL_FILES
+            "libraries/nethosting/linux/arm64/libnethost.so"
+        )
+    endif()
 endif()
 
 add_custom_target("CopyDLLs")

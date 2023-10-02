@@ -12,7 +12,7 @@ I'm deciding to become independent of Unity by learning an immense amount of C++
 - ✅ MacOS
     - ⚠️ I currently only own an Intel Mac computer, so I can't support Arm64 (M1/M2) / Apple Silicon computer architecture yet.
 - ✅ Linux (tested on Zorin/Ubuntu)
-- ❌ Raspberry Pi (will test on arm64)
+- 🛠️ Raspberry Pi (tested on arm64)
 
 
 ## 🛠️ Project TODO's

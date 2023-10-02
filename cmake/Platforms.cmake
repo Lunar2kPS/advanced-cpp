@@ -8,18 +8,21 @@ function(setup_platforms)
     elseif (UNIX)   # AND NOT APPLE
         set(LINUX True PARENT_SCOPE)
         set(PLATFORM_NAME "Linux" PARENT_SCOPE)
-        
-        set(filePath "pi-check.sh")
-        string(REGEX REPLACE "src/" "" toFilePath "${filePath}")
-        configure_file(
-            "${PROJECT_SOURCE_DIR}/${filePath}"
-            "${PROJECT_BINARY_DIR}/${toFilePath}"
-            COPYONLY
-        )
+
+        execute_process(COMMAND "./cmake-scripts/pi-check.sh" RESULT_VARIABLE EXIT_CODE)
+        if (NOT EXIT_CODE EQUAL 0)
+            set(RASPBERRYPI True PARENT_SCOPE)
+        endif()
     else()
     # NOTE: This check doesn't seem to work since we're setting the PLATFORM_NAME variable in PARENT_SCOPE.
     # if (NOT DEFINED PLATFORM_NAME)
         set(PLATFORM_NAME "Unknown" PARENT_SCOPE)
+    endif()
+
+    if (CMAKE_SYSTEM_PROCESSOR MATCHES "(x84_64)|((amd)|(AMD)64)")
+        set(INTEL64 True PARENT_SCOPE)
+    elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+        set(ARM64 True PARENT_SCOPE)
     endif()
 endfunction()
 

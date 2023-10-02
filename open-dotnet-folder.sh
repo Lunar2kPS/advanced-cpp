@@ -37,6 +37,27 @@ case "$simpleOSName" in
         printf "Found .NET SDK in the folder:\n    $folderPath\n"
         ;;
     "Linux")
+        if [[ $isRaspberryPi ]]; then
+            folderPath="$(which dotnet)"
+            if [[ $folderPath == "" ]]; then
+                printf ".NET SDK (\"dotnet\") not found in command-line.\nIt's either not installed, or just not in your \$PATH variable.\n"
+                exit 1
+            fi
+
+            folderPath="$(dirname "$folderPath")"
+            open "$folderPath"
+            printf "Found .NET SDK in the folder:\n    $folderPath\n"
+        else
+            folderPath="$(which dotnet)"
+            if [[ $folderPath == "" ]]; then
+                printf ".NET SDK (\"dotnet\") not found in command-line.\nIt's either not installed, or just not in your \$PATH variable.\n"
+                exit 1
+            fi
+
+            folderPath="$(dirname "$folderPath")"
+            nautilus "$folderPath"
+            printf "Found .NET SDK in the folder:\n    $folderPath\n"
+        fi
         ;;
     "Unknown")
 

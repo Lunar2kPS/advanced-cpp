@@ -33,7 +33,16 @@ target_include_directories("${PROJECT_NAME}" PUBLIC "libraries")
 target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
 
 # Allows our CMakeLists.txt file to use target_link_libraries(...) commands starting from this folder:
-target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
+# target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting")
+if (WINDOWS)
+    target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting/windows/intel64")
+elseif (MACOS)
+    # TODO: Support M1/M2 (Apple Silicon) ARM architecture!
+    target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting/macos/intel64")
+elseif (LINUX)
+    # TODO: Support ARM architecture for embedded devices like Raspberry Pi!
+    target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting/linux/intel64")
+endif()
 
 
 # GLAD
@@ -77,7 +86,9 @@ if (WINDOWS)
     # Links against the dynamic library nethost.dll.
     # NOTE: There IS NO hostfxr.lib.
     target_link_libraries("${PROJECT_NAME}" PUBLIC nethost)
-elseif (UNIX)
+elseif (MACOS)
+    target_link_libraries("${PROJECT_NAME}" PUBLIC "libnethost.dylib")
+elseif (LINUX)
     # This linker option is required when using the dynamic library functions (dlfcn.h):
     # target_link_options("${PROJECT_NAME}" PUBLIC -ldl)
     target_link_libraries("${PROJECT_NAME}" PUBLIC dl)
@@ -94,13 +105,18 @@ endif()
 # NOTE: These are automatically prepended with the source dir (CMAKE_CURRENT_SOURCE_DIR)
 if (WINDOWS)
     set(DLL_FILES
-        "libraries/nethosting/nethost.dll"
+        "libraries/nethosting/windows/intel64/nethost.dll"
         # Add more DLL file paths as needed here!
     )
-elseif (UNIX)
+elseif (MACOS)
+    # TODO: Support M1/M2 (Apple Silicon) ARM architecture!
     set(DLL_FILES
-        "libraries/nethosting/libnethost.so"
-        # Add more DLL file paths as needed here!
+        "libraries/nethosting/macos/intel64/libnethost.dylib"
+    )
+elseif (LINUX)
+    # TODO: Support ARM architecture for embedded devices like Raspberry Pi!
+    set(DLL_FILES
+        "libraries/nethosting/linux/intel64/libnethost.so"
     )
 endif()
 
@@ -118,6 +134,8 @@ foreach (dllFilePath ${DLL_FILES})
     else()
         set(absoluteDllFilePath "${CMAKE_CURRENT_SOURCE_DIR}/${dllFilePath}")
     endif()
+
+    message("Copying ${absoluteDllFilePath}")
 
     # WARNING: For some reason, this copy command doesn't work unless we provide the absolute path:
     #       Maybe because we're calling the cmake executable, which exists under our program files/OS installation files.

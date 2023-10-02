@@ -1,17 +1,18 @@
 # Advanced C++ (Learning)
 This is a learning project to help my C++ skills rival my Unity/C# skills.
 
-**Purpose:** I'm disappointed in the direction that Unity (as a game engine, and as a company) has been going for a while. It did, however, help to inspire my interest in free, open source, stable, and extensible software with a focus on RPGs for PC and console gaming!
+**Purpose:** I'm disappointed in the direction that Unity (as a game engine, and as a company) has been going for a while. However, it's taught me so much about game development and API design, and inspired my interest in free, open source, stable, and extensible software with a focus on RPGs for PC and console gaming.
 
-So, I'm deciding to become independent of Unity by learning an immense amount of C++, to give me much more freedom as a developer, and perhaps even potential to contribute someday to [Godot engine](https://godotengine.org/) or learn [Unreal engine](https://www.unrealengine.com). For now, I'm sticking with command line, libraries, and 2D projects.
+I'm deciding to become independent of Unity by learning an immense amount of C++, to give me much more freedom as a developer, and perhaps even potential to contribute someday to [Godot engine](https://godotengine.org/) or learn [Unreal engine](https://www.unrealengine.com). For now, I'm sticking with command line, libraries, and 2D projects. I hope this project helps to provide a human-friendly, more understandable example of working with many C++ libraries to create a small, specialized game engine.
 
 ---
 
 ## 🛠️ Platform Support
 - ✅ Windows
-- ❌ MacOS
+- ✅ MacOS
+    - ⚠️ I currently only own an Intel Mac computer, so I can't support Arm64 (M1/M2) / Apple Silicon computer architecture yet.
 - ✅ Linux (tested on Zorin/Ubuntu)
-- ❌ Raspberry Pi (will test on armx64)
+- ❌ Raspberry Pi (will test on arm64)
 
 
 ## 🛠️ Project TODO's
@@ -31,7 +32,7 @@ This project is very much in-progress. Here are some things I'd like to do next:
 ## Learning Topics
 - JSON saving/loading
 - Embedding C# scripting
-- Cross-platform support (Win/Max/Linux/Pi)
+- Cross-platform support (Win/Mac/Linux/Pi)
 - Using EC/ECS
 - File I/O
 - Rendering realtime 2D pixel art
@@ -55,9 +56,7 @@ This project is very much in-progress. Here are some things I'd like to do next:
 - [![Git icon](/docs/images/Git%20Icon%20(Small%20Orange).png "Dear ImGui is brought in as a git submodule")](https://git-scm.com/book/en/v2/Git-Tools-Submodules) [(Dear) ImGui v1.89.9-docking](https://github.com/ocornut/imgui/tree/v1.89.9-docking)
 
 ## Resources
-- https://github.com/dotnet/roslyn
 - https://www.baeldung.com/java-structural-design-patterns
-- (Roslyn) https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp/
 
 - ### [C# .NET Hosting from Native C++](https://learn.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting)
     - See their GitHub docs on [Native hosting (Calling managed function)](https://github.com/dotnet/runtime/blob/main/docs/design/features/native-hosting.md#calling-managed-function-net-5-and-above) and a brief explanation of [the components involved](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md).

@@ -19,7 +19,7 @@ function(setup_platforms)
         set(PLATFORM_NAME "Unknown" PARENT_SCOPE)
     endif()
 
-    if (CMAKE_SYSTEM_PROCESSOR MATCHES "(x84_64)|((amd)|(AMD)64)")
+    if (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86_64)|((amd)|(AMD)64)")
         set(INTEL64 True PARENT_SCOPE)
     elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
         set(ARM64 True PARENT_SCOPE)

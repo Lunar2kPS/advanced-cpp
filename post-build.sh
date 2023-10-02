@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # COMMAND LINE USAGE:
-# sh post-build.sh {BUILD_EXIT_CODE} {BUILD_OUTPUT_FOLDER}
+# post-build.sh {BUILD_EXIT_CODE} {BUILD_OUTPUT_FOLDER}
 argCount=$#
 args=("$@")
 buildExitCode=${args[0]}

@@ -45,7 +45,7 @@ This project is very much in-progress. Here are some things I'd like to do next:
 - .NET 7+ (SDK) ⚠️ _(more instructions to come soon about this)_
 - [Nlohmann's Json Library v3.11.2](https://github.com/nlohmann/json/releases/tag/v3.11.2)
     - Downloaded the `include.zip`, deleted the `include` folder and `meson.build` file, and changed the structure to easily `#include "nlohmann/json.hpp"`
-- [Entt v3.12.2](https://github.com/skypjack/entt)
+- [EnTT v3.12.2](https://github.com/skypjack/entt)
     - Downloaded their single-file header include ([entt.hpp](https://github.com/skypjack/entt/blob/v3.12.2/single_include/entt/entt.hpp))
 - [GLAD v2.0.4](https://github.com/Dav1dde/glad/tree/v2.0.4)
     - Linked in their README, use their [webservice](https://gen.glad.sh/) to generate the files you need.

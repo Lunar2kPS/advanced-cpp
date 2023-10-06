@@ -144,6 +144,9 @@ void runImgui() {
             // printf("moveTarget = %d\n", moveTarget);
         }
 
+        glClearColor(0, 0, 0, 0);
+        glClear(GL_COLOR_BUFFER_BIT);
+
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

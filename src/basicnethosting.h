@@ -23,6 +23,7 @@
 #include "hostfxr.h"
 
 using std::cout;
+using std::wcout;
 using std::cerr;
 using std::hex;
 using std::dec;
@@ -48,19 +49,63 @@ namespace carlos {
     load_assembly_and_get_function_pointer_fn getNETLoadAssembly(const char_t* configPath);
     bool loadHostfxr();
 
-    int runManagedCode(const string_t& rootPath) {
-        //STEP 1: Load hostfxr and get certain exported functions
-        if (!loadHostfxr()) {
-            return 1;
+    string_t getCurrentDirectory(
+        int argCount,
+#if defined(WINDOWS)
+        wchar_t** args
+#else
+        char** args
+#endif
+    ) {
+        //Get the current executable's directory
+        //This assumes the managed assembly to load and its runtime configuration file are next to the host
+        char_t rootPath[MAX_PATH];
+        #if defined(WINDOWS)
+            int size = GetFullPathNameW(args[0], sizeof(rootPath) / sizeof(char_t), rootPath, nullptr);
+            if (size <= 0)
+                return STR("");
+        #else
+            char* result = realpath(args[0], rootPath);
+            if (result == nullptr)
+                return STR("");
+        #endif
+
+        string_t rootPathStr = rootPath;
+        for (size_t i = 0; i < rootPathStr.length(); i++) {
+            if (rootPathStr[i] == '\\')
+                rootPathStr[i] = '/';
         }
 
-        //STEP 2: Initialize and start the .NET runtime
-        const string_t configPath = rootPath + STR("/MainCSProj.runtimeconfig.json");
-        load_assembly_and_get_function_pointer_fn netLoadAssembly = getNETLoadAssembly(configPath.c_str());
+        int index = rootPathStr.find_last_of('/');
+        rootPathStr = rootPathStr.substr(0, index);
+        
+        //TODO: Clean this up...
+        #if defined(WINDOWS)
+            wcout << "rootPath = " << rootPathStr << endl;
+        #else
+            cout << "rootPath = " << rootPathStr << endl;
+        #endif
+        return rootPathStr;
+    }
 
-        if (netLoadAssembly == nullptr) {
-            cerr << "Failed to get .NET load assembly." << endl;
-            return 1;
+    bool didLoad = false;
+    load_assembly_and_get_function_pointer_fn netLoadAssembly = nullptr;
+    int runManagedCode(const string_t& rootPath) {
+        //STEP 1: Load hostfxr and get certain exported functions
+        if (!didLoad) {
+            if (!loadHostfxr()) {
+                return 1;
+            }
+
+            //STEP 2: Initialize and start the .NET runtime
+            const string_t configPath = rootPath + STR("/MainCSProj.runtimeconfig.json");
+            netLoadAssembly = getNETLoadAssembly(configPath.c_str());
+
+            if (netLoadAssembly == nullptr) {
+                cerr << "Failed to get .NET load assembly." << endl;
+                return 1;
+            }
+            didLoad = true;
         }
 
         //STEP 3: Load managed assembly and get pointer to a managed method
@@ -117,7 +162,12 @@ namespace carlos {
         int result = get_hostfxr_path(buffer, &bufferSize, nullptr);
         if (result != 0)
             cerr << "(ERROR) get_hostfxr_path result = " << hex << showbase << result << dec << noshowbase << endl;
-        cout << "hostfxr path = " << ((char_t*) buffer) << endl;
+        //TODO: Clean this up...
+        #if defined(WINDOWS)
+            wcout << "hostfxr path = " << ((wchar_t*) buffer) << endl;
+        #else
+            cout << "hostfxr path = " << ((char_t*) buffer) << endl;
+        #endif
         void* library = loadLibrary(buffer);
 
         initFunction = (hostfxr_initialize_for_runtime_config_fn) getExport(library, "hostfxr_initialize_for_runtime_config");

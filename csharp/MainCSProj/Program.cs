@@ -12,7 +12,9 @@
 //}
 
 using System;
+using System.Threading;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace MainCSProjNamespace {
     public class Program {
@@ -27,11 +29,24 @@ namespace MainCSProjNamespace {
         }
 
         public static int SimpleMethod(IntPtr arg, int argLength) {
+            Console.WriteLine(argLength + " vs. " + Marshal.SizeOf<LibraryArgs>());
             if (argLength < Marshal.SizeOf<LibraryArgs>())
                 return 1;
 
+            Task test = Task.Run(async () => {
+                int sum = 0;
+                int interval = 400;
+                for (int i = 0; i < 10; i++) {
+                    Console.WriteLine("Waiting... (" + sum + "ms)");
+                    await Task.Delay(interval);
+                    sum += interval;
+                }
+            });
             LibraryArgs args = Marshal.PtrToStructure<LibraryArgs>(arg);
-            Console.WriteLine("Hello world from C#! (" + GetString(args.message) + ")");
+            for (int i = 0; i < 3; i++) {
+                Console.WriteLine("Hello world from C#! (" + GetString(args.message) + ")");
+                Thread.Sleep(1000);
+            }
             return 0;
         }
 

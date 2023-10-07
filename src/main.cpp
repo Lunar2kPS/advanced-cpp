@@ -1,5 +1,6 @@
 #include <chrono>
 #include <iostream>
+#include <future>
 #include <thread>
 #include <string>
 #include <sstream>
@@ -32,8 +33,17 @@ using std::this_thread::sleep_for;
 using std::chrono::milliseconds;
 using std::stringstream;
 using glm::vec3;
+using std::future;
+using std::async;
 
-void runImgui();
+void runImgui(
+    int argCount,
+#if defined(WINDOWS)
+    wchar_t** args
+#else
+    char** args
+#endif
+);
 int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& window);
 
 #if defined(WINDOWS)
@@ -45,37 +55,24 @@ int main(int argCount, char** args) {
     testJSON();
     testECS();
 
-    //Get the current executable's directory
-    //This assumes the managed assembly to load and its runtime configuration file are next to the host
-    char_t rootPath[MAX_PATH];
-    #if defined(WINDOWS)
-        int size = GetFullPathNameW(args[0], sizeof(rootPath) / sizeof(char_t), rootPath, nullptr);
-        if (size <= 0)
-            return 1;
-    #else
-        char* result = realpath(args[0], rootPath);
-        if (result == nullptr)
-            return 1;
-    #endif
-    cout << "rootPath = " << rootPath << endl;
+    // string_t path = carlos::getCurrentDirectory(argCount, args);
+    // future task = async(std::launch::async, [&rootPathStr]() {
+    //     carlos::runManagedCode(path);
+    // });
 
-    string_t rootPathStr = rootPath;
-    for (size_t i = 0; i < rootPathStr.length(); i++) {
-        if (rootPathStr[i] == '\\')
-            rootPathStr[i] = '/';
-    }
-
-    int index = rootPathStr.find_last_of('/');
-    rootPathStr = rootPathStr.substr(0, index);
-
-    carlos::runManagedCode(rootPathStr);
-
-    runImgui();
+    runImgui(argCount, args);
 
     return 0;
 }
 
-void runImgui() {
+void runImgui(
+    int argCount,
+#if defined(WINDOWS)
+    wchar_t** args
+#else
+    char** args
+#endif
+) {
     GLFWwindow* window;
     int initError = tryCreateWindow("Advanced C++", 800, 600, window);
     if (initError != 0) {
@@ -107,6 +104,7 @@ void runImgui() {
     int windowHeight;
     float timeLastSwitched = 0;
     float prevTime = glfwGetTime();
+    bool was0PressedLastFrame = false;
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         
@@ -136,13 +134,20 @@ void runImgui() {
         if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
             input.z++;
 
-        if (glfwGetKey(window, GLFW_KEY_0) && time - timeLastSwitched > 1) {
+        bool is0PressedThisFrame = glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS;
+        if (is0PressedThisFrame != was0PressedLastFrame && is0PressedThisFrame) {
+            string_t path = carlos::getCurrentDirectory(argCount, args);
+            future task = async(std::launch::async, [&path]() {
+                carlos::runManagedCode(path);
+            });
+
             // moveTarget = (MovementMode) ((int) moveTarget + 1);
             // if ((int) moveTarget > 1)
             //     moveTarget = (MovementMode) 0;
             // timeLastSwitched = time;
             // printf("moveTarget = %d\n", moveTarget);
         }
+        was0PressedLastFrame = is0PressedThisFrame;
 
         glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT);

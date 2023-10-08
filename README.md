@@ -7,18 +7,31 @@ I'm deciding to become independent of Unity by learning an immense amount of C++
 
 ---
 
-## 🛠️ Platform Support
+## Learning Topics
+- Cross-platform support (Win/Mac/Linux/Pi)
+- JSON saving/loading
+- Using EC/ECS
+- Embedding C# scripting _(native .NET hosting)_
+- File I/O
+- Rendering realtime 2D pixel art
+- Using GUI
+- HTTP Networking
+- TCP/UDP Networking
+- Measuring performance and/or profiling
+
+
+## Platform Support
 - ✅ Windows
 - ✅ MacOS
     - ⚠️ I currently only own an Intel Mac computer, so I can't support Arm64 (M1/M2) / Apple Silicon computer architecture yet.
 - ✅ Linux (tested on Zorin/Ubuntu)
-- 🛠️ Raspberry Pi (tested on arm64)
+- ✅ Raspberry Pi (tested on arm64)
 
 
 ## 🛠️ Project TODO's
 This project is very much in-progress. Here are some things I'd like to do next:
 
-- ⚠️ **I need to document the setup better for .NET hosting,** and make it easier to build. Currently, you need to copy the VS output files from the csharp project into the C++ program's output directory for the .NET hosting to work.
+- I need to document the setup better for .NET hosting.
 - Open questions about Linux:
     - Why did linking against dl work but not against libdl?
     - Why did we need to link against pthread? Is this intentional?
@@ -29,31 +42,25 @@ This project is very much in-progress. Here are some things I'd like to do next:
         - https://man7.org/linux/man-pages/man3/dlopen.3.html#LIBRARY
 
 
-## Learning Topics
-- JSON saving/loading
-- Embedding C# scripting
-- Cross-platform support (Win/Mac/Linux/Pi)
-- Using EC/ECS
-- File I/O
-- Rendering realtime 2D pixel art
-- Using GUI
-- HTTP Networking
-- TCP/UDP Networking
-
-
-## 🛠️ Project Dependencies
-- .NET 7+ (SDK) ⚠️ _(more instructions to come soon about this)_
+## Project Dependencies
+- .NET 7+ (SDK) 🛠️ _(more instructions to come soon about this)_
 - [Nlohmann's Json Library v3.11.2](https://github.com/nlohmann/json/releases/tag/v3.11.2)
-    - Downloaded the `include.zip`, deleted the `include` folder and `meson.build` file, and changed the structure to easily `#include "nlohmann/json.hpp"`
+    - ℹ️ Nlohmann's Json Library allows you to easily read and write to [JSON _(JavaScript Object Notation)_](https://www.json.org/json-en.html), which is a widely used text-based format for saving and loading data into any program that supports reading/writing to it.
+    - ⚙️ **Include/compile/link instructions:** Download the `include.zip` (from one of the GitHub releases), delete the `include` folder and `meson.build` file, and change the folder structure to easily `#include "nlohmann/json.hpp"`
 - [EnTT v3.12.2](https://github.com/skypjack/entt)
-    - Downloaded their single-file header include ([entt.hpp](https://github.com/skypjack/entt/blob/v3.12.2/single_include/entt/entt.hpp))
+    - ℹ️ EnTT is a library for ECS _(Entity-Component System)_ architecture, similar to Unity GameObjects (entities) and MonoBehaviours (components).
+    - ⚙️ **Include/compile/link instructions:** Download their single-file header include ([entt.hpp](https://github.com/skypjack/entt/blob/v3.12.2/single_include/entt/entt.hpp))
 - [GLAD v2.0.4](https://github.com/Dav1dde/glad/tree/v2.0.4)
-    - Linked in their README, use their [webservice](https://gen.glad.sh/) to generate the files you need.
-    - I had some trouble setting this up, but it turned out to be easy! See [glad issue #443](https://github.com/Dav1dde/glad/issues/443) for more details.
-    - See [this screenshot](/docs/images/Glad%20v2.0.4%20Generation%20Options.png) for my exact options used!
+    - ℹ️ _(GL Loader-Generator)_ is used to load modern OpenGL functions on a variety of machines and environments, to make it much easier to get started using OpenGL features in cross-platform projects.
+    - ⚙️ **Include/compile/link instructions:** Linked in their README, use their [webservice](https://gen.glad.sh/) to generate the files you need.
+        - I had some trouble setting this up, but it turned out to be easy! See [glad issue #443](https://github.com/Dav1dde/glad/issues/443) for more details.
+        - See [this screenshot](/docs/images/Glad%20v2.0.4%20Generation%20Options.png) for my exact options used!
 - [![Git icon](/docs/images/Git%20Icon%20(Small%20Orange).png "GLFW is brought in as a git submodule")](https://git-scm.com/book/en/v2/Git-Tools-Submodules) [GLFW v3.3.8](https://github.com/glfw/glfw/tree/3.3.8)
+    - ℹ️ GLFW _(Graphics Library Framework)_ is used for creating our game window in a cross-platform way.
 - [![Git icon](/docs/images/Git%20Icon%20(Small%20Orange).png "GLM is brought in as a git submodule")](https://git-scm.com/book/en/v2/Git-Tools-Submodules) [GLM v0.9.9.8](https://github.com/g-truc/glm/tree/0.9.9.8)
+    - ℹ️ GLM _(OpenGL Mathematics)_ is used for our vector and matrix types, with similar usage to GLSL shader programs.
 - [![Git icon](/docs/images/Git%20Icon%20(Small%20Orange).png "Dear ImGui is brought in as a git submodule")](https://git-scm.com/book/en/v2/Git-Tools-Submodules) [(Dear) ImGui v1.89.9-docking](https://github.com/ocornut/imgui/tree/v1.89.9-docking)
+    - ℹ️ Dear ImGui _([previously named just "ImGui"](https://github.com/ocornut/imgui/discussions/4041) -- Immediate Mode Graphical User Interface)_ is used for developer/debugging user interface, like panels, text, buttons, and other GUI controls.
 
 ## Resources
 - https://www.baeldung.com/java-structural-design-patterns

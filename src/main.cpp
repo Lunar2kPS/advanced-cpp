@@ -13,7 +13,9 @@
 #include "tests/entities.h"
 #include "basicnethosting.h"
 
-#include "glad/gl.h"
+// #define IMGUI_IMPL_OPENGL_ES3
+#include "glad/egl.h"
+#include "glad/gles2.h"
 #include "GLFW/glfw3.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -90,7 +92,7 @@ void runImgui(
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
-    ImGui_ImplOpenGL3_Init();
+    ImGui_ImplOpenGL3_Init("#version 300 es");
 
     // while (true) {
     // for (int i = 0; i < 1000; i++) {
@@ -191,7 +193,7 @@ int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& windo
         //Like OpenGL 3.0+. HOWEVER,
         //NOTE: Context profiles are only available in OpenGL 3.2+, so we'll require that!
         //TODO: Try to require 4.6, then if we get the error (during callback) of "Requested OpenGL version 4.6, got version 4.1", then request that version instead!
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
         //NOTE: BEFORE doing this, I was getting the following results:
@@ -201,6 +203,10 @@ int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& windo
         //So, we set it to use OpenGL Core profile with forward compatibility: 
         glfwWindowHint(GLFW_OPENGL_PROFILE,             GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,      GL_TRUE);
+
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
+        glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
 
         glfwSetErrorCallback(errorCallback);
     }
@@ -214,12 +220,12 @@ int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& windo
 
     if (!glfwInitialized) {
         glfwMakeContextCurrent(window);
-        int version = gladLoadGL(glfwGetProcAddress);
+        int version = gladLoadGLES2(glfwGetProcAddress);
         if (version == 0) {
             printf("Failed to initialize OpenGL context with GLAD!\n");
             return 3;
         }
-        printf("Loaded OpenGL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+        printf("Loaded OpenGL ES %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
     }
     glfwInitialized = true;
     return 0;

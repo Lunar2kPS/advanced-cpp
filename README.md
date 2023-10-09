@@ -44,6 +44,7 @@ This project is very much in-progress. Here are some things I'd like to do next:
 
 ## Project Dependencies
 - .NET 7+ (SDK) 🛠️ _(more instructions to come soon about this)_
+    - ⚙️ The sources for these files are documented [here](/libraries/nethosting/source.md).
 - [Nlohmann's Json Library v3.11.2](https://github.com/nlohmann/json/releases/tag/v3.11.2)
     - ℹ️ Nlohmann's Json Library allows you to easily read and write to [JSON _(JavaScript Object Notation)_](https://www.json.org/json-en.html), which is a widely used text-based format for saving and loading data into any program that supports reading/writing to it.
     - ⚙️ **Include/compile/link instructions:** Download the `include.zip` (from one of the GitHub releases), delete the `include` folder and `meson.build` file, and change the folder structure to easily `#include "nlohmann/json.hpp"`

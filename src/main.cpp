@@ -9,8 +9,6 @@
 //      #include <Windows.h> NEEDS to be included FIRST before glfw!
 //      Or else there will be macro redefinition of APIENTRY.
 //      TODO: Have better structure in this entire program to avoid this better.. but just noting for now.
-#include "tests/json.h"
-#include "tests/entities.h"
 #include "basicnethosting.h"
 
 #include "glad/gl.h"
@@ -43,10 +41,6 @@ int __cdecl wmain(int argCount, wchar_t** args) {
 #else
 int main(int argCount, char** args) {
 #endif
-    cout << "Hello world!" << endl;
-    testJSON();
-    testECS();
-
     GLFWwindow* window;
     int initError = tryCreateWindow("Advanced C++", 800, 600, window);
     if (initError != 0) {

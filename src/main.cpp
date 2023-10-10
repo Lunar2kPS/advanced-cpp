@@ -47,6 +47,9 @@ int main(int argCount, char** args) {
         fprintf(stderr, "%s%d\n", "Exiting with initialization exit code ", initError);
         return initError;
     }
+    //NOTE: V-Sync: Wait 1 frame before rendering each frame --
+    //      don't waste CPU resources trying to render at 2000 FPS when our screens can't even display that fast!
+    glfwSwapInterval(1);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -65,6 +68,7 @@ int main(int argCount, char** args) {
     float timeLastSwitched = 0;
     float prevTime = glfwGetTime();
     bool was0PressedLastFrame = false;
+    bool was1PressedLastFrame = false;
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         glfwGetWindowSize(window, &windowWidth, &windowHeight);
@@ -76,6 +80,7 @@ int main(int argCount, char** args) {
 
         float time = glfwGetTime();
         float dt = time - prevTime;
+        float instantaneousFPS = 1 / dt;
 
         bool is0PressedThisFrame = glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS;
         if (is0PressedThisFrame != was0PressedLastFrame && is0PressedThisFrame) {
@@ -85,6 +90,13 @@ int main(int argCount, char** args) {
             });
         }
         was0PressedLastFrame = is0PressedThisFrame;
+
+        bool is1PressedThisFrame = glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS;
+        if (is1PressedThisFrame != was1PressedLastFrame && is1PressedThisFrame) {
+            if (carlos::closeFunction != nullptr)
+                carlos::closeFunction(nullptr);
+        }
+        was1PressedLastFrame = is1PressedThisFrame;
 
         glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT);

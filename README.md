@@ -58,6 +58,23 @@ See my [backlog](/BACKLOG.md) for other, lower priority learning goals.
 
 ## Resources
 - https://www.baeldung.com/java-structural-design-patterns
+- 🛠️ TODO: Sort through these helpful links:
+    - [EnTT Crash Course](https://skypjack.github.io/entt/md_docs_md_entity.html)
+    - [Arbitrary type JSON serialization](https://json.nlohmann.me/features/arbitrary_types/)
+    - Dear ImGui styles ([here](https://github.com/GraphicsProgramming/dear-imgui-styles) and [here](https://github.com/ocornut/imgui/issues/707))
+    - [The Definitive C++ Book Guide and List](https://stackoverflow.com/questions/388242/the-definitive-c-book-guide-and-list)
+    - [Discussion on proper use of GLAD](https://github.com/Dav1dde/glad/issues/443)
+    - [ThreadPools](https://learn.microsoft.com/en-us/dotnet/api/system.threading.threadpool?view=net-7.0)
+    - [OpenGL Docs](https://docs.gl/)
+    - [Do's and Do NOT's of multithreading](https://gamedev.stackexchange.com/a/80077)
+    - [File I/O in C++](https://www.w3schools.com/cpp/cpp_files.asp)
+    - Programming design patterns (C# focus, because that's what I'm familiar with):
+        - https://www.dofactory.com/net/design-patterns
+        - https://www.c-sharpcorner.com/UploadFile/bd5be5/design-patterns-in-net/
+        - https://refactoring.guru/design-patterns/csharp
+        - (C++) https://gameprogrammingpatterns.com/contents.html
+    - [FreeImage library](https://freeimage.sourceforge.io/download.html)
+        - [FreeImage docs](https://cfhcable.dl.sourceforge.net/project/freeimage/Source%20Documentation/3.18.0/FreeImage3180.pdf)
 
 - ### [C# .NET Hosting from Native C++](https://learn.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting)
     - See their GitHub docs on [Native hosting (Calling managed function)](https://github.com/dotnet/runtime/blob/main/docs/design/features/native-hosting.md#calling-managed-function-net-5-and-above) and a brief explanation of [the components involved](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md).

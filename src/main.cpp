@@ -1,4 +1,3 @@
-#include <chrono>
 #include <iostream>
 #include <future>
 #include <thread>
@@ -16,7 +15,6 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-#include "glm/glm.hpp"
 
 using std::wcout;
 using std::cout;
@@ -28,13 +26,14 @@ using std::endl;
 // using this_thread = std::this_thread;
 
 using std::this_thread::sleep_for;
-using std::chrono::milliseconds;
 using std::stringstream;
-using glm::vec3;
 using std::future;
 using std::async;
 
+string_t path;
+
 int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& window);
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int modifiers);
 
 #if defined(WINDOWS)
 int __cdecl wmain(int argCount, wchar_t** args) {
@@ -69,6 +68,9 @@ int main(int argCount, char** args) {
     float prevTime = glfwGetTime();
     bool was0PressedLastFrame = false;
     bool was1PressedLastFrame = false;
+
+    path = carlos::getCurrentDirectory(argCount, args);
+    glfwSetKeyCallback(window, keyCallback);
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         glfwGetWindowSize(window, &windowWidth, &windowHeight);
@@ -82,28 +84,11 @@ int main(int argCount, char** args) {
         float dt = time - prevTime;
         float instantaneousFPS = 1 / dt;
 
-        bool is0PressedThisFrame = glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS;
-        if (is0PressedThisFrame != was0PressedLastFrame && is0PressedThisFrame) {
-            string_t path = carlos::getCurrentDirectory(argCount, args);
-            future task = async(std::launch::async, [&path]() {
-                carlos::runManagedCode(path);
-            });
-        }
-        was0PressedLastFrame = is0PressedThisFrame;
-
-        bool is1PressedThisFrame = glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS;
-        if (is1PressedThisFrame != was1PressedLastFrame && is1PressedThisFrame) {
-            if (carlos::closeFunction != nullptr)
-                carlos::closeFunction(nullptr);
-        }
-        was1PressedLastFrame = is1PressedThisFrame;
-
         glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT);
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
 
         glfwSwapBuffers(window);
         prevTime = time;
@@ -116,6 +101,25 @@ int main(int argCount, char** args) {
     glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
+}
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int modifiers) {
+    switch (key) {
+        case GLFW_KEY_0:
+            if (action == GLFW_PRESS) {
+                future task = async(std::launch::async, []() {
+                    carlos::runManagedCode(path);
+                });
+            }
+            break;
+        case GLFW_KEY_1:
+            if (action == GLFW_PRESS) {
+                cout << "Attempting to unload hostfxr/nethost... but I don't think this is officially supported, so it won't work!" << endl;
+                if (carlos::closeFunction != nullptr)
+                    carlos::closeFunction(nullptr);
+            }
+            break;
+    }
 }
 
 

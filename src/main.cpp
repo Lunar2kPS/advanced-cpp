@@ -36,14 +36,6 @@ using glm::vec3;
 using std::future;
 using std::async;
 
-void runImgui(
-    int argCount,
-#if defined(WINDOWS)
-    wchar_t** args
-#else
-    char** args
-#endif
-);
 int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& window);
 
 #if defined(WINDOWS)
@@ -55,29 +47,11 @@ int main(int argCount, char** args) {
     testJSON();
     testECS();
 
-    // string_t path = carlos::getCurrentDirectory(argCount, args);
-    // future task = async(std::launch::async, [&rootPathStr]() {
-    //     carlos::runManagedCode(path);
-    // });
-
-    runImgui(argCount, args);
-
-    return 0;
-}
-
-void runImgui(
-    int argCount,
-#if defined(WINDOWS)
-    wchar_t** args
-#else
-    char** args
-#endif
-) {
     GLFWwindow* window;
     int initError = tryCreateWindow("Advanced C++", 800, 600, window);
     if (initError != 0) {
         fprintf(stderr, "%s%d\n", "Exiting with initialization exit code ", initError);
-        return; //initError;
+        return initError;
     }
 
     // Setup Dear ImGui context
@@ -91,14 +65,6 @@ void runImgui(
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
     ImGui_ImplOpenGL3_Init();
-
-    // while (true) {
-    // for (int i = 0; i < 1000; i++) {
-    //     ImGui::Render();
-    //     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    //     sleep_for(std::chrono::milliseconds(30));
-    // }
     
     int windowWidth;
     int windowHeight;
@@ -107,32 +73,15 @@ void runImgui(
     bool was0PressedLastFrame = false;
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
+        glfwGetWindowSize(window, &windowWidth, &windowHeight);
         
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         ImGui::ShowDemoWindow(); // Show demo window! :)
 
-        glfwGetWindowSize(window, &windowWidth, &windowHeight);
-
         float time = glfwGetTime();
         float dt = time - prevTime;
-
-        vec3 input = vec3(0);
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-            input.x--;
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-            input.x++;
-            
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-            input.y--;
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-            input.y++;
-
-        if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
-            input.z--;
-        if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
-            input.z++;
 
         bool is0PressedThisFrame = glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS;
         if (is0PressedThisFrame != was0PressedLastFrame && is0PressedThisFrame) {
@@ -140,12 +89,6 @@ void runImgui(
             future task = async(std::launch::async, [&path]() {
                 carlos::runManagedCode(path);
             });
-
-            // moveTarget = (MovementMode) ((int) moveTarget + 1);
-            // if ((int) moveTarget > 1)
-            //     moveTarget = (MovementMode) 0;
-            // timeLastSwitched = time;
-            // printf("moveTarget = %d\n", moveTarget);
         }
         was0PressedLastFrame = is0PressedThisFrame;
 
@@ -166,6 +109,7 @@ void runImgui(
 
     glfwDestroyWindow(window);
     glfwTerminate();
+    return 0;
 }
 
 

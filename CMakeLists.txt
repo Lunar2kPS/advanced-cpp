@@ -74,6 +74,7 @@ target_link_libraries("${PROJECT_NAME}" PUBLIC glfw)
 target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/glfw/include")
 
 
+# GLM
 # See for glm compiler options: https://chromium.googlesource.com/external/github.com/g-truc/glm/+/HEAD/manual.md
 add_compile_definitions(GLM_FORCE_LEFT_HANDED)
 add_subdirectory("libraries/glm")

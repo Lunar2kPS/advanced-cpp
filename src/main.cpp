@@ -143,8 +143,8 @@ int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& windo
 
         //NOTE: Let's require a certain (old) version of OpenGL or newer...
         //Like OpenGL 3.0+. HOWEVER,
-        //NOTE: Context profiles are only available in OpenGL 3.2+, so we'll require that!
-        //TODO: Try to require 4.6, then if we get the error (during callback) of "Requested OpenGL version 4.6, got version 4.1", then request that version instead!
+        //NOTE: Context profiles are only available in OpenGL 3.2+, so we'll require that
+        //TODO: Try to require 4.6, then if we get the error (during callback) of "Requested OpenGL version 4.6, got version 4.1", then request that version instead
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 

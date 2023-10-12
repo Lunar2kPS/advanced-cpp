@@ -11,9 +11,6 @@ using std::cout;
 using std::endl;
 
 int main(int argCount, char** args) {
-    cout << u8"UTF-8 cout test: lΔφρυθ" << endl;
-    cout << "UTF-8 cout test: lΔφρυθ" << endl;
-
     #if defined(_WIN32)
         SetConsoleOutputCP(CP_UTF8);
         SetConsoleCP(CP_UTF8);
@@ -25,5 +22,8 @@ int main(int argCount, char** args) {
         locale utf8 = locale("en_US.UTF-8");
         locale::global(utf8); //https://en.cppreference.com/w/cpp/locale/locale/global
     #endif
+
+    cout << u8"UTF-8 cout test: lΔφρυθ" << endl;
+    cout << "UTF-8 cout test: lΔφρυθ" << endl;
     return 0;
 }

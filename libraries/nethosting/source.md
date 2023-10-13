@@ -7,7 +7,13 @@ I retrieved these files from the following folders. Each of them are nested insi
     - nethost.h\*
     - nethost.dll
     - nethost.lib
-- **MacOS:** `/users/local/share/dotnet/packs/Microsoft.NETCore.App.Host.osx-x64/7.0.11/runtimes/osx-64/native`
+- **MacOS (Intel64):** `/users/local/share/dotnet/packs/Microsoft.NETCore.App.Host.osx-x64/7.0.11/runtimes/osx-64/native`
+    - coreclr_delegates.h\*
+    - hostfxr.h\*
+    - nethost.h\*
+    - libnethost.a
+    - libnethost.dylib
+- **MacOS (Arm64):** `/usr/local/share/dotnet/packs/Microsoft.NETCore.App.Host.osx-arm64/7.0.1/runtimes/osx-arm64/native` _(downloaded from [here](https://github.com/dotnet/core/blob/main/release-notes/7.0/7.0.11/7.0.11.md), not sure why the actual downloaded/install path is 7.0.1 instead of 7.0.11)_
     - coreclr_delegates.h\*
     - hostfxr.h\*
     - nethost.h\*

@@ -9,8 +9,7 @@ I'm deciding to learn an immense amount of C++, to give me much more freedom as 
 
 ## Platform Support
 - ✅ Windows
-- ✅ MacOS
-    - ⚠️ I currently only own an Intel Macbook, so I can't support Arm64 (M1/M2) / Apple Silicon computer architecture yet.
+- ✅ MacOS (Intel64 and Arm64 (M1/M2))
 - ✅ Linux (tested on Zorin/Ubuntu)
 - ✅ Raspberry Pi (tested on arm64)
 

@@ -1,4 +1,5 @@
-﻿#include <fstream>
+﻿#include <cstring> //NOTE: For some reason, including <string> on Ubuntu Linux doesn't include strlen. We need to explicitly include <cstring>
+#include <fstream>
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -7,7 +8,6 @@
 #if defined(_WIN32)
     #include <Windows.h>
     #pragma execution_character_set("utf-8")
-    using std::locale;
 #endif
 
 using std::cout;
@@ -23,19 +23,20 @@ using std::string;
 using std::dec;
 using std::hex;
 using std::uppercase;
+using std::locale;
 
 int main(int argCount, char** args) {
     #if defined(_WIN32)
         SetConsoleOutputCP(CP_UTF8);
         SetConsoleCP(CP_UTF8);
-        setlocale(LC_ALL, "en_US.UTF-8");
 
         // Enable buffering to prevent VS from chopping up UTF-8 byte sequences
         setvbuf(stdout, nullptr, _IOFBF, 1000);
-
-        locale utf8 = locale("en_US.UTF-8");
-        locale::global(utf8); //https://en.cppreference.com/w/cpp/locale/locale/global
     #endif
+
+    setlocale(LC_ALL, "en_US.UTF-8");
+    locale utf8 = locale("en_US.UTF-8");
+    locale::global(utf8); //https://en.cppreference.com/w/cpp/locale/locale/global
 
     cout << u8"UTF-8 cout test: lΔφρυθ" << endl;
     cout << "UTF-8 cout test: lΔφρυθ" << endl;
@@ -57,7 +58,7 @@ int main(int argCount, char** args) {
         cout.flush();
     }
 
-    ofstream outFile("../test-output.txt", ios::binary, ios::trunc);
+    ofstream outFile = ofstream("./test-output.txt", ios::binary | ios::trunc);
     outFile.imbue(utf8);
     outFile << "This is some\nText in a file\nwith a couple lines." << endl;
     outFile.close();

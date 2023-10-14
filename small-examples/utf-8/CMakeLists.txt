@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.19)
 project("UTF-8Example" VERSION 1.0.0)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 add_executable("${PROJECT_NAME}" main.cpp)
 
 # NOTE: For UTF-8 Unicode tips,

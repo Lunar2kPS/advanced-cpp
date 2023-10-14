@@ -32,9 +32,17 @@ using std::stringstream;
 using std::future;
 using std::async;
 
-string_t path;
+#define ENUM_TO_STRING(s) #s
+enum class GraphicsAPI : int {
+    NONE = 0,
+    OPENGL,
+    OPENGL_ES
+};
 
-int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& window);
+string_t path;
+GraphicsAPI graphicsAPI;
+
+int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& window, GraphicsAPI& api);
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int modifiers);
 
 #if defined(WINDOWS)
@@ -43,7 +51,7 @@ int __cdecl wmain(int argCount, wchar_t** args) {
 int main(int argCount, char** args) {
 #endif
     GLFWwindow* window;
-    int initError = tryCreateWindow("Advanced C++", 800, 600, window);
+    int initError = tryCreateWindow("Advanced C++", 800, 600, window, graphicsAPI);
     if (initError != 0) {
         fprintf(stderr, "%s%d\n", "Exiting with initialization exit code ", initError);
         return initError;
@@ -62,11 +70,11 @@ int main(int argCount, char** args) {
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
-// <<<<<<< HEAD
-    ImGui_ImplOpenGL3_Init("#version 300 es");
-// =======
-//     ImGui_ImplOpenGL3_Init();
-// >>>>>>> main
+
+    if (graphicsAPI == GraphicsAPI::OPENGL)
+        ImGui_ImplOpenGL3_Init();
+    else if (graphicsAPI == GraphicsAPI::OPENGL_ES)
+        ImGui_ImplOpenGL3_Init("#version 300 es");
     
     int windowWidth;
     int windowHeight;
@@ -140,42 +148,57 @@ void errorCallback(int errorCode, const char* description) {
     fprintf(stderr, "%s", message);
 }
 
-int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& window) {
+void prepareForOpenGL() {
+    //NOTE: Let's require a certain (old) version of OpenGL or newer...
+    //Like OpenGL 3.0+. HOWEVER,
+    //NOTE: Context profiles are only available in OpenGL 3.2+, so we'll require that
+    //TODO: Try to require 4.6, then if we get the error (during callback) of "Requested OpenGL version 4.6, got version 4.1", then request that version instead
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+
+    //NOTE: BEFORE doing this, I was getting the following results:
+    //  Windows:        OpenGL 4.6          ==> NOW OpenGL 3.2
+    //  MacOS:          OpenGL 2.1          ==> NOW OpenGL 4.1!
+    //  Linux:          OpenGL 4.6          ==> NOW OpenGL 3.2
+    //So, we set it to use OpenGL Core profile with forward compatibility: 
+    glfwWindowHint(GLFW_OPENGL_PROFILE,             GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,      GL_TRUE);
+}
+
+void prepareForOpenGLES() {
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+
+    glfwWindowHint(GLFW_OPENGL_PROFILE,             GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,      GL_TRUE);
+
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
+    glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+}
+
+int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& window, GraphicsAPI& api) {
     if (!glfwInitialized) {
+        api = GraphicsAPI::NONE;
         if (!glfwInit()) {
             fprintf(stderr, "GLFW initialization failed!\n");
             return 1;
         }
-
-        //NOTE: Let's require a certain (old) version of OpenGL or newer...
-        //Like OpenGL 3.0+. HOWEVER,
-        
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        
-        //NOTE: Context profiles are only available in OpenGL 3.2+, so we'll require that
-        //TODO: Try to require 4.6, then if we get the error (during callback) of "Requested OpenGL version 4.6, got version 4.1", then request that version instead
-
-        // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-
-        //NOTE: BEFORE doing this, I was getting the following results:
-        //  Windows:        OpenGL 4.6          ==> NOW OpenGL 3.2
-        //  MacOS:          OpenGL 2.1          ==> NOW OpenGL 4.1!
-        //  Linux:          OpenGL 4.6          ==> NOW OpenGL 3.2
-        //So, we set it to use OpenGL Core profile with forward compatibility: 
-        glfwWindowHint(GLFW_OPENGL_PROFILE,             GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,      GL_TRUE);
-
-        glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
-        glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
-
         glfwSetErrorCallback(errorCallback);
     }
 
+    prepareForOpenGL();
     window = glfwCreateWindow(width, height, title, NULL, NULL);
-    if (window == NULL) {
-        fprintf(stderr, "Failed to create window or OpenGL context!\n");
+    if (window != nullptr) {
+        api = GraphicsAPI::OPENGL;
+    } else {
+        prepareForOpenGLES();
+        window = glfwCreateWindow(width, height, title, NULL, NULL);
+        if (window != nullptr)
+            api = GraphicsAPI::OPENGL_ES;
+    }
+    if (window == nullptr) {
+        fprintf(stderr, "Failed to create window or OpenGL/OpenGL ES context!\n");
         glfwTerminate();
         return 2;
     }
@@ -187,7 +210,11 @@ int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& windo
             printf("Failed to initialize OpenGL context with GLAD!\n");
             return 3;
         }
-        printf("Loaded OpenGL ES %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+        //TODO: Clean this up:
+        if (api == GraphicsAPI::OPENGL)
+            printf("Loaded OpenGL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+        else if (api == GraphicsAPI::OPENGL_ES)
+            printf("Loaded OpenGL ES %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
     }
     glfwInitialized = true;
     return 0;

@@ -1,6 +1,15 @@
 # Small C++ Program Examples
 These small C++ programs demonstrate how to use tools, libraries, and programming design patterns, on a more basic level.
 
+Programs:
+- [ECS](./ecs)
+- [JSON](./json)
+- [OpenGL](./opengl)
+- [UTF-8](./utf-8)
+- [Programming Design Patterns](./patterns):
+    - [Singleton](./patterns/singleton)
+    - _More coming soon!_
+
 ## 📜 How to Run These Programs
 NOTE: Each project has a name, defined near the top of their CMakeLists.txt file with the `project(...)` CMake statement. For example, `project("JsonExample" VERSION 1.0.0)` defines the project name to be "JsonExample".
 

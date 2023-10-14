@@ -11,4 +11,4 @@ NOTE: Each project has a name, defined near the top of their CMakeLists.txt file
     - This uses the build tool/generator used by CMake to actually build your project.
 4. Using the **name of your project** _(see above)_, run your executable:
     - `./out/[CONFIG]/[PROJECT_NAME].exe` _(Windows)_
-    - `./out/[CONFIG]/[PROJECT_NAME]` _(Mac/Linux)_
+    - `./out/[PROJECT_NAME]` _(Mac/Linux)_

@@ -21,7 +21,7 @@ function(setup_platforms)
 
     if (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86_64)|((amd)|(AMD)64)")
         set(INTEL64 True PARENT_SCOPE)
-    elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+    elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "(arm)|(aarch)64")
         set(ARM64 True PARENT_SCOPE)
     endif()
 endfunction()

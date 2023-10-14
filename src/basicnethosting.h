@@ -6,6 +6,7 @@
 
 #if defined(WINDOWS)
     #include <Windows.h>
+    #include <libloaderapi.h>
     #define STR(s) L ## s
 #else
     #include <dlfcn.h>

@@ -40,8 +40,9 @@ if (WINDOWS)
 elseif (MACOS)
     if (INTEL64)
         target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting/macos/intel64")
+    elseif (ARM64)
+        target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting/macos/arm64")
     endif()
-    # TODO: Support M1/M2 (Apple Silicon) ARM architecture!
 elseif (LINUX)
     if (INTEL64)
         target_link_directories("${PROJECT_NAME}" PUBLIC "libraries/nethosting/linux/intel64")
@@ -74,6 +75,7 @@ target_link_libraries("${PROJECT_NAME}" PUBLIC glfw)
 target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/glfw/include")
 
 
+# GLM
 # See for glm compiler options: https://chromium.googlesource.com/external/github.com/g-truc/glm/+/HEAD/manual.md
 add_compile_definitions(GLM_FORCE_LEFT_HANDED)
 add_subdirectory("libraries/glm")
@@ -115,10 +117,15 @@ if (WINDOWS)
         # Add more DLL file paths as needed here!
     )
 elseif (MACOS)
-    # TODO: Support M1/M2 (Apple Silicon) ARM architecture!
-    set(DLL_FILES
-        "libraries/nethosting/macos/intel64/libnethost.dylib"
-    )
+    if (INTEL64)
+        set(DLL_FILES
+            "libraries/nethosting/macos/intel64/libnethost.dylib"
+        )
+    elseif (ARM64)
+        set(DLL_FILES
+            "libraries/nethosting/macos/arm64/libnethost.dylib"
+        )
+    endif()
 elseif (LINUX)
     if (INTEL64)
         set(DLL_FILES

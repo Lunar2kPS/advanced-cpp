@@ -1,23 +1,21 @@
 #include <iostream>
 
-//NOTE: Just for glm::to_string(...)
-#define GLM_ENABLE_EXPERIMENTAL
-
-
 #include "entt/entt.hpp"
-#include "glm/ext.hpp" //NOTE: Just for glm::to_string(...)
-#include "Transform.h"
 
 using std::cout;
 using std::endl;
 
 using namespace entt;
-using namespace carlos;
 
-struct Velocity {
-    vec2 velocity;
+struct Transform {
+    float positionX;
+    float positionY;
 };
 
+struct Velocity {
+    float velocityX;
+    float velocityY;
+};
 
 void update(registry& registry, float dt) {
     //TODO: Figure out the data types here.
@@ -38,8 +36,8 @@ void update(registry& registry, float dt) {
         Transform& t = view.get<Transform>(e);
         Velocity& v = view.get<Velocity>(e);
 
-        vec2 localPos = t.getLocalPosition();
-        t.setLocalPosition(localPos + v.velocity * dt);
+        t.positionX = (t.positionX + v.velocityX * dt);
+        t.positionY = (t.positionY + v.velocityY * dt);
     }
 }
 
@@ -49,12 +47,12 @@ void test(registry& registry) {
     for (entity e : view) {
         Transform& t = view.get<Transform>(e);
         //NOTE: https://stackoverflow.com/questions/11515469/how-do-i-print-vector-values-of-type-glmvec3-that-have-been-passed-by-referenc
-        cout << "pos = (" << glm::to_string(t.getLocalPosition()) << ")" << endl;
+        cout << "pos = (" << t.positionX << ", " << t.positionY << ")" << endl;
     }
     cout << endl;
 }
 
-void testECS() {
+int main() {
     registry registry;
 
     for (int i = 0; i < 3; i++) {
@@ -74,10 +72,8 @@ void testECS() {
         if (i % 2 == 0) {
             // registry.emplace<Velocity>(e, i, (float) i / 2);
             Velocity& v = registry.emplace<Velocity>(e);
-            v.velocity = vec2(
-                i,
-                (float) i / 2
-            );
+            v.velocityX = i;
+            v.velocityY = (float) i / 2;
         }
     }
 
@@ -85,4 +81,5 @@ void testECS() {
         update(registry, 0.1f);
         test(registry);
     }
+    return 0;
 }

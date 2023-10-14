@@ -1,4 +1,3 @@
-#include <chrono>
 #include <iostream>
 #include <future>
 #include <thread>
@@ -9,8 +8,6 @@
 //      #include <Windows.h> NEEDS to be included FIRST before glfw!
 //      Or else there will be macro redefinition of APIENTRY.
 //      TODO: Have better structure in this entire program to avoid this better.. but just noting for now.
-#include "tests/json.h"
-#include "tests/entities.h"
 #include "basicnethosting.h"
 
 // #define IMGUI_IMPL_OPENGL_ES3
@@ -20,7 +17,6 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-#include "glm/glm.hpp"
 
 using std::wcout;
 using std::cout;
@@ -32,55 +28,29 @@ using std::endl;
 // using this_thread = std::this_thread;
 
 using std::this_thread::sleep_for;
-using std::chrono::milliseconds;
 using std::stringstream;
-using glm::vec3;
 using std::future;
 using std::async;
 
-void runImgui(
-    int argCount,
-#if defined(WINDOWS)
-    wchar_t** args
-#else
-    char** args
-#endif
-);
+string_t path;
+
 int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& window);
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int modifiers);
 
 #if defined(WINDOWS)
 int __cdecl wmain(int argCount, wchar_t** args) {
 #else
 int main(int argCount, char** args) {
 #endif
-    cout << "Hello world!" << endl;
-    testJSON();
-    testECS();
-
-    // string_t path = carlos::getCurrentDirectory(argCount, args);
-    // future task = async(std::launch::async, [&rootPathStr]() {
-    //     carlos::runManagedCode(path);
-    // });
-
-    runImgui(argCount, args);
-
-    return 0;
-}
-
-void runImgui(
-    int argCount,
-#if defined(WINDOWS)
-    wchar_t** args
-#else
-    char** args
-#endif
-) {
     GLFWwindow* window;
     int initError = tryCreateWindow("Advanced C++", 800, 600, window);
     if (initError != 0) {
         fprintf(stderr, "%s%d\n", "Exiting with initialization exit code ", initError);
-        return; //initError;
+        return initError;
     }
+    //NOTE: V-Sync: Wait 1 frame before rendering each frame --
+    //      don't waste CPU resources trying to render at 2000 FPS when our screens can't even display that fast!
+    glfwSwapInterval(1);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -92,71 +62,39 @@ void runImgui(
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
+// <<<<<<< HEAD
     ImGui_ImplOpenGL3_Init("#version 300 es");
-
-    // while (true) {
-    // for (int i = 0; i < 1000; i++) {
-    //     ImGui::Render();
-    //     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    //     sleep_for(std::chrono::milliseconds(30));
-    // }
+// =======
+//     ImGui_ImplOpenGL3_Init();
+// >>>>>>> main
     
     int windowWidth;
     int windowHeight;
     float timeLastSwitched = 0;
     float prevTime = glfwGetTime();
     bool was0PressedLastFrame = false;
+    bool was1PressedLastFrame = false;
+
+    path = carlos::getCurrentDirectory(argCount, args);
+    glfwSetKeyCallback(window, keyCallback);
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
+        glfwGetWindowSize(window, &windowWidth, &windowHeight);
         
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         ImGui::ShowDemoWindow(); // Show demo window! :)
 
-        glfwGetWindowSize(window, &windowWidth, &windowHeight);
-
         float time = glfwGetTime();
         float dt = time - prevTime;
-
-        vec3 input = vec3(0);
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-            input.x--;
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-            input.x++;
-            
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-            input.y--;
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-            input.y++;
-
-        if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
-            input.z--;
-        if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
-            input.z++;
-
-        bool is0PressedThisFrame = glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS;
-        if (is0PressedThisFrame != was0PressedLastFrame && is0PressedThisFrame) {
-            string_t path = carlos::getCurrentDirectory(argCount, args);
-            future task = async(std::launch::async, [&path]() {
-                carlos::runManagedCode(path);
-            });
-
-            // moveTarget = (MovementMode) ((int) moveTarget + 1);
-            // if ((int) moveTarget > 1)
-            //     moveTarget = (MovementMode) 0;
-            // timeLastSwitched = time;
-            // printf("moveTarget = %d\n", moveTarget);
-        }
-        was0PressedLastFrame = is0PressedThisFrame;
+        float instantaneousFPS = 1 / dt;
 
         glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT);
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
 
         glfwSwapBuffers(window);
         prevTime = time;
@@ -168,6 +106,26 @@ void runImgui(
 
     glfwDestroyWindow(window);
     glfwTerminate();
+    return 0;
+}
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int modifiers) {
+    switch (key) {
+        case GLFW_KEY_0:
+            if (action == GLFW_PRESS) {
+                future task = async(std::launch::async, []() {
+                    carlos::runManagedCode(path);
+                });
+            }
+            break;
+        case GLFW_KEY_1:
+            if (action == GLFW_PRESS) {
+                cout << "Attempting to unload hostfxr/nethost... but I don't think this is officially supported, so it won't work!" << endl;
+                if (carlos::closeFunction != nullptr)
+                    carlos::closeFunction(nullptr);
+            }
+            break;
+    }
 }
 
 
@@ -191,9 +149,13 @@ int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& windo
 
         //NOTE: Let's require a certain (old) version of OpenGL or newer...
         //Like OpenGL 3.0+. HOWEVER,
-        //NOTE: Context profiles are only available in OpenGL 3.2+, so we'll require that!
-        //TODO: Try to require 4.6, then if we get the error (during callback) of "Requested OpenGL version 4.6, got version 4.1", then request that version instead!
+        
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        
+        //NOTE: Context profiles are only available in OpenGL 3.2+, so we'll require that
+        //TODO: Try to require 4.6, then if we get the error (during callback) of "Requested OpenGL version 4.6, got version 4.1", then request that version instead
+
+        // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
         //NOTE: BEFORE doing this, I was getting the following results:

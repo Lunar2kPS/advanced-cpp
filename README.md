@@ -3,27 +3,13 @@ This is a learning project to help my C++ skills rival my Unity/C# skills.
 
 **Purpose:** I'm disappointed in the direction that Unity (as a game engine, and as a company) has been going for a while. However, it's taught me so much about game development and API design, and inspired my interest in free, open source, stable, and extensible software with a focus on RPGs for PC and console gaming.
 
-I'm deciding to become independent of Unity by learning an immense amount of C++, to give me much more freedom as a developer, and perhaps even potential to contribute someday to [Godot engine](https://godotengine.org/) or learn [Unreal engine](https://www.unrealengine.com). For now, I'm sticking with command line, libraries, and 2D projects. I hope this project helps to provide a human-friendly, more understandable example of working with many C++ libraries to create a small, specialized game engine.
+I'm deciding to learn an immense amount of C++, to give me much more freedom as a developer, and perhaps even potential to contribute someday to open source projects like the [Godot engine](https://godotengine.org/), or learn [Unreal engine](https://www.unrealengine.com). For now, I'm sticking with command line, libraries, and 2D projects. I hope this project helps to provide a human-friendly, more understandable example of working with many C++ libraries to create a small, specialized game engine.
 
 ---
 
-## Learning Topics
-- Cross-platform support (Win/Mac/Linux/Pi)
-- JSON saving/loading
-- Using EC/ECS
-- Embedding C# scripting _(native .NET hosting)_
-- File I/O
-- Rendering realtime 2D pixel art
-- Using GUI
-- HTTP Networking
-- TCP/UDP Networking
-- Measuring performance and/or profiling
-
-
 ## Platform Support
 - ✅ Windows
-- ✅ MacOS
-    - ⚠️ I currently only own an Intel Mac computer, so I can't support Arm64 (M1/M2) / Apple Silicon computer architecture yet.
+- ✅ MacOS (Intel64 and Arm64 (M1/M2))
 - ✅ Linux (tested on Zorin/Ubuntu)
 - ✅ Raspberry Pi (tested on arm64)
 
@@ -32,18 +18,25 @@ I'm deciding to become independent of Unity by learning an immense amount of C++
 This project is very much in-progress. Here are some things I'd like to do next:
 
 - I need to document the setup better for .NET hosting.
-- Open questions about Linux:
-    - Why did linking against dl work but not against libdl?
-    - Why did we need to link against pthread? Is this intentional?
-    - Open a GitHub bug/issue for the snap installation issues I found.
-    - Perhaps learn about [dlfcn.h](https://stackoverflow.com/questions/59727057/purpose-of-using-dynamic-linking-loader-dlfcn-h-instead-of-direct-function-cal) in more detail.
-    - Establish a better workflow for determining libraries from standard C++ header (.h) files
-        - https://docs.oracle.com/cd/E86824_01/html/E54772/libdl-3lib.html
-        - https://man7.org/linux/man-pages/man3/dlopen.3.html#LIBRARY
+- I want to split up the project to have easier, smaller examples of using different techniques more individually as well. (Showing both how to use techniques on an individual level, _as well as_ integrating them all together).
+- ### Learning Topics
+    - JSON saving/loading
+    - Using EC/ECS
+    - Embedding C# scripting _(native .NET hosting)_
+    - Programming design patterns
+    - File I/O
+    - Rendering realtime 2D pixel art
+    - Using GUI
+    - HTTP Networking
+    - TCP/UDP Networking
+    - Measuring performance and/or profiling
+
+See my [backlog](/BACKLOG.md) for other, lower priority learning goals.
 
 
 ## Project Dependencies
 - .NET 7+ (SDK) 🛠️ _(more instructions to come soon about this)_
+    - ⚙️ The sources for these files are documented [here](/libraries/nethosting/source.md).
 - [Nlohmann's Json Library v3.11.2](https://github.com/nlohmann/json/releases/tag/v3.11.2)
     - ℹ️ Nlohmann's Json Library allows you to easily read and write to [JSON _(JavaScript Object Notation)_](https://www.json.org/json-en.html), which is a widely used text-based format for saving and loading data into any program that supports reading/writing to it.
     - ⚙️ **Include/compile/link instructions:** Download the `include.zip` (from one of the GitHub releases), delete the `include` folder and `meson.build` file, and change the folder structure to easily `#include "nlohmann/json.hpp"`
@@ -64,6 +57,23 @@ This project is very much in-progress. Here are some things I'd like to do next:
 
 ## Resources
 - https://www.baeldung.com/java-structural-design-patterns
+- 🛠️ TODO: Sort through these helpful links:
+    - [EnTT Crash Course](https://skypjack.github.io/entt/md_docs_md_entity.html)
+    - [Arbitrary type JSON serialization](https://json.nlohmann.me/features/arbitrary_types/)
+    - Dear ImGui styles ([here](https://github.com/GraphicsProgramming/dear-imgui-styles) and [here](https://github.com/ocornut/imgui/issues/707))
+    - [The Definitive C++ Book Guide and List](https://stackoverflow.com/questions/388242/the-definitive-c-book-guide-and-list)
+    - [Discussion on proper use of GLAD](https://github.com/Dav1dde/glad/issues/443)
+    - [ThreadPools](https://learn.microsoft.com/en-us/dotnet/api/system.threading.threadpool?view=net-7.0)
+    - [OpenGL Docs](https://docs.gl/)
+    - [Do's and Do NOT's of multithreading](https://gamedev.stackexchange.com/a/80077)
+    - [File I/O in C++](https://www.w3schools.com/cpp/cpp_files.asp)
+    - Programming design patterns (C# focus, because that's what I'm familiar with):
+        - https://www.dofactory.com/net/design-patterns
+        - https://www.c-sharpcorner.com/UploadFile/bd5be5/design-patterns-in-net/
+        - https://refactoring.guru/design-patterns/csharp
+        - (C++) https://gameprogrammingpatterns.com/contents.html
+    - [FreeImage library](https://freeimage.sourceforge.io/download.html)
+        - [FreeImage docs](https://cfhcable.dl.sourceforge.net/project/freeimage/Source%20Documentation/3.18.0/FreeImage3180.pdf)
 
 - ### [C# .NET Hosting from Native C++](https://learn.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting)
     - See their GitHub docs on [Native hosting (Calling managed function)](https://github.com/dotnet/runtime/blob/main/docs/design/features/native-hosting.md#calling-managed-function-net-5-and-above) and a brief explanation of [the components involved](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md).

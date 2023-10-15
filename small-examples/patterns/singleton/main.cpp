@@ -16,9 +16,11 @@ int main() {
     cout << "Same instance? " << (instance == same ? "true" : "false") << endl;
     Singleton::destroyInstance();
 
-    // shared_ptr<SmartSingleton> smartInstance = SmartSingleton::getInstance();
-    // shared_ptr<SmartSingleton> sameSmart = SmartSingleton::getInstance();
-    // cout << "Same instance? " << (smartInstance == sameSmart ? "true" : "false") << endl;
+    cout << " --- --- --- " << endl;
+
+    shared_ptr<SmartSingleton> smartInstance = SmartSingleton::getInstance();
+    shared_ptr<SmartSingleton> sameSmart = SmartSingleton::getInstance();
+    cout << "Same instance? " << (smartInstance == sameSmart ? "true" : "false") << endl;
 
     return 0;
 }

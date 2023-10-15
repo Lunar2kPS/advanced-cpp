@@ -3,10 +3,11 @@
 #include <memory>
 
 using std::shared_ptr;
+using std::weak_ptr;
 
 class SmartSingleton {
     private:
-        static SmartSingleton instance;
+        static weak_ptr<SmartSingleton> instance;
         SmartSingleton();
     public:
         static shared_ptr<SmartSingleton> getInstance();

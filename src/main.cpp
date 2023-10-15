@@ -126,13 +126,6 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int modi
                 });
             }
             break;
-        case GLFW_KEY_1:
-            if (action == GLFW_PRESS) {
-                cout << "Attempting to unload hostfxr/nethost... but I don't think this is officially supported, so it won't work!" << endl;
-                if (carlos::closeFunction != nullptr)
-                    carlos::closeFunction(nullptr);
-            }
-            break;
     }
 }
 

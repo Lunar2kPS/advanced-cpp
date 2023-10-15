@@ -114,7 +114,7 @@ endif()
 if (WINDOWS)
     set(DLL_FILES
         "libraries/nethosting/windows/intel64/nethost.dll"
-        # Add more DLL file paths as needed here!
+        # NOTE: Add more DLL file paths as needed here!
     )
 elseif (MACOS)
     if (INTEL64)
@@ -139,7 +139,6 @@ elseif (LINUX)
 endif()
 
 add_custom_target("CopyDLLs")
-
 # WARNING: NO QUOTES IS IMPORTANT HERE!
 #   The list is semi-colon-separated,
 #   And the semi-colons need to be OUTSIDE of quotes to separate each iteration of the loop.

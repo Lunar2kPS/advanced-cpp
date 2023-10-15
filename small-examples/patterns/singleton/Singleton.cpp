@@ -1,7 +1,9 @@
 ﻿#include "Singleton.h"
 
 #include <iostream>
-#include <fstream>
+
+using std::cout;
+using std::endl;
 
 Singleton* Singleton::instance;
 
@@ -19,9 +21,9 @@ bool Singleton::destroyInstance() {
 }
 
 Singleton::Singleton() {
-    std::cout << "(Constructor)" << std::endl;
+    cout << "(Constructor)" << endl;
 }
 
 Singleton::~Singleton() {
-    std::cout << "(Destructor)" << std::endl;
+    cout << "(Destructor)" << endl;
 }

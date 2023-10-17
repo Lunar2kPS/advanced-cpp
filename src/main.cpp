@@ -10,13 +10,14 @@
 //      TODO: Have better structure in this entire program to avoid this better.. but just noting for now.
 #include "basicnethosting.h"
 
-// #define IMGUI_IMPL_OPENGL_ES3
 #include "glad/egl.h"
 #include "glad/gles2.h"
 #include "GLFW/glfw3.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+
+#include "guitester.h"
 
 using std::wcout;
 using std::cout;
@@ -32,7 +33,6 @@ using std::stringstream;
 using std::future;
 using std::async;
 
-#define ENUM_TO_STRING(s) #s
 enum class GraphicsAPI : int {
     NONE = 0,
     OPENGL,
@@ -68,6 +68,8 @@ int main(int argCount, char** args) {
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // IF using Docking Branch
 
+    ImGui::StyleColorsDark();
+
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
 
@@ -75,6 +77,8 @@ int main(int argCount, char** args) {
         ImGui_ImplOpenGL3_Init();
     else if (graphicsAPI == GraphicsAPI::OPENGL_ES)
         ImGui_ImplOpenGL3_Init("#version 300 es");
+
+    onGUIEnable();
     
     int windowWidth;
     int windowHeight;
@@ -88,18 +92,19 @@ int main(int argCount, char** args) {
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         glfwGetWindowSize(window, &windowWidth, &windowHeight);
+
+        glClearColor(0, 0, 0, 0);
+        glClear(GL_COLOR_BUFFER_BIT);
         
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-        ImGui::ShowDemoWindow(); // Show demo window! :)
 
         float time = glfwGetTime();
         float dt = time - prevTime;
         float instantaneousFPS = 1 / dt;
 
-        glClearColor(0, 0, 0, 0);
-        glClear(GL_COLOR_BUFFER_BIT);
+        onGUI();
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -107,6 +112,8 @@ int main(int argCount, char** args) {
         glfwSwapBuffers(window);
         prevTime = time;
     }
+
+    onGUIDisable();
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();

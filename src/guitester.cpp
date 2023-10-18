@@ -111,39 +111,39 @@ void onGUIDisable() {
 }
 
 void onGUI() {
-    ImGui::ShowDemoWindow();
+    ImGui::ShowDemoWindow();    
 
-    ImGui::PushFont(customFont);
-    ImGui::Begin("Inspector", isOpen, 0);
-    windowPos = ImGui::GetWindowPos();
-    windowSize = ImGui::GetWindowSize();
+    // ImGui::PushFont(customFont);
+    // ImGui::Begin("Inspector", isOpen, 0);
+    // windowPos = ImGui::GetWindowPos();
+    // windowSize = ImGui::GetWindowSize();
 
-    if (!ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
-        if (windowPos.x < 0) {
-            windowPos.x = 0;
-            ImGui::SetWindowPos(windowPos);
-        }
-    }
-
-    // if (ImGui::Button("Decrease")) {
+    // if (!ImGui::IsMouseDragging(ImGuiMouseButton_Left)) {
+    //     if (windowPos.x < 0) {
+    //         windowPos.x = 0;
+    //         ImGui::SetWindowPos(windowPos);
+    //     }
     // }
+
+    // // if (ImGui::Button("Decrease")) {
+    // // }
+    // // ImGui::SameLine();
+    // // if (ImGui::Button("Increase")) {
+    // // }
+
+    // ImGui::AlignTextToFramePadding();
+    // ImGui::Text("Name");
     // ImGui::SameLine();
-    // if (ImGui::Button("Increase")) {
-    // }
+    // ImGui::InputText("", nameBuffer, 256, ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_CharsUppercase | ImGuiInputTextFlags_CallbackEdit, onNameChanged);
+    // // cout << (ImGui::IsItemActive() ? "true" : "false") << endl;
+    // ImGui::AlignTextToFramePadding();
 
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Name");
-    ImGui::SameLine();
-    ImGui::InputText("", nameBuffer, 256, ImGuiInputTextFlags_AutoSelectAll | ImGuiInputTextFlags_CharsUppercase | ImGuiInputTextFlags_CallbackEdit, onNameChanged);
-    // cout << (ImGui::IsItemActive() ? "true" : "false") << endl;
-    ImGui::AlignTextToFramePadding();
+    // float pos[3];
+    // ImGui::AlignTextToFramePadding();
+    // ImGui::Text("Position");
+    // ImGui::SameLine();
+    // ImGui::InputFloat3("", pos, "%.2f");
 
-    float pos[3];
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("Position");
-    ImGui::SameLine();
-    ImGui::InputFloat3("", pos, "%.2f");
-
-    ImGui::End();
-    ImGui::PopFont();
+    // ImGui::End();
+    // ImGui::PopFont();
 }

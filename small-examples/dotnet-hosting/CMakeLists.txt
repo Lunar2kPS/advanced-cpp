@@ -13,7 +13,9 @@ elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "(arm)|(aarch)64")
     set(ARM64 True)
 endif()
 
+# TODO: Make this work for Mac, Linux, Pi:
 add_custom_target("CopyDLLs")
+
 if (WIN32)
     if (INTEL64)
         # Allows our CMakeLists.txt file to use target_link_libraries(...) commands starting from this folder:

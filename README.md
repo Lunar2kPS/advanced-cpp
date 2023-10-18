@@ -1,15 +1,10 @@
 # Advanced C++ (Learning)
-This is a learning project to help my C++ skills rival my Unity/C# skills.
-
 **Purpose:** I'm disappointed in the direction that Unity (as a game engine, and as a company) has been going for a while. However, it's taught me so much about game development and API design, and inspired my interest in free, open source, stable, and extensible software with a focus on RPGs for PC and console gaming.
 
-I'm deciding to learn an immense amount of C++, to give me much more freedom as a developer, and perhaps even potential to contribute someday to open source projects like the [Godot engine](https://godotengine.org/), or learn [Unreal engine](https://www.unrealengine.com). For now, I'm sticking with command line, libraries, and 2D projects. I hope this project helps to provide a human-friendly, more understandable example of working with many C++ libraries to create a small, specialized game engine.
+I'm deciding to learn an immense amount of C++, to give me much more freedom as a developer, and perhaps even potential to contribute someday to open source projects like the [Godot engine](https://godotengine.org/), or learn [Unreal engine](https://www.unrealengine.com).
 
-## 📓 Subfolders in this Project
-- [Small (C++ Program) Examples](./small-examples/README.md)
-    - Includes examples for ECS, JSON, OpenGL, UTF-8 cross-platform, File I/O, and more!
+I hope this project helps to provide a human-friendly, more understandable example of working with many C++ libraries to create a small, specialized game engine.
 
----
 
 ## Platform Support
 - ✅ Windows
@@ -21,17 +16,25 @@ I'm deciding to learn an immense amount of C++, to give me much more freedom as 
 ## 🛠️ Project TODO's
 This project is very much in-progress. Here are some things I'd like to do next:
 
+- I'd like to better document what this repo shows off. Currently my notes are a little bit unorganized for a first-time viewer.
+- I want to better document what the setup was for getting the [small example UTF-8 program](./small-examples/utf-8) to work.
 - I need to document the setup better for .NET hosting.
-- ### Learning Topics
-    - Embedding C# scripting _(native .NET hosting)_
+    - I want to know the most performant way(s) of calling out to C# code, especially during the game loop.
+- Dear ImGUI:
+    - 🐛 I need to somehow fix an issue with Dear IMGUI where Tab/Shift + Tab navigation on the keyboard is not working at all.
+    - I want to display float fields without forcing a specific number of decimal places.
+    - I want to restrict all GUI to the GLFW window, so they can't get cut off-screen.
+- C++ learning topics:
     - Programming design patterns
     - Rendering realtime 2D pixel art
-    - Using GUI
-    - HTTP Networking
-    - TCP/UDP Networking
     - Measuring performance and/or profiling
 
 See my [backlog](/BACKLOG.md) for other, lower priority learning goals.
+
+
+## 📁 Subfolders in this Project
+- [Small (C++ Program) Examples](./small-examples/README.md)
+    - Includes examples for ECS, JSON, OpenGL, UTF-8 cross-platform, File I/O, and more!
 
 
 ## Project Dependencies
@@ -52,8 +55,8 @@ See my [backlog](/BACKLOG.md) for other, lower priority learning goals.
     - ℹ️ GLFW _(Graphics Library Framework)_ is used for creating our game window in a cross-platform way.
 - [![Git icon](/docs/images/Git%20Icon%20(Small%20Orange).png "GLM is brought in as a git submodule")](https://git-scm.com/book/en/v2/Git-Tools-Submodules) [GLM v0.9.9.8](https://github.com/g-truc/glm/tree/0.9.9.8)
     - ℹ️ GLM _(OpenGL Mathematics)_ is used for our vector and matrix types, with similar usage to GLSL shader programs.
-- [![Git icon](/docs/images/Git%20Icon%20(Small%20Orange).png "Dear ImGui is brought in as a git submodule")](https://git-scm.com/book/en/v2/Git-Tools-Submodules) [(Dear) ImGui v1.89.9-docking](https://github.com/ocornut/imgui/tree/v1.89.9-docking)
-    - ℹ️ Dear ImGui _([previously named just "ImGui"](https://github.com/ocornut/imgui/discussions/4041) -- Immediate Mode Graphical User Interface)_ is used for developer/debugging user interface, like panels, text, buttons, and other GUI controls.
+- [![Git icon](/docs/images/Git%20Icon%20(Small%20Orange).png "Dear ImGUI is brought in as a git submodule")](https://git-scm.com/book/en/v2/Git-Tools-Submodules) [Dear ImGUI v1.89.9-docking](https://github.com/ocornut/imgui/tree/v1.89.9-docking)
+    - ℹ️ Dear ImGUI _([previously named just "ImGUI"](https://github.com/ocornut/imgui/discussions/4041) -- Immediate Mode Graphical User Interface)_ is used for developer/debugging user interface, like panels, text, buttons, and other GUI controls.
 
 ## Resources
 - [Programming Design Patterns (IN BASIC ENGLISH!)](https://refactoring.guru/design-patterns)

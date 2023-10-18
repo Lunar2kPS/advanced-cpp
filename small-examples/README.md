@@ -2,12 +2,14 @@
 These small C++ programs demonstrate how to use tools, libraries, and programming design patterns, on a more basic level.
 
 Programs:
+- [.NET Hosting](./dotnet-hosting) _(See more info below in this doc)_
 - [ECS](./ecs)
 - [JSON](./json)
 - [OpenGL](./opengl)
 - [UTF-8](./utf-8)
 - [Programming Design Patterns](./patterns):
     - [Singleton](./patterns/singleton)
+    - [Service Locator](./patterns/service-locator)
     - _More coming soon!_
 
 

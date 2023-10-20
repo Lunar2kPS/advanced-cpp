@@ -16,6 +16,10 @@ I hope this project helps to provide a human-friendly, more understandable examp
 ## 🛠️ Project TODO's
 This project is very much in-progress. Here are some things I'd like to do next:
 
+- I want to draw basic pixel art on the screen with OpenGL.
+- I'd like to upgrade the **Project Dependencies** section,
+    - To make it easier to see which methods are used to include the libraries (single-file header, source with existing CMakeLists.txt, etc.)
+    - To mention licenses
 - I'd like to better document what this repo shows off. Currently my notes are a little bit unorganized for a first-time viewer.
 - I want to better document what the setup was for getting the [small example UTF-8 program](./small-examples/utf-8) to work.
 - I need to document the setup better for .NET hosting.
@@ -57,6 +61,10 @@ See my [backlog](/BACKLOG.md) for other, lower priority learning goals.
     - ℹ️ GLM _(OpenGL Mathematics)_ is used for our vector and matrix types, with similar usage to GLSL shader programs.
 - [![Git icon](/docs/images/Git%20Icon%20(Small%20Orange).png "Dear ImGUI is brought in as a git submodule")](https://git-scm.com/book/en/v2/Git-Tools-Submodules) [Dear ImGUI v1.89.9-docking](https://github.com/ocornut/imgui/tree/v1.89.9-docking)
     - ℹ️ Dear ImGUI _([previously named just "ImGUI"](https://github.com/ocornut/imgui/discussions/4041) -- Immediate Mode Graphical User Interface)_ is used for developer/debugging user interface, like panels, text, buttons, and other GUI controls.
+- [stb_image](https://github.com/nothings/stb)
+    - ℹ️ stb_image is a library for loading image files (such as PNG, JPG, GIF, and more) from memory and disk.
+    - ⚙️ **Include/compile/link instructions:** Download their single-file header include ([stb_image.h](https://github.com/nothings/stb/blob/master/stb_image.h)) directly, and choose one of their [licenses](https://github.com/nothings/stb/blob/master/LICENSE).
+
 
 ## Resources
 - [Programming Design Patterns (IN BASIC ENGLISH!)](https://refactoring.guru/design-patterns)

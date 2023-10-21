@@ -2,5 +2,4 @@
 
 void onGUIEnable();
 void onGUIDisable();
-
 void onGUI();

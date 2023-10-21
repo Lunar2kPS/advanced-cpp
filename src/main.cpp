@@ -17,6 +17,10 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb/stb_image.h"
+
+#include "opengltester.h"
 #include "guitester.h"
 
 using std::wcout;
@@ -60,6 +64,8 @@ int main(int argCount, char** args) {
     //      don't waste CPU resources trying to render at 2000 FPS when our screens can't even display that fast!
     glfwSwapInterval(1);
 
+    onGLEnable();
+
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -95,6 +101,8 @@ int main(int argCount, char** args) {
 
         glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        onGLUpdate();
         
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -118,6 +126,8 @@ int main(int argCount, char** args) {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+
+    onGLDisable();
 
     glfwDestroyWindow(window);
     glfwTerminate();

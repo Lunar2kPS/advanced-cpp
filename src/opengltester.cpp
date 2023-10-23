@@ -59,15 +59,18 @@ void onGLEnable() {
     GLCALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(GLuint), indices, GL_STATIC_DRAW));
     GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL)); //TODO: Test if NULL is defined on platforms other than Windows, cause nullptr doesn't work here
 
-    // unsigned int offset = 0;
-    // GLCALL(glGenVertexArrays(1, &vao));
-    // GLCALL(glBindVertexArray(vao));
-    // GLCALL(glEnableVertexAttribArray(0));
-    // GLCALL(glVertexAttribPointer(0, 2, GL_FLOAT, false, 2 * sizeof(float), (const void*) offset)); //NOTE: This requires a currently-bound GL_ARRAY_BUFFER target
+    unsigned int offset = 0;
+    GLCALL(glGenVertexArrays(1, &vao));
+    GLCALL(glBindVertexArray(vao));
+    GLCALL(glBindBuffer(GL_ARRAY_BUFFER, vbo));
+    GLCALL(glEnableVertexAttribArray(0));
+    GLCALL(glVertexAttribPointer(0, 2, GL_FLOAT, false, 2 * sizeof(float), (const void*) offset)); //NOTE: This requires a currently-bound GL_ARRAY_BUFFER target
+    GLCALL(glBindVertexArray(NULL));
+    GLCALL(glBindBuffer(GL_ARRAY_BUFFER, NULL));
 }
 
 void onGLDisable() {
-    // GLCALL(glDeleteVertexArrays(1, &vao));
+    GLCALL(glDeleteVertexArrays(1, &vao));
     GLCALL(glDeleteBuffers(1, &vbo));
     GLCALL(glDeleteBuffers(1, &ibo));
 
@@ -76,9 +79,9 @@ void onGLDisable() {
 }
 
 void onGLUpdate() {
-    // GLCALL(glBindVertexArray(vao));
-    // GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
-    // GLCALL(glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, NULL));
-    // GLCALL(glBindVertexArray(NULL));
-    // GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL));
+    GLCALL(glBindVertexArray(vao));
+    GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
+    GLCALL(glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, NULL));
+    GLCALL(glBindVertexArray(NULL));
+    GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL));
 }

@@ -22,6 +22,7 @@ This project is very much in-progress. Here are some things I'd like to do next:
     - To mention licenses
 - I'd like to better document what this repo shows off. Currently my notes are a little bit unorganized for a first-time viewer.
 - I want to better document what the setup was for getting the [small example UTF-8 program](./small-examples/utf-8) to work.
+- 🐛 For some reason, I've noticed that changing the shader from our source code's "resources" folder updates the already-built builds upon next run. The C++ program should really be reading from the /out folder's resources folder instead.
 - I need to document the setup better for .NET hosting.
     - I want to know the most performant way(s) of calling out to C# code, especially during the game loop.
 - Dear ImGUI:

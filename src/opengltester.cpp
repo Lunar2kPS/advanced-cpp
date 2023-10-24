@@ -3,9 +3,13 @@
 #include <iostream>
 
 #include "glad/gl.h"
-#include "GLFW/glfw3.h"
-
 #include "openglutility.h"
+
+#define USE_SHADER
+
+#if defined(USE_SHADER)
+    #include "openglshadertester.h"
+#endif
 
 using std::cout;
 using std::endl;
@@ -35,7 +39,30 @@ static int indexCount;
 static float* positions;
 static int positionCount;
 
+void createMesh();
+void deleteMesh();
+void drawMesh();
+
 void onGLEnable() {
+    createMesh();
+    #if defined(USE_SHADER)
+        createShader();
+    #endif
+}
+
+void onGLDisable() {
+    deleteMesh();
+    #if defined(USE_SHADER)
+        deleteShader();
+    #endif
+}
+
+void onGLUpdate() {
+    drawMesh();
+}
+
+
+void createMesh() {
     indexCount = 3; //6;
     positionCount = 8;
 
@@ -71,7 +98,7 @@ void onGLEnable() {
     GLCALL(glBindBuffer(GL_ARRAY_BUFFER, NULL));
 }
 
-void onGLDisable() {
+void deleteMesh() {
     GLCALL(glDeleteVertexArrays(1, &vao));
     GLCALL(glDeleteBuffers(1, &vbo));
     GLCALL(glDeleteBuffers(1, &ibo));
@@ -80,10 +107,11 @@ void onGLDisable() {
     delete[] positions;
 }
 
-void onGLUpdate() {
+void drawMesh() {
     GLCALL(glBindVertexArray(vao));
     GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
     GLCALL(glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, NULL));
     GLCALL(glBindVertexArray(NULL));
     GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL));
 }
+

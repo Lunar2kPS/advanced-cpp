@@ -72,18 +72,15 @@ void createShader() {
     parseShader("resources/Color Shader.glsl", vSrc, fSrc);
 
     const GLchar* vSrcCStr = vSrc.c_str();
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glLogAllErrors();
+    GLCALL(GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER));
     GLCALL(glShaderSource(vertexShader, 1, &vSrcCStr, nullptr));
 
     const GLchar* fSrcCStr = fSrc.c_str();
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glLogAllErrors();
+    GLCALL(GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER));
     GLCALL(glShaderSource(fragmentShader, 1, &fSrcCStr, nullptr));
 
     if (compileShader(vertexShader) && compileShader(fragmentShader)) {
-        program = glCreateProgram();
-        glLogAllErrors();
+        GLCALL(program = glCreateProgram());
         GLCALL(glAttachShader(program, vertexShader));
         GLCALL(glAttachShader(program, fragmentShader));
         GLCALL(glLinkProgram(program));
@@ -92,6 +89,9 @@ void createShader() {
         GLCALL(glDeleteShader(fragmentShader));
 
         GLCALL(glUseProgram(program));
+
+        int location = glGetUniformLocation(program, "uniColor");
+        glUniform4f(location, 0, 1, 0.5f, 1);
     } else {
         program = GL_NONE;
     }

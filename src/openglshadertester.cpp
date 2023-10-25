@@ -6,6 +6,8 @@
 #include <string>
 
 #include "glad/gl.h"
+#include "stb/stb_image.h"
+
 #include "openglutility.h"
 
 using std::ifstream;
@@ -21,6 +23,7 @@ enum class ShaderType {
 };
 
 static GLuint program;
+static GLuint mainTexture;
 
 void parseShader(const string& filePath, string& vertexShader, string& fragmentShader) {
     ifstream file = ifstream(filePath);
@@ -90,15 +93,37 @@ void createShader() {
 
         GLCALL(glUseProgram(program));
 
-        int location = glGetUniformLocation(program, "uniColor");
-        glUniform4f(location, 0, 1, 0.5f, 1);
+        GLCALL(int location = glGetUniformLocation(program, "color"));
+        GLCALL(glUniform4f(location, 0, 1, 0.5f, 1));
+
+        GLCALL(location = glGetUniformLocation(program, "mainTexture"));
+        if (location >= 0) {
+            int width;
+            int height;
+            int channelCount;
+            unsigned char* imageData = stbi_load("resources/Grass Tile.png", &width, &height, &channelCount, STBI_rgb_alpha);
+            if (imageData != nullptr) {
+                GLCALL(glActiveTexture(GL_TEXTURE0));
+
+                GLCALL(glGenTextures(1, &mainTexture));
+                GLCALL(glBindTexture(GL_TEXTURE_2D, mainTexture));
+                GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+                GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+                GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+                GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+
+                GLCALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData));
+                GLCALL(glUniform1i(location, 0));
+            }
+            stbi_image_free(imageData);
+        }
     } else {
         program = GL_NONE;
     }
 }
 
 void deleteShader() {
-    if (program != GL_NONE)
-        GLCALL(glDeleteProgram(program));
+    GLCALL(glDeleteProgram(program));
+    GLCALL(glDeleteTextures(1, &mainTexture));
 }
 

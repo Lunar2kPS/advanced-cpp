@@ -36,8 +36,8 @@ static GLuint ibo;
 
 static GLuint* indices;
 static int indexCount;
-static float* positions;
-static int positionCount;
+static float* vertices;
+static int vertexValueCount;
 
 void createMesh();
 void deleteMesh();
@@ -64,36 +64,46 @@ void onGLUpdate() {
 
 void createMesh() {
     indexCount = 3; //6;
-    positionCount = 8;
+    int vertexCount = 4;
+    int vertexAttributeDimensionCount = 2 + 2; //xy positions, uv texcoords
+    vertexValueCount = vertexCount * vertexAttributeDimensionCount;
 
     indices = new GLuint[indexCount] {
         0, 1, 2 //,
         // 3, 2, 1
     };
 
-    positions = new float[positionCount] {
-         0.5f, -0.5f,
-        -0.5f, -0.5f,
-         0.5f,  0.5f,
-        -0.5f,  0.5f
+    vertices = new float[vertexValueCount] {
+         0.5f, -0.5f, 1, 0,
+        -0.5f, -0.5f, 0, 0,
+         0.5f,  0.5f, 1, 1,
+        -0.5f,  0.5f, 0, 1
     };
 
     //TODO: Test if NULL is defined on platforms other than Windows, cause nullptr doesn't work here with glBindBuffer accepting in an integer (like NULL = 0).
 
     GLCALL(glGenBuffers(1, &vbo));
     GLCALL(glBindBuffer(GL_ARRAY_BUFFER, vbo));
-    GLCALL(glBufferData(GL_ARRAY_BUFFER, positionCount * sizeof(float), positions, GL_STATIC_DRAW));
+    GLCALL(glBufferData(GL_ARRAY_BUFFER, vertexValueCount * sizeof(float), vertices, GL_STATIC_DRAW));
 
     GLCALL(glGenBuffers(1, &ibo));
     GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
     GLCALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(GLuint), indices, GL_STATIC_DRAW));
     GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL));
 
-    unsigned int offset = 0;
     GLCALL(glGenVertexArrays(1, &vao));
     GLCALL(glBindVertexArray(vao));
+    
+    unsigned int offset = 0;
+    GLsizei totalStride = vertexAttributeDimensionCount * sizeof(float);
     GLCALL(glEnableVertexAttribArray(0));
-    GLCALL(glVertexAttribPointer(0, 2, GL_FLOAT, false, 2 * sizeof(float), (const void*) offset)); //NOTE: This requires a currently-bound GL_ARRAY_BUFFER target
+    GLCALL(glVertexAttribPointer(0, 2, GL_FLOAT, false, totalStride, (const void*) offset)); //NOTE: This requires a currently-bound GL_ARRAY_BUFFER target
+    offset += 2 * sizeof(float);
+
+    GLCALL(glEnableVertexAttribArray(1));
+    GLCALL(glVertexAttribPointer(1, 2, GL_FLOAT, false, totalStride, (const void*) offset));
+    offset += 2 * sizeof(float);
+
     GLCALL(glBindVertexArray(NULL));
     GLCALL(glBindBuffer(GL_ARRAY_BUFFER, NULL));
 }
@@ -104,7 +114,7 @@ void deleteMesh() {
     GLCALL(glDeleteBuffers(1, &ibo));
 
     delete[] indices;
-    delete[] positions;
+    delete[] vertices;
 }
 
 void drawMesh() {

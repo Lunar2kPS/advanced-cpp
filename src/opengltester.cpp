@@ -63,14 +63,14 @@ void onGLUpdate() {
 
 
 void createMesh() {
-    indexCount = 3; //6;
+    indexCount = 6;
     int vertexCount = 4;
     int vertexAttributeDimensionCount = 2 + 2; //xy positions, uv texcoords
     vertexValueCount = vertexCount * vertexAttributeDimensionCount;
 
     indices = new GLuint[indexCount] {
-        0, 1, 2 //,
-        // 3, 2, 1
+        0, 1, 2,
+        3, 2, 1
     };
 
     vertices = new float[vertexValueCount] {

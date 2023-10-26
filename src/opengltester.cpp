@@ -34,6 +34,7 @@ static GLuint vbo;
 /// @note - IBOs let you define which order of the vertices, in triplets, should be used to make up the triangles in your mesh.
 static GLuint ibo;
 
+static bool isAbleToDraw = true;
 static GLuint* indices;
 static int indexCount;
 static float* vertices;
@@ -118,10 +119,17 @@ void deleteMesh() {
 }
 
 void drawMesh() {
-    GLCALL(glBindVertexArray(vao));
-    GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
-    GLCALL(glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, NULL));
-    GLCALL(glBindVertexArray(NULL));
-    GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL));
+    if (isAbleToDraw) {
+        glClearPreviousErrorFlag();
+        GLCALL(glBindVertexArray(vao));
+        GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
+        GLCALL(glBindBuffer(GL_ARRAY_BUFFER, vbo));
+        GLCALL(glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, NULL));
+        GLCALL(glBindVertexArray(NULL));
+        GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL));
+        GLCALL(glBindBuffer(GL_ARRAY_BUFFER, NULL));
+        if (glHadPreviousErrors())
+            isAbleToDraw = false;
+    }
 }
 

@@ -27,6 +27,13 @@ static GLuint mainTexture;
 
 void parseShader(const string& filePath, string& vertexShader, string& fragmentShader) {
     ifstream file = ifstream(filePath);
+    if (!file.is_open()) {
+        cout << "Unable to find shader at file path: \"" << filePath << "\"" << endl;
+        vertexShader = "";
+        fragmentShader = "";
+        return;
+    }
+
     stringstream ss[2];
     ShaderType currentType = ShaderType::NONE;
 
@@ -41,6 +48,7 @@ void parseShader(const string& filePath, string& vertexShader, string& fragmentS
             ss[(int) currentType] << line << '\n';
         }
     }
+    file.close();
 
     vertexShader = ss[(int) ShaderType::VERTEX].str();
     fragmentShader = ss[(int) ShaderType::FRAGMENT].str();
@@ -72,7 +80,9 @@ bool compileShader(GLuint shaderId) {
 void createShader() {
     string vSrc;
     string fSrc;
-    parseShader("resources/Color Shader.glsl", vSrc, fSrc);
+
+    string filePath = "resources/Color Shader.glsl";
+    parseShader(filePath, vSrc, fSrc);
 
     const GLchar* vSrcCStr = vSrc.c_str();
     GLCALL(GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER));
@@ -82,7 +92,9 @@ void createShader() {
     GLCALL(GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER));
     GLCALL(glShaderSource(fragmentShader, 1, &fSrcCStr, nullptr));
 
-    if (compileShader(vertexShader) && compileShader(fragmentShader)) {
+    bool compileSuccess = compileShader(vertexShader) && compileShader(fragmentShader);
+    if (compileSuccess) {
+        glClearPreviousErrorFlag();
         GLCALL(program = glCreateProgram());
         GLCALL(glAttachShader(program, vertexShader));
         GLCALL(glAttachShader(program, fragmentShader));
@@ -92,34 +104,41 @@ void createShader() {
         GLCALL(glDeleteShader(fragmentShader));
 
         GLCALL(glUseProgram(program));
+        if (glHadPreviousErrors())
+            compileSuccess = false;
 
-        GLCALL(int location = glGetUniformLocation(program, "color"));
-        GLCALL(glUniform4f(location, 0, 1, 0.5f, 1));
+        if (compileSuccess) {
+            GLCALL(int location = glGetUniformLocation(program, "color"));
+            GLCALL(glUniform4f(location, 0, 1, 0.5f, 1));
 
-        GLCALL(location = glGetUniformLocation(program, "mainTexture"));
-        if (location >= 0) {
-            stbi_set_flip_vertically_on_load(1);
-            
-            int width;
-            int height;
-            int channelCount;
-            unsigned char* imageData = stbi_load("resources/Grass Tile.png", &width, &height, &channelCount, STBI_rgb_alpha);
-            if (imageData != nullptr) {
-                GLCALL(glActiveTexture(GL_TEXTURE0));
+            GLCALL(location = glGetUniformLocation(program, "mainTexture"));
+            if (location >= 0) {
+                stbi_set_flip_vertically_on_load(1);
+                
+                int width;
+                int height;
+                int channelCount;
+                unsigned char* imageData = stbi_load("resources/Grass Tile.png", &width, &height, &channelCount, STBI_rgb_alpha);
+                if (imageData != nullptr) {
+                    GLCALL(glActiveTexture(GL_TEXTURE0));
 
-                GLCALL(glGenTextures(1, &mainTexture));
-                GLCALL(glBindTexture(GL_TEXTURE_2D, mainTexture));
-                GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
-                GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
-                GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-                GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+                    GLCALL(glGenTextures(1, &mainTexture));
+                    GLCALL(glBindTexture(GL_TEXTURE_2D, mainTexture));
+                    GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+                    GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+                    GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+                    GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
-                GLCALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData));
-                GLCALL(glUniform1i(location, 0));
+                    GLCALL(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData));
+                    GLCALL(glUniform1i(location, 0));
+                }
+                stbi_image_free(imageData);
             }
-            stbi_image_free(imageData);
         }
-    } else {
+    }
+    
+    if (!compileSuccess) {
+        cout << "Failed to compile shader at file path: \"" << filePath << "\"\n" << endl;
         program = GL_NONE;
     }
 }

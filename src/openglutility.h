@@ -17,6 +17,8 @@ void glClearAllErrors();
 /// @return The number of errors logged, or 0 if there were no errors.
 int glLogAllErrors();
 
+void glClearPreviousErrorFlag();
+bool glHadPreviousErrors();
 
 /// @brief Wraps OpenGL calls with error-logging.
 /// @param innerCall The OpenGL call, such as glClear, glGenVertexArrays, glDrawElements, etc.

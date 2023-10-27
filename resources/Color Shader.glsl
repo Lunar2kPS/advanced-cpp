@@ -1,6 +1,6 @@
 #shader vertex
-#version 330 core
-// #version 300 es
+#version 300 es
+precision mediump float;
 
 layout (location = 0) in vec2 localPosition;
 layout (location = 1) in vec2 meshUV;
@@ -12,7 +12,8 @@ void main() {
 }
 
 #shader fragment
-#version 330 core
+#version 300 es
+precision mediump float;
 
 in vec2 uv;
 layout (location = 0) out vec4 fragmentOutput;

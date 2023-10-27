@@ -10,8 +10,7 @@
 //      TODO: Have better structure in this entire program to avoid this better.. but just noting for now.
 #include "basicnethosting.h"
 
-#include "glad/egl.h"
-#include "glad/gles2.h"
+#include "glad/gl.h"
 #include "GLFW/glfw3.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -20,6 +19,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
+#include "openglutility.h"
 #include "opengltester.h"
 #include "guitester.h"
 
@@ -116,6 +116,10 @@ int main(int argCount, char** args) {
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        //TODO: Dear ImGUI leaks a 1280 (0x500) GL_INVALID_ENUM error during drawing!
+        //      So far, I've only confirmed it on 64bit Raspberry Pi (OpenGL ES 3.1),
+        //      but should confirm whether or not the error appears on any other platform.
+        glClearAllErrors();
 
         glfwSwapBuffers(window);
         prevTime = time;
@@ -187,6 +191,10 @@ void prepareForOpenGLES() {
     glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
 }
 
+typedef int (*GLLoadFunc)();
+int foo1();
+int foo2();
+
 int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& window, GraphicsAPI& api) {
     if (!glfwInitialized) {
         api = GraphicsAPI::NONE;
@@ -198,14 +206,18 @@ int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& windo
     }
 
     prepareForOpenGL();
+    GLLoadFunc loadGLCallback = nullptr;
     window = glfwCreateWindow(width, height, title, NULL, NULL);
     if (window != nullptr) {
         api = GraphicsAPI::OPENGL;
+        loadGLCallback = foo1;
     } else {
         prepareForOpenGLES();
         window = glfwCreateWindow(width, height, title, NULL, NULL);
-        if (window != nullptr)
+        if (window != nullptr) {
             api = GraphicsAPI::OPENGL_ES;
+            loadGLCallback = foo2;
+        }
     }
     if (window == nullptr) {
         fprintf(stderr, "Failed to create window or OpenGL/OpenGL ES context!\n");
@@ -215,7 +227,7 @@ int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& windo
 
     if (!glfwInitialized) {
         glfwMakeContextCurrent(window);
-        int version = gladLoadGLES2(glfwGetProcAddress);
+        int version = loadGLCallback();
         if (version == 0) {
             printf("Failed to initialize OpenGL context with GLAD!\n");
             return 3;

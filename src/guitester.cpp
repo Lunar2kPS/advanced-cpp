@@ -4,8 +4,7 @@
 #include <iostream>
 #include <string>
 
-#include "glad/egl.h"
-#include "glad/gles2.h"
+#include "glad/gl.h"
 #include "GLFW/glfw3.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"

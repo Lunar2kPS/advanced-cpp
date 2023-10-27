@@ -128,8 +128,10 @@ void drawMesh() {
         GLCALL(glBindVertexArray(NULL));
         GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL));
         GLCALL(glBindBuffer(GL_ARRAY_BUFFER, NULL));
-        if (glHadPreviousErrors())
+        if (glHadPreviousErrors()) {
+            cout << "Encountered an error! Stopping drawing..." << endl;
             isAbleToDraw = false;
+        }
     }
 }
 

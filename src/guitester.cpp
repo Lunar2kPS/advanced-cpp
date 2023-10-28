@@ -4,7 +4,11 @@
 #include <iostream>
 #include <string>
 
-#include "glad/gl.h"
+#if defined(GRAPHICS_API_GL)
+    #include "glad/gl.h"
+#elif defined(GRAPHICS_API_GLES)
+    #include "glad/gles2.h"
+#endif
 #include "GLFW/glfw3.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"

@@ -95,7 +95,7 @@ void createShader() {
     string vSrc;
     string fSrc;
 
-    string filePath = "resources/Color Shader.glsl";
+    string filePath = "resources/Unlit Texture.glsl";
     parseShader(filePath, vSrc, fSrc);
 
     const GLchar* vSrcCStr = vSrc.c_str();

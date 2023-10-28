@@ -7,11 +7,13 @@ function(setup_platforms)
         set(PLATFORM_NAME "MacOS" PARENT_SCOPE)
     elseif (UNIX)   # AND NOT APPLE
         set(LINUX True PARENT_SCOPE)
-        set(PLATFORM_NAME "Linux" PARENT_SCOPE)
-
+        
         execute_process(COMMAND "./cmake-scripts/pi-check.sh" RESULT_VARIABLE EXIT_CODE)
-        if (NOT EXIT_CODE EQUAL 0)
-            set(RASPBERRYPI True PARENT_SCOPE)
+        if (EXIT_CODE EQUAL 0)
+            set(PLATFORM_NAME "Linux" PARENT_SCOPE)
+        else()
+            set(PLATFORM_NAME "Raspberry Pi" PARENT_SCOPE)
+            set(RASPBERRY_PI True PARENT_SCOPE)
         endif()
     else()
     # NOTE: This check doesn't seem to work since we're setting the PLATFORM_NAME variable in PARENT_SCOPE.

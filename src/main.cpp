@@ -10,7 +10,11 @@
 //      TODO: Have better structure in this entire program to avoid this better.. but just noting for now.
 #include "basicnethosting.h"
 
-#include "glad/gl.h"
+#if defined (GRAPHICS_API_GL)
+    #include "glad/gl.h"
+#elif defined (GRAPHICS_API_GLES)
+    #include "glad/gles2.h"
+#endif
 #include "GLFW/glfw3.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -198,14 +202,13 @@ int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& windo
 
     prepareForOpenGL();
     window = glfwCreateWindow(width, height, title, NULL, NULL);
-    if (window != nullptr) {
+    if (window != nullptr)
         api = GraphicsAPI::OPENGL;
-    } else {
-        prepareForOpenGLES();
-        window = glfwCreateWindow(width, height, title, NULL, NULL);
-        if (window != nullptr)
-            api = GraphicsAPI::OPENGL_ES;
-    }
+    
+    // prepareForOpenGLES();
+    // window = glfwCreateWindow(width, height, title, NULL, NULL);
+    // api = GraphicsAPI::OPENGL_ES;
+
     if (window == nullptr) {
         fprintf(stderr, "Failed to create window or OpenGL/OpenGL ES context!\n");
         glfwTerminate();

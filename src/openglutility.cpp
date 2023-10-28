@@ -1,6 +1,6 @@
 ﻿#include "openglutility.h"
 
-static bool errorDirtyFlag;
+static bool errorDirtyFlag = false;
 
 void glClearAllErrors() {
     while (glGetError() != GL_NO_ERROR)

@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "name": "All",
+            "defines": [
+                //NOTE: These are defined just in the editing experience in VS Code.
+                //  In actual builds, see CMakeLists.txt's usage of add_compile_definitions(...).
+                "GRAPHICS_API_GL",
+                "GRAPHICS_API_GLES"
+            ]
+        }
+    ],
+    "version": 4
+}

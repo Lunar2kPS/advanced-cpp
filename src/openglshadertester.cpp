@@ -5,7 +5,11 @@
 #include <sstream>
 #include <string>
 
-#include "glad/gl.h"
+#if defined(GRAPHICS_API_GL)
+    #include "glad/gl.h"
+#elif defined(GRAPHICS_API_GLES)
+    #include "glad/gles2.h"
+#endif
 #include "stb/stb_image.h"
 
 #include "openglutility.h"

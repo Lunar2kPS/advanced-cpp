@@ -2,7 +2,11 @@
 
 #include <iostream>
 
-#include "glad/gl.h"
+#if defined(GRAPHICS_API_GL)
+    #include "glad/gl.h"
+#elif defined(GRAPHICS_API_GLES)
+    #include "glad/gles2.h"
+#endif
 #include "openglutility.h"
 
 #define USE_SHADER
@@ -128,8 +132,10 @@ void drawMesh() {
         GLCALL(glBindVertexArray(NULL));
         GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL));
         GLCALL(glBindBuffer(GL_ARRAY_BUFFER, NULL));
-        if (glHadPreviousErrors())
+        if (glHadPreviousErrors()) {
+            cout << "Encountered an error! Stopping drawing..." << endl;
             isAbleToDraw = false;
+        }
     }
 }
 

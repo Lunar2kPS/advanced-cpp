@@ -12,6 +12,16 @@ setup_platforms()
 include("cmake/Resources.cmake")
 copy_resources_assets()
 
+# Graphics APIs:
+if (RASPBERRY_PI)
+    add_compile_definitions(RASPBERRY_PI)
+    add_compile_definitions(GRAPHICS_API_GLES)
+    set(GRAPHICS_API_GLES True)
+elseif (WINDOWS OR MACOS OR LINUX)
+    add_compile_definitions(GRAPHICS_API_GL)
+    set(GRAPHICS_API_GL True)
+endif()
+
 file(GLOB_RECURSE SRC_FILES "src/*.cpp")
 
 
@@ -53,8 +63,13 @@ endif()
 
 
 # GLAD
-add_subdirectory("libraries/glad")
-target_link_libraries("${PROJECT_NAME}" PUBLIC glad)
+if (GRAPHICS_API_GL)
+    add_subdirectory("libraries/glad/GL")
+    target_link_libraries("${PROJECT_NAME}" PUBLIC gladGL)
+elseif (GRAPHICS_API_GLES)
+    add_subdirectory("libraries/glad/GLES")
+    target_link_libraries("${PROJECT_NAME}" PUBLIC gladGLES)
+endif()
 target_include_directories("${PROJECT_NAME}" PUBLIC "libraries/glad/include")
 
 

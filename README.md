@@ -16,23 +16,29 @@ I hope this project helps to provide a human-friendly, more understandable examp
 ## 🛠️ Project TODO's
 This project is very much in-progress. Here are some things I'd like to do next:
 
-- I want to draw basic pixel art on the screen with OpenGL.
-- I'd like to upgrade the **Project Dependencies** section,
-    - To make it easier to see which methods are used to include the libraries (single-file header, source with existing CMakeLists.txt, etc.)
-    - To mention licenses
-- I'd like to better document what this repo shows off. Currently my notes are a little bit unorganized for a first-time viewer.
-- I want to better document what the setup was for getting the [small example UTF-8 program](./small-examples/utf-8) to work.
-- 🐛 For some reason, I've noticed that changing the shader from our source code's "resources" folder updates the already-built builds upon next run. The C++ program should really be reading from the /out folder's resources folder instead.
-- I need to document the setup better for .NET hosting.
-    - I want to know the most performant way(s) of calling out to C# code, especially during the game loop.
-- Dear ImGUI:
-    - 🐛 I need to somehow fix an issue with Dear IMGUI where Tab/Shift + Tab navigation on the keyboard is not working at all.
-    - I want to display float fields without forcing a specific number of decimal places.
-    - I want to restrict all GUI to the GLFW window, so they can't get cut off-screen.
-- C++ learning topics:
-    - Programming design patterns
-    - Rendering realtime 2D pixel art
-    - Measuring performance and/or profiling
+- Features/Bugs:
+    - 🐛 I need a way to dynamically update the shader based on the current platform _(#version 330 core vs. #version 300 es + precision mediump float;)_
+        - Currently errors out on MacOS
+    - I want to tile the grass texture with proper aspect ratio, regardless of the window size/resizing.
+    - Dear ImGUI:
+        - 🐛 I need to somehow fix an issue with Dear IMGUI where Tab/Shift + Tab navigation on the keyboard is not working at all.
+        - I want to display float fields without forcing a specific number of decimal places.
+        - I want to restrict all GUI to the GLFW window, so they can't get cut off-screen.
+    - C++ learning topics:
+        - Programming design patterns
+        - Rendering realtime 2D pixel art
+        - Measuring performance and/or profiling
+    - 🐛 For some reason, I've noticed that changing the shader from our source code's "resources" folder updates the already-built builds upon next run. The C++ program should really be reading from the /out folder's resources folder instead.
+
+- Documentation:
+    - I want to better document how I switch between using OpenGL and OpenGL ES, and the pros/cons of the current approach's use of "pre-assumptions" about the current platform.
+    - I need to document the setup better for .NET hosting.
+    - I want to document and measure the most performant way(s) of calling out to C# code, especially during the game loop.
+    - I'd like to upgrade the **Project Dependencies** section,
+        - To make it easier to see which methods are used to include the libraries (single-file header, source with existing CMakeLists.txt, etc.)
+        - To mention licenses
+    - I'd like to better document what this repo shows off. Currently my notes are a little bit unorganized for a first-time viewer.
+    - I want to better document what the setup was for getting the [small example UTF-8 program](./small-examples/utf-8) to work.
 
 See my [backlog](/BACKLOG.md) for other, lower priority learning goals.
 

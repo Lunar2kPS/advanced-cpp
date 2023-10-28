@@ -10,8 +10,7 @@
 //      TODO: Have better structure in this entire program to avoid this better.. but just noting for now.
 #include "basicnethosting.h"
 
-#include "glad/egl.h"
-#include "glad/gles2.h"
+#include "glad/gl.h"
 #include "GLFW/glfw3.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -215,7 +214,7 @@ int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& windo
 
     if (!glfwInitialized) {
         glfwMakeContextCurrent(window);
-        int version = gladLoadGLES2(glfwGetProcAddress);
+        int version = gladLoadGL(glfwGetProcAddress);
         if (version == 0) {
             printf("Failed to initialize OpenGL context with GLAD!\n");
             return 3;

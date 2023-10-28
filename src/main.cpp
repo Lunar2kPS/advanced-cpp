@@ -10,9 +10,9 @@
 //      TODO: Have better structure in this entire program to avoid this better.. but just noting for now.
 #include "basicnethosting.h"
 
-#if defined (GRAPHICS_API_GL)
+#if defined(GRAPHICS_API_GL)
     #include "glad/gl.h"
-#elif defined (GRAPHICS_API_GLES)
+#elif defined(GRAPHICS_API_GLES)
     #include "glad/gles2.h"
 #endif
 #include "GLFW/glfw3.h"
@@ -200,16 +200,18 @@ int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& windo
         glfwSetErrorCallback(errorCallback);
     }
 
+#if defined(GRAPHICS_API_GL)
+    api = GraphicsAPI::OPENGL;
     prepareForOpenGL();
     window = glfwCreateWindow(width, height, title, NULL, NULL);
-    if (window != nullptr)
-        api = GraphicsAPI::OPENGL;
-    
-    // prepareForOpenGLES();
-    // window = glfwCreateWindow(width, height, title, NULL, NULL);
-    // api = GraphicsAPI::OPENGL_ES;
+#elif defined(GRAPHICS_API_GLES)
+    api = GraphicsAPI::OPENGL_ES;
+    prepareForOpenGLES();
+    window = glfwCreateWindow(width, height, title, NULL, NULL);
+#endif
 
     if (window == nullptr) {
+        api = GraphicsAPI::NONE;
         fprintf(stderr, "Failed to create window or OpenGL/OpenGL ES context!\n");
         glfwTerminate();
         return 2;
@@ -217,16 +219,23 @@ int tryCreateWindow(const char* title, int width, int height, GLFWwindow*& windo
 
     if (!glfwInitialized) {
         glfwMakeContextCurrent(window);
-        int version = gladLoadGL(glfwGetProcAddress);
+        int version =
+#if defined(GRAPHICS_API_GL)
+            gladLoadGL(glfwGetProcAddress)
+#elif defined(GRAPHICS_API_GLES)
+            gladLoadGLES2(glfwGetProcAddress);
+#endif
+        ;
         if (version == 0) {
             printf("Failed to initialize OpenGL context with GLAD!\n");
             return 3;
         }
         //TODO: Clean this up:
-        if (api == GraphicsAPI::OPENGL)
+#if defined(GRAPHICS_API_GL)
             printf("Loaded OpenGL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
-        else if (api == GraphicsAPI::OPENGL_ES)
+#elif defined(GRAPHICS_API_GLES)
             printf("Loaded OpenGL ES %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+#endif
     }
     glfwInitialized = true;
     return 0;

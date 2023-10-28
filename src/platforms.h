@@ -5,6 +5,8 @@
 #elif defined(__APPLE__)
     #define MACOS
 #elif defined(__linux__)
+    //NOTE: RASPBERRY_PI may also be defined from CMake.
+    //  See the main CMakeLists.txt, where it uses add_compile_definitions(...)
     #define LINUX
 #else
     #define UNKNOWN_PLATFORM

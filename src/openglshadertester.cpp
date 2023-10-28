@@ -49,7 +49,17 @@ void parseShader(const string& filePath, string& vertexShader, string& fragmentS
             else if (line.find("fragment") != string::npos)
                 currentType = ShaderType::FRAGMENT;
         } else if (currentType != ShaderType::NONE) {
-            ss[(int) currentType] << line << '\n';
+            int index = (int) currentType;
+            //TODO: Support for this #version line to be ignored when commented out
+            if (line.find("#version AUTO") != string::npos) {
+#if defined(GRAPHICS_API_GL)
+                ss[index] << "#version 330 core" << '\n';
+#elif defined(GRAPHICS_API_GLES)
+                ss[index] << "#version 300 es" << '\n';
+#endif
+            } else {
+                ss[index] << line << '\n';
+            }
         }
     }
     file.close();

@@ -1,6 +1,8 @@
 #shader vertex
-#version 300 es
-precision mediump float;
+#version AUTO
+#if defined(GL_ES)
+    precision mediump float;
+#endif
 
 layout (location = 0) in vec2 localPosition;
 layout (location = 1) in vec2 meshUV;
@@ -12,8 +14,10 @@ void main() {
 }
 
 #shader fragment
-#version 300 es
-precision mediump float;
+#version AUTO
+#if defined(GL_ES)
+    precision mediump float;
+#endif
 
 in vec2 uv;
 layout (location = 0) out vec4 fragmentOutput;

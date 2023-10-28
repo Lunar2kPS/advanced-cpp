@@ -17,8 +17,6 @@ I hope this project helps to provide a human-friendly, more understandable examp
 This project is very much in-progress. Here are some things I'd like to do next:
 
 - Features/Bugs:
-    - 🐛 I need a way to dynamically update the shader based on the current platform _(#version 330 core vs. #version 300 es + precision mediump float;)_
-        - Currently errors out on MacOS
     - I want to tile the grass texture with proper aspect ratio, regardless of the window size/resizing.
     - Dear ImGUI:
         - 🐛 I need to somehow fix an issue with Dear IMGUI where Tab/Shift + Tab navigation on the keyboard is not working at all.

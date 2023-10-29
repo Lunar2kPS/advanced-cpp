@@ -4,7 +4,7 @@
 #include "interfaces/IGameLoopSystem.h"
 
 namespace carlos {
-    class GUI : public IGameLoopSystem {
+    class GUISystem : public IGameLoopSystem {
         private:
             bool initialized = false;
             char* nameBuffer;
@@ -15,8 +15,8 @@ namespace carlos {
             void onGUI();
 
         public:
-            GUI();
-            ~GUI();
+            GUISystem();
+            ~GUISystem();
 
             int getOrder() { return 10000; }
             void update();

@@ -1,4 +1,4 @@
-﻿#include "systems/GUI.h"
+﻿#include "systems/GUISystem.h"
 
 #include "openglutility.h"
 #include "GLFW/glfw3.h"
@@ -84,7 +84,7 @@ namespace carlos {
     }
 
 
-    GUI::GUI() {
+    GUISystem::GUISystem() {
         initialized = false;
         ServiceLocator* locator = ServiceLocator::getInstance();
         IWindowSystem* windowing = locator->getSystem<IWindowSystem>();
@@ -131,7 +131,7 @@ namespace carlos {
         setStyle();
     }
 
-    GUI::~GUI() {
+    GUISystem::~GUISystem() {
         if (initialized) {
             delete[] nameBuffer;
 
@@ -141,7 +141,7 @@ namespace carlos {
         }
     }
 
-    void GUI::onGUI() {
+    void GUISystem::onGUI() {
         ImGui::ShowDemoWindow();
 
         // ImGui::PushFont(customFont);
@@ -179,9 +179,9 @@ namespace carlos {
         // ImGui::PopFont();
     }
 
-    void GUI::update() { }
+    void GUISystem::update() { }
 
-    void GUI::render() {
+    void GUISystem::render() {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();

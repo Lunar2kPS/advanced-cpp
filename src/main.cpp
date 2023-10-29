@@ -13,8 +13,9 @@
 #include "ServiceLocator.h"
 #include "interfaces/IGameLoopSystem.h"
 #include "systems/WindowSystem.h"
+#include "systems/TimeSystem.h"
 #include "systems/ExampleRenderSystem.h"
-#include "systems/GUI.h"
+#include "systems/GUISystem.h"
 
 using std::wcout;
 using std::cout;
@@ -55,18 +56,14 @@ int main(int argCount, char** args) {
         return 1;
     }
     
+    locator->addSystem<TimeSystem>(new TimeSystem());
     locator->addSystem<ExampleRenderSystem>(new ExampleRenderSystem());
-    locator->addSystem<GUI>(new GUI());
+    locator->addSystem<GUISystem>(new GUISystem());
 
-    // float prevTime = glfwGetTime();
     vector<IGameLoopSystem*> systems = { };
 
     // glfwSetKeyCallback(window, keyCallback);
     while (windowing->anyWindowOpen()) {
-        // float time = glfwGetTime();
-        // float dt = time - prevTime;
-        // float instantaneousFPS = 1 / dt;
-
         locator->getSystems(systems, SortMode::BY_ORDER);
         for (IGameLoopSystem* s : systems)
             s->earlyUpdate();
@@ -82,12 +79,9 @@ int main(int argCount, char** args) {
             s->render();
         for (IGameLoopSystem* s : systems)
             s->postRender();
-
-        // prevTime = time;
     }
 
     Exit:
-
     locator->getSystems(systems, SortMode::BY_REVERSE_ORDER);
     for (IGameLoopSystem* s : systems)
         delete s;

@@ -179,7 +179,9 @@ namespace carlos {
     }
 
     void WindowSystem::render() {
-
+        //TODO: Multi-window support
+        if (anyWindowOpen())
+            GLCALL(glViewport(0, 0, windows[0]->getWidth(), windows[0]->getHeight()));
     }
 
     void WindowSystem::postRender() {

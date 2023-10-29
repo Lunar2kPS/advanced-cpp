@@ -9,6 +9,11 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
+#include "includers/glm.h"
+#include "glm/gtc/matrix_transform.hpp"
+#include "ServiceLocator.h"
+#include "interfaces/IWindowSystem.h"
+
 using std::ifstream;
 using std::stringstream;
 using std::cout;
@@ -172,11 +177,17 @@ namespace carlos {
         };
 
         vertices = new float[vertexValueCount] {
-            0.5f, -0.5f, 1, 0,
-            -0.5f, -0.5f, 0, 0,
-            0.5f,  0.5f, 1, 1,
-            -0.5f,  0.5f, 0, 1
+            16,   0,  1,  0,
+             0,   0,  0,  0,
+            16,  16,  1,  1,
+             0,  16,  0,  1
         };
+
+        int pixelScale = 4;
+        for (int i = 0; i < vertexCount; i++) {
+            vertices[i * vertexAttributeDimensionCount]     *= pixelScale;
+            vertices[i * vertexAttributeDimensionCount + 1] *= pixelScale;
+        }
 
         GLCALL(glGenBuffers(1, &vbo));
         GLCALL(glBindBuffer(GL_ARRAY_BUFFER, vbo));
@@ -224,6 +235,35 @@ namespace carlos {
 
     void ExampleRenderSystem::render() {
         if (isAbleToDraw) {
+            GLCALL(glUseProgram(program));
+
+            IWindowSystem* windowing = ServiceLocator::getInstance()->getSystem<IWindowSystem>();
+            if (windowing != nullptr) {
+                Window* mainWindow = windowing->getMainWindow();
+                if (mainWindow != nullptr) {
+                    //NOTE: mat4() is all zeroes.
+                    //      mat4(1) is the identity matrix, which is equivalent to:
+                    //      mat4(
+                    //          1, 0, 0, 0,
+                    //          0, 1, 0, 0,
+                    //          0, 0, 1, 0,
+                    //          0, 0, 0, 1
+                    //      )
+                    
+                    mat4 proj = glm::ortho<float>(0, mainWindow->getWidth(), 0, mainWindow->getHeight(), -1, 1);
+                    mat4 view = mat4(1);
+                    mat4 model = mat4(1);
+                    
+                    //NOTE: The multiplication appears as P V M because GLM adheres to column-major ordering in memory layout,
+                    //  as opposed to row-major ordering. OpenGL uses column-major, so when setting uniforms,
+                    //  because GLM adheres to the same conventions as OpenGL, no transposition is necessary.
+                    mat4 mvp = proj * view * model;
+
+                    GLCALL(int location = glGetUniformLocation(program, "mvp"));
+                    GLCALL(glUniformMatrix4fv(location, 1, false, &mvp[0][0]));
+                }
+            }
+
             glClearPreviousErrorFlag();
             GLCALL(glBindVertexArray(vao));
             GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));

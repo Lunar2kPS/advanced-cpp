@@ -178,8 +178,6 @@ namespace carlos {
             -0.5f,  0.5f, 0, 1
         };
 
-        //TODO: Test if NULL is defined on platforms other than Windows, cause nullptr doesn't work here with glBindBuffer accepting in an integer (like NULL = 0).
-
         GLCALL(glGenBuffers(1, &vbo));
         GLCALL(glBindBuffer(GL_ARRAY_BUFFER, vbo));
         GLCALL(glBufferData(GL_ARRAY_BUFFER, vertexValueCount * sizeof(float), vertices, GL_STATIC_DRAW));

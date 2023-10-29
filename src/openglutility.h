@@ -1,11 +1,11 @@
 ﻿#pragma once
 
 #include <iostream>
-// #if defined(GRAPHICS_API_GL)
+#if defined(GRAPHICS_API_GL)
     #include "glad/gl.h"
-// #elif defined(GRAPHICS_API_GLES)
-//     #include "glad/gles2.h"
-// #endif
+#elif defined(GRAPHICS_API_GLES)
+    #include "glad/gles2.h"
+#endif
 
 using std::cout;
 using std::endl;

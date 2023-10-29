@@ -34,7 +34,6 @@ using std::vector;
 using namespace carlos;
 
 string_t path;
-// void keyCallback(GLFWwindow* window, int key, int scancode, int action, int modifiers);
 
 #if defined(WINDOWS)
 int __cdecl wmain(int argCount, wchar_t** args) {
@@ -62,7 +61,6 @@ int main(int argCount, char** args) {
 
     vector<IGameLoopSystem*> systems = { };
 
-    // glfwSetKeyCallback(window, keyCallback);
     while (windowing->anyWindowOpen()) {
         locator->getSystems(systems, SortMode::BY_ORDER);
         for (IGameLoopSystem* s : systems)
@@ -88,15 +86,3 @@ int main(int argCount, char** args) {
     ServiceLocator::destroyInstance();
     return 0;
 }
-
-// void keyCallback(GLFWwindow* window, int key, int scancode, int action, int modifiers) {
-//     switch (key) {
-//         case GLFW_KEY_0:
-//             if (action == GLFW_PRESS) {
-//                 future task = async(std::launch::async, []() {
-//                     carlos::runManagedCode(path);
-//                 });
-//             }
-//             break;
-//     }
-// }

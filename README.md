@@ -5,6 +5,8 @@ I'm deciding to learn an immense amount of C++, to give me much more freedom as 
 
 I hope this project helps to provide a human-friendly, more understandable example of working with many C++ libraries to create a small, specialized game engine.
 
+![Project Overview Screenshot](/docs/images/Project%20Overview.png)
+
 
 ## Platform Support
 - ✅ Windows
@@ -90,8 +92,5 @@ See my [backlog](/BACKLOG.md) for other, lower priority learning goals.
 - [OpenGL Docs](https://docs.gl/)
 - [Do's and Do NOT's of multithreading](https://gamedev.stackexchange.com/a/80077)
 - [File I/O in C++](https://www.w3schools.com/cpp/cpp_files.asp)
-- [FreeImage library](https://freeimage.sourceforge.io/download.html)
-    - [FreeImage docs](https://cfhcable.dl.sourceforge.net/project/freeimage/Source%20Documentation/3.18.0/FreeImage3180.pdf)
-
 - ### [C# .NET Hosting from Native C++](https://learn.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting)
     - See their GitHub docs on [Native hosting (Calling managed function)](https://github.com/dotnet/runtime/blob/main/docs/design/features/native-hosting.md#calling-managed-function-net-5-and-above) and a brief explanation of [the components involved](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md).

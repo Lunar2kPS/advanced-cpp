@@ -57,7 +57,7 @@ int main(int argCount, char** args) {
     
     locator->addSystem<TimeSystem>(new TimeSystem());
     locator->addSystem<ExampleRenderSystem>(new ExampleRenderSystem());
-    locator->addSystem<GUISystem>(new GUISystem());
+    // locator->addSystem<GUISystem>(new GUISystem());
 
     vector<IGameLoopSystem*> systems = { };
 

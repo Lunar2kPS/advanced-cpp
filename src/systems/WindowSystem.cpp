@@ -168,6 +168,8 @@ namespace carlos {
             }
         }
 
+        if (windows.size() <= 0)
+            return;
         glfwPollEvents();
 
         for (Window* window : windows) {

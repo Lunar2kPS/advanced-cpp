@@ -16,6 +16,7 @@
 #include "systems/TimeSystem.h"
 #include "systems/ExampleRenderSystem.h"
 #include "systems/GUISystem.h"
+#include "systems/AppSystem.h"
 
 using std::wcout;
 using std::cout;
@@ -44,9 +45,11 @@ int main(int argCount, char** args) {
 
     ServiceLocator::createInstance();
     ServiceLocator* locator = ServiceLocator::getInstance();
+    AppSystem* app = new AppSystem();
     IWindowSystem* windowing = new WindowSystem();
 
     //TODO: Clean up to keep this initialization order in sync with system ordering (ISystem.getOrder())
+    locator->addSystem<AppSystem>(app);
     locator->addSystem<IWindowSystem>(windowing);
 
     Window* mainWindow;
@@ -65,21 +68,18 @@ int main(int argCount, char** args) {
         locator->getSystems(systems, SortMode::BY_ORDER);
         for (IGameLoopSystem* s : systems)
             s->earlyUpdate();
-        for (IGameLoopSystem* s : systems) {
+        for (IGameLoopSystem* s : systems)
             s->update();
-
-            //TODO: Clean this up from being hard-coded/dependent on WindowSystem.cpp implementing their check during update()
-            if (!windowing->anyWindowOpen())
-                goto Exit;
-        }
 
         for (IGameLoopSystem* s : systems)
             s->render();
         for (IGameLoopSystem* s : systems)
             s->postRender();
+
+        if (app->isQuitRequested())
+            break;
     }
 
-    Exit:
     locator->getSystems(systems, SortMode::BY_REVERSE_ORDER);
     for (IGameLoopSystem* s : systems)
         delete s;

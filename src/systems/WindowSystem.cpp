@@ -5,6 +5,8 @@
 
 #include "openglutility.h"
 #include "GLFW/glfw3.h"
+#include "ServiceLocator.h"
+#include "systems/AppSystem.h"
 
 using std::stringstream;
 
@@ -82,6 +84,7 @@ namespace carlos {
                 glfwDestroyWindow(ptr);
             delete window;
         }
+        windows.clear();
 
         glfwTerminate();
     }
@@ -161,14 +164,21 @@ namespace carlos {
         for (int i = windows.size() - 1; i >= 0; i--) {
             GLFWwindow* ptr = static_cast<GLFWwindow*>(windows[i]->getPtr());
             if (glfwWindowShouldClose(ptr)) {
-                glfwDestroyWindow(ptr);
-                delete windows[i];
-                windows.erase(windows.begin() + i);
+                //WARNING: Destroying the window immediately doesn't give other systems the chance to delete their OpenGL state/data, and then may cause significant errors.
+                // glfwDestroyWindow(ptr);
+                // delete windows[i];
+                // windows.erase(windows.begin() + i);
+
+                //Instead, let's request application quit and let the main program handle the ordering of everything gracefully based on system orders.
+                ServiceLocator* locator = ServiceLocator::getInstance();
+                AppSystem* app = locator->getSystem<AppSystem>();
+                app->requestQuit();
+                break;
             }
         }
 
-        if (windows.size() <= 0)
-            return;
+        // if (windows.size() <= 0)
+        //     return;
         glfwPollEvents();
 
         for (Window* window : windows) {

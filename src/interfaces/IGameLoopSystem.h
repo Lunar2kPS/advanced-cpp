@@ -13,8 +13,8 @@ namespace carlos {
             virtual ~IGameLoopSystem() { }
 
             virtual void earlyUpdate() { }
-            virtual void update() = 0;
-            virtual void render() = 0;
+            virtual void update() { }
+            virtual void render() { }
             virtual void postRender() { }
     };
 }

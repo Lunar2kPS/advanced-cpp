@@ -11,11 +11,6 @@
 using std::cout;
 using std::endl;
 
-//Grass Tiling!
-//  - 1 mesh
-//  - X transforms
-//  - TODO: Batching or GPU instancing
-
 namespace carlos {
     ExampleRenderSystem::ExampleRenderSystem() {
         int indexCount = 6;

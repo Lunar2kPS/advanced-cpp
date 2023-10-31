@@ -101,12 +101,11 @@ namespace carlos {
 #if defined(GRAPHICS_API_GL)
         api = GraphicsAPI::OPENGL;
         prepareForOpenGL();
-        GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
 #elif defined(GRAPHICS_API_GLES)
         api = GraphicsAPI::OPENGL_ES;
         prepareForOpenGLES();
-        window = glfwCreateWindow(width, height, title, NULL, NULL);
 #endif
+        GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
 
         if (window == nullptr) {
             api = GraphicsAPI::NONE;

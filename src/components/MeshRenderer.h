@@ -8,10 +8,11 @@
 
 namespace carlos {
     class MeshRenderer : public Component {
-        Mesh& mesh;
-        Material& material;
+        Mesh* mesh;
+        Material* material;
 
         public:
+            MeshRenderer() { }
             void render();
     };
 }

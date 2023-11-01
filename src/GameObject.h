@@ -17,6 +17,8 @@ using std::is_base_of;
 namespace carlos {
     class GameObject {
         private:
+            static registry* entityRegistry;
+            
             string name;
             entity entity;
             GameObject();
@@ -26,11 +28,23 @@ namespace carlos {
             ~GameObject();
 
             template <typename T, typename = enable_if<is_base_of<Component, T>::value>>
-            T getComponent();
+            T* getComponent();
+
+            template <typename T, typename = enable_if<is_base_of<Component, T>::value>>
+            T* addComponent();
     };
 
     template <typename T, typename>
-    T GameObject::getComponent() {
-        
+    T* GameObject::getComponent() {
+        if (entityRegistry == nullptr)
+            return nullptr;
+        return entityRegistry->get<T>(entity);
+    }
+
+    template <typename T, typename>
+    T* GameObject::addComponent() {
+        if (entityRegistry == nullptr)
+            return nullptr;
+        return &entityRegistry->emplace<T>(entity);
     }
 }

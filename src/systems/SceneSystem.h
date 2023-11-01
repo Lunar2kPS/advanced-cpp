@@ -5,19 +5,22 @@
 
 #include "components/Component.h"
 #include "interfaces/IGameLoopSystem.h"
+#include "GameObject.h"
 
 using namespace entt;
 using std::vector;
 
 namespace carlos {
-    class SceneSystem {
+    class SceneSystem : public IGameLoopSystem {
         private:
             registry entityRegistry;
-            vector<GameObject*> gameObjects;
+            // vector<GameObject*> gameObjects;
         public:
             SceneSystem();
             ~SceneSystem();
 
             int getOrder() { return -1000; }
+
+            registry& getEntityRegistry() { return entityRegistry; }
     };
 }

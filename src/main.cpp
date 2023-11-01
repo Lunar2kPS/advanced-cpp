@@ -19,6 +19,8 @@
 #include "systems/AppSystem.h"
 #include "systems/SceneSystem.h"
 #include "GameObject.h"
+#include "components/Transform.h"
+#include "components/MeshRenderer.h"
 
 using std::wcout;
 using std::cout;
@@ -67,7 +69,9 @@ int main(int argCount, char** args) {
     locator->addSystem<GUISystem>(new GUISystem());
     locator->addSystem<SceneSystem>(scenes);
 
-    GameObject::create("Test Object");
+    GameObject* a = GameObject::create("Test Object");
+    a->addComponent<Transform>();
+    a->addComponent<MeshRenderer>();
 
     vector<IGameLoopSystem*> systems = { };
 

@@ -17,6 +17,8 @@
 #include "systems/ExampleRenderSystem.h"
 #include "systems/GUISystem.h"
 #include "systems/AppSystem.h"
+#include "systems/SceneSystem.h"
+#include "GameObject.h"
 
 using std::wcout;
 using std::cout;
@@ -31,6 +33,7 @@ using std::this_thread::sleep_for;
 using std::future;
 using std::async;
 using std::vector;
+using std::string;
 
 using namespace carlos;
 
@@ -47,6 +50,7 @@ int main(int argCount, char** args) {
     ServiceLocator* locator = ServiceLocator::getInstance();
     AppSystem* app = new AppSystem();
     IWindowSystem* windowing = new WindowSystem();
+    SceneSystem* scenes = new SceneSystem();
 
     //TODO: Clean up to keep this initialization order in sync with system ordering (ISystem.getOrder())
     locator->addSystem<AppSystem>(app);
@@ -61,6 +65,9 @@ int main(int argCount, char** args) {
     locator->addSystem<TimeSystem>(new TimeSystem());
     locator->addSystem<ExampleRenderSystem>(new ExampleRenderSystem());
     locator->addSystem<GUISystem>(new GUISystem());
+    locator->addSystem<SceneSystem>(scenes);
+
+    GameObject::create("Test Object");
 
     vector<IGameLoopSystem*> systems = { };
 

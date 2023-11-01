@@ -4,7 +4,7 @@
 #include <sstream>
 
 #include "openglutility.h"
-#include "GLFW/glfw3.h"
+
 #include "ServiceLocator.h"
 #include "systems/AppSystem.h"
 

@@ -65,13 +65,17 @@ int main(int argCount, char** args) {
     }
     
     locator->addSystem<TimeSystem>(new TimeSystem());
-    locator->addSystem<ExampleRenderSystem>(new ExampleRenderSystem());
+    // locator->addSystem<ExampleRenderSystem>(new ExampleRenderSystem());
     locator->addSystem<GUISystem>(new GUISystem());
     locator->addSystem<SceneSystem>(scenes);
 
-    GameObject* a = GameObject::create("Test Object");
+    GameObject* a = new GameObject("Test Object");
+    scenes->add(a);
     a->addComponent<Transform>();
-    a->addComponent<MeshRenderer>();
+    MeshRenderer* renderer = a->addComponent<MeshRenderer>();
+
+    Mesh* mesh = new Mesh(
+    // renderer->setMesh()
 
     vector<IGameLoopSystem*> systems = { };
 

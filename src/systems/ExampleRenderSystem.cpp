@@ -44,6 +44,8 @@ namespace carlos {
 
         mainTexture = Texture::loadFrom("resources/Grass Tile.png");
         material->setTexture("mainTexture", mainTexture);
+
+        
     }
 
     ExampleRenderSystem::~ExampleRenderSystem() {

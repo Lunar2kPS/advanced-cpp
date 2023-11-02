@@ -1,50 +1,59 @@
-﻿#pragma once
+#pragma once
 
 #include <string>
 #include <vector>
 #include <type_traits>
-#include "entt/entt.hpp"
 
-#include "components/Component.h"
 #include "systems/SceneSystem.h"
 
-using namespace entt;
 using std::string;
 using std::vector;
 using std::enable_if;
 using std::is_base_of;
+using std::move;
 
 namespace carlos {
+    //NOTE: this breaks the circular dependency of GameObject ←-→ Component
+    class Component;
+
     class GameObject {
         private:
-            static registry* entityRegistry;
-            
             string name;
-            entity entity;
-            GameObject();
+            vector<Component*> components;
 
         public:
-            static GameObject* create(string&& name);
+            GameObject(string&& name) : name(move(name)) { }
             ~GameObject();
 
-            template <typename T, typename = enable_if<is_base_of<Component, T>::value>>
+            vector<Component*>& getAllComponents() { return components; }
+
+            template <typename T>
             T* getComponent();
 
-            template <typename T, typename = enable_if<is_base_of<Component, T>::value>>
+            template <typename T>
             T* addComponent();
     };
 
-    template <typename T, typename>
+    template <typename T>
     T* GameObject::getComponent() {
-        if (entityRegistry == nullptr)
-            return nullptr;
-        return entityRegistry->get<T>(entity);
+        for (int i = 0; i < components.size(); i++) {
+            T* specificType = dynamic_cast<T*>(components[i]);
+            if (specificType != nullptr)
+                return specificType;
+        }
+        return nullptr;
     }
 
-    template <typename T, typename>
+    template <typename T>
     T* GameObject::addComponent() {
-        if (entityRegistry == nullptr)
-            return nullptr;
-        return &entityRegistry->emplace<T>(entity);
+        T* newComponent = new T();
+
+        //TODO: Generic constraints..
+        Component* c = dynamic_cast<Component*>(newComponent);
+        if (c != nullptr)
+            c->setGameObject(this);
+
+        components.push_back(newComponent);
+        return newComponent;
     }
 }

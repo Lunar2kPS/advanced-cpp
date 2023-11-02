@@ -6,8 +6,10 @@
 
 layout (location = 0) in vec2 localPosition;
 
+uniform mat4 mvp;
+
 void main() {
-    gl_Position = vec4(localPosition, 0, 1);
+    gl_Position = mvp * vec4(localPosition, 0, 1);
 }
 
 #shader fragment

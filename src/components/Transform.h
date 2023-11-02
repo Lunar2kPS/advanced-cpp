@@ -1,8 +1,10 @@
-#pragma once
-#include "includers/glm.h"
+﻿#pragma once
+
+#include "glmutility.h"
+#include "components/Component.h"
 
 namespace carlos {
-    class Transform {
+    class Transform : public Component {
         private:
             vec2 localPosition;
         

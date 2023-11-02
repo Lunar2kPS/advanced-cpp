@@ -7,6 +7,9 @@
     #include "glad/gles2.h"
 #endif
 
+//NOTE: GLFW must be included AFTER OpenGL:
+#include "GLFW/glfw3.h"
+
 using std::cout;
 using std::endl;
 using std::hex;

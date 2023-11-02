@@ -5,6 +5,8 @@ I'm deciding to learn an immense amount of C++, to give me much more freedom as 
 
 I hope this project helps to provide a human-friendly, more understandable example of working with many C++ libraries to create a small, specialized game engine.
 
+![Project Overview Screenshot](/docs/images/Project%20Overview.png)
+
 
 ## Platform Support
 - ✅ Windows
@@ -18,17 +20,22 @@ This project is very much in-progress. Here are some things I'd like to do next:
 
 - Features/Bugs:
     - I want to tile the grass texture with proper aspect ratio, regardless of the window size/resizing.
+    - Create a CSharpScriptingSystem to encapsulate the .NET hosting logic
+    - Abstract an InputSystem class (using GLFW behind the scenes) and re-implement pressing 0 key for testing C# scripting.
+    - Upgrade the ServiceLocator implementation (in the main program under `/src`) to use templates to let you define the base class that all your systems must inherit from, rather than hard-coding it to use IGameLoopSystems.
     - Dear ImGUI:
         - 🐛 I need to somehow fix an issue with Dear IMGUI where Tab/Shift + Tab navigation on the keyboard is not working at all.
         - I want to display float fields without forcing a specific number of decimal places.
         - I want to restrict all GUI to the GLFW window, so they can't get cut off-screen.
+        - Dear ImGUI's `ImGui_ImplOpenGL3_RenderDrawData(...)` function throws a 1280 (0x500) GL_INVALID_ENUM OpenGL error during drawing on 64bit Raspberry Pi (OpenGL ES 3.1).
     - C++ learning topics:
-        - Programming design patterns
-        - Rendering realtime 2D pixel art
         - Measuring performance and/or profiling
+        - Rendering realtime 2D pixel art
+        - Programming design patterns
     - 🐛 For some reason, I've noticed that changing the shader from our source code's "resources" folder updates the already-built builds upon next run. The C++ program should really be reading from the /out folder's resources folder instead.
 
 - Documentation:
+    - I want to document the main classes/methods/structure/API design that I'm using in the code.
     - I want to better document how I switch between using OpenGL and OpenGL ES, and the pros/cons of the current approach's use of "pre-assumptions" about the current platform.
     - I need to document the setup better for .NET hosting.
     - I want to document and measure the most performant way(s) of calling out to C# code, especially during the game loop.
@@ -86,8 +93,5 @@ See my [backlog](/BACKLOG.md) for other, lower priority learning goals.
 - [OpenGL Docs](https://docs.gl/)
 - [Do's and Do NOT's of multithreading](https://gamedev.stackexchange.com/a/80077)
 - [File I/O in C++](https://www.w3schools.com/cpp/cpp_files.asp)
-- [FreeImage library](https://freeimage.sourceforge.io/download.html)
-    - [FreeImage docs](https://cfhcable.dl.sourceforge.net/project/freeimage/Source%20Documentation/3.18.0/FreeImage3180.pdf)
-
 - ### [C# .NET Hosting from Native C++](https://learn.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting)
     - See their GitHub docs on [Native hosting (Calling managed function)](https://github.com/dotnet/runtime/blob/main/docs/design/features/native-hosting.md#calling-managed-function-net-5-and-above) and a brief explanation of [the components involved](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md).

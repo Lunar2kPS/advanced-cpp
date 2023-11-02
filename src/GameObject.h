@@ -25,6 +25,8 @@ namespace carlos {
             GameObject(string&& name) : name(move(name)) { }
             ~GameObject();
 
+            string& getName() { return name; }
+
             vector<Component*>& getAllComponents() { return components; }
 
             template <typename T>

@@ -53,14 +53,14 @@ namespace carlos {
 
     template <typename T>
     T* DefaultServiceLocator::getSystem() {
-        return ServiceLocator::getSystem(ServiceLocator::getInstance());
+        return ServiceLocator::getSystem<T>(ServiceLocator::getInstance());
     }
 
     template <typename T>
     T* ServiceLocator::getSystem(ServiceLocator* locator) {
         if (locator == nullptr)
             return nullptr;
-        return locator->getSystem();
+        return locator->getSystem<T>();
     }
 
     //WARNING: For some reason, the compiler and/or linker need these template functions to be available immediately in the .h header file,
@@ -74,7 +74,7 @@ namespace carlos {
         size_t key = typeid(T).hash_code();
         unordered_map<size_t, IGameLoopSystem*>::const_iterator search = systems.find(key);
         if (search != systems.end())
-            return static_cast<T*>(systems[search->first]);
+            return dynamic_cast<T*>(systems[search->first]);
         return nullptr;
     }
 

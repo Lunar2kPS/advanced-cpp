@@ -15,6 +15,7 @@
 #include "systems/WindowSystem.h"
 #include "systems/TimeSystem.h"
 #include "systems/ExampleRenderSystem.h"
+#include "systems/GameObjectTester.h"
 #include "systems/GUISystem.h"
 #include "systems/AppSystem.h"
 #include "systems/SceneSystem.h"
@@ -65,18 +66,15 @@ int main(int argCount, char** args) {
     }
     
     locator->addSystem<TimeSystem>(new TimeSystem());
-    // locator->addSystem<ExampleRenderSystem>(new ExampleRenderSystem());
     locator->addSystem<GUISystem>(new GUISystem());
     locator->addSystem<SceneSystem>(scenes);
 
-    GameObject* a = new GameObject("Test Object");
-    scenes->add(a);
-    a->addComponent<Transform>();
-    MeshRenderer* renderer = a->addComponent<MeshRenderer>();
+    // locator->addSystem<ExampleRenderSystem>(new ExampleRenderSystem());
+    
+    //WARNING: This required the SceneSystem to be added first before calling the constructor with new... Can't believe I didn't see this before it took hours of my time...
+    locator->addSystem<GameObjectTester>(new GameObjectTester());
 
-    Mesh* mesh = new Mesh(
-    // renderer->setMesh()
-
+    IGameLoopSystem* test = scenes;
     vector<IGameLoopSystem*> systems = { };
 
     while (windowing->anyWindowOpen()) {

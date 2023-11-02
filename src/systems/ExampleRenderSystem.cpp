@@ -4,7 +4,6 @@
 #include <string>
 
 #include "glmutility.h"
-#include "glm/gtc/matrix_transform.hpp"
 #include "ServiceLocator.h"
 #include "interfaces/IWindowSystem.h"
 
@@ -61,7 +60,7 @@ namespace carlos {
 
     void ExampleRenderSystem::render() {
         if (isAbleToDraw) {
-            IWindowSystem* windowing = ServiceLocator::getInstance()->getSystem<IWindowSystem>();
+            IWindowSystem* windowing = DefaultServiceLocator::getSystem<IWindowSystem>();
             Window* mainWindow = nullptr;
             if (windowing != nullptr) {
                 mainWindow = windowing->getMainWindow();

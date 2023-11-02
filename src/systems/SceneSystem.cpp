@@ -1,5 +1,11 @@
 ﻿#include "systems/SceneSystem.h"
+
+#include <iostream>
+
 #include "components/MeshRenderer.h"
+
+using std::cout;
+using std::endl;
 
 namespace carlos {
     SceneSystem::SceneSystem() {
@@ -22,9 +28,8 @@ namespace carlos {
     void SceneSystem::render() {
         for (GameObject* g : gameObjects) {
             MeshRenderer* renderer = g->getComponent<MeshRenderer>();
-            if (renderer != nullptr) {
+            if (renderer != nullptr)
                 renderer->render();
-            }
         }
     }
 }

@@ -5,9 +5,7 @@
 using std::cout;
 using std::endl;
 
-//WARNING: GLFW must be included AFTER OpenGL
-// #include "openglutility.h"
-#include "GLFW/glfw3.h"
+#include "openglutility.h"
 
 namespace carlos {
     double TimeSystem::timeAsDouble() { return appTime; }

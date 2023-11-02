@@ -15,8 +15,13 @@
 #include "systems/WindowSystem.h"
 #include "systems/TimeSystem.h"
 #include "systems/ExampleRenderSystem.h"
+#include "systems/GameObjectTester.h"
 #include "systems/GUISystem.h"
 #include "systems/AppSystem.h"
+#include "systems/SceneSystem.h"
+#include "GameObject.h"
+#include "components/Transform.h"
+#include "components/MeshRenderer.h"
 
 using std::wcout;
 using std::cout;
@@ -31,6 +36,7 @@ using std::this_thread::sleep_for;
 using std::future;
 using std::async;
 using std::vector;
+using std::string;
 
 using namespace carlos;
 
@@ -47,6 +53,7 @@ int main(int argCount, char** args) {
     ServiceLocator* locator = ServiceLocator::getInstance();
     AppSystem* app = new AppSystem();
     IWindowSystem* windowing = new WindowSystem();
+    SceneSystem* scenes = new SceneSystem();
 
     //TODO: Clean up to keep this initialization order in sync with system ordering (ISystem.getOrder())
     locator->addSystem<AppSystem>(app);
@@ -59,9 +66,15 @@ int main(int argCount, char** args) {
     }
     
     locator->addSystem<TimeSystem>(new TimeSystem());
-    locator->addSystem<ExampleRenderSystem>(new ExampleRenderSystem());
     locator->addSystem<GUISystem>(new GUISystem());
+    locator->addSystem<SceneSystem>(scenes);
 
+    // locator->addSystem<ExampleRenderSystem>(new ExampleRenderSystem());
+    
+    //WARNING: This required the SceneSystem to be added first before calling the constructor with new... Can't believe I didn't see this before it took hours of my time...
+    locator->addSystem<GameObjectTester>(new GameObjectTester());
+
+    IGameLoopSystem* test = scenes;
     vector<IGameLoopSystem*> systems = { };
 
     while (windowing->anyWindowOpen()) {

@@ -3,8 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "includers/glm.h"
-#include "glm/gtc/matrix_transform.hpp"
+#include "glmutility.h"
 #include "ServiceLocator.h"
 #include "interfaces/IWindowSystem.h"
 
@@ -44,6 +43,8 @@ namespace carlos {
 
         mainTexture = Texture::loadFrom("resources/Grass Tile.png");
         material->setTexture("mainTexture", mainTexture);
+
+        
     }
 
     ExampleRenderSystem::~ExampleRenderSystem() {
@@ -59,7 +60,7 @@ namespace carlos {
 
     void ExampleRenderSystem::render() {
         if (isAbleToDraw) {
-            IWindowSystem* windowing = ServiceLocator::getInstance()->getSystem<IWindowSystem>();
+            IWindowSystem* windowing = DefaultServiceLocator::getSystem<IWindowSystem>();
             Window* mainWindow = nullptr;
             if (windowing != nullptr) {
                 mainWindow = windowing->getMainWindow();

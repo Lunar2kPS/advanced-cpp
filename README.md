@@ -35,6 +35,7 @@ This project is very much in-progress. Here are some things I'd like to do next:
     - 🐛 For some reason, I've noticed that changing the shader from our source code's "resources" folder updates the already-built builds upon next run. The C++ program should really be reading from the /out folder's resources folder instead.
 
 - Documentation:
+    - I want to document the main classes/methods/structure/API design that I'm using in the code.
     - I want to better document how I switch between using OpenGL and OpenGL ES, and the pros/cons of the current approach's use of "pre-assumptions" about the current platform.
     - I need to document the setup better for .NET hosting.
     - I want to document and measure the most performant way(s) of calling out to C# code, especially during the game loop.

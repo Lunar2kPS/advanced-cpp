@@ -18,7 +18,7 @@ namespace carlos {
             GUISystem();
             ~GUISystem();
 
-            int getOrder() { return 10000; }
+            int getOrder() { return 1000; }
             void update();
             void render();
     };

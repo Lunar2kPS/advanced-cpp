@@ -4,11 +4,11 @@
 #include <string>
 #include <vector>
 
-//WARNING: Somehow, one of these files probably includes Windows OS headers...
+//NOTE: basicnethosting.h includes Windows OS headers, and
 //      #include <Windows.h> NEEDS to be included FIRST before glfw!
 //      Or else there will be macro redefinition of APIENTRY.
-//      TODO: Have better structure in this entire program to avoid this better.. but just noting for now.
 #include "basicnethosting.h"
+#include "openglutility.h"
 
 #include "ServiceLocator.h"
 #include "interfaces/IGameLoopSystem.h"
@@ -20,6 +20,7 @@
 #include "systems/GUISystem.h"
 #include "systems/AppSystem.h"
 #include "systems/SceneSystem.h"
+#include "systems/CSharpTestSystem.h"
 #include "GameObject.h"
 #include "components/Transform.h"
 #include "components/MeshRenderer.h"
@@ -28,31 +29,22 @@ using std::wcout;
 using std::cout;
 using std::endl;
 
-//TODO: Not sure how to just reduce the need for "std::" here, without "using namespace std;" -- I don't want to use the entire std namespace!
-//Neither of these worked:
-// using std::this_thread = this_thread;
-// using this_thread = std::this_thread;
-
-using std::this_thread::sleep_for;
-using std::future;
-using std::async;
 using std::vector;
 using std::string;
 
 using namespace carlos;
 
-string_t path;
-
 #if defined(WINDOWS)
-int __cdecl wmain(int argCount, wchar_t** args) {
+//TODO: What was __cdecl about?
+    #define MAIN_PROGRAM wmain
 #else
-int main(int argCount, char** args) {
+    #define MAIN_PROGRAM main
 #endif
-    path = getCurrentDirectory(argCount, args);
 
+int MAIN_PROGRAM(int argCount, platform_char** args) {
     ServiceLocator::createInstance();
     ServiceLocator* locator = ServiceLocator::getInstance();
-    AppSystem* app = new AppSystem();
+    AppSystem* app = new AppSystem(argCount, args);
     IWindowSystem* windowing = new WindowSystem();
     SceneSystem* scenes = new SceneSystem();
 
@@ -74,8 +66,8 @@ int main(int argCount, char** args) {
 
     // locator->addSystem<ExampleRenderSystem>(new ExampleRenderSystem());
     
-    //WARNING: This required the SceneSystem to be added first before calling the constructor with new... Can't believe I didn't see this before it took hours of my time...
     locator->addSystem<GameObjectTester>(new GameObjectTester());
+    locator->addSystem<CSharpTestSystem>(new CSharpTestSystem()); //TODO: For some reason, adding this line crashes the program sometimes immediately on launch.
 
     IGameLoopSystem* test = scenes;
     vector<IGameLoopSystem*> systems = { };

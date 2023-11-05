@@ -6,6 +6,7 @@
 
 #include "ServiceLocator.h"
 #include "interfaces/IGameLoopSystem.h"
+#include "interfaces/IInputSystem.h"
 #include "components/MeshRenderer.h"
 #include "components/Transform.h"
 #include "GameObject.h"
@@ -90,6 +91,23 @@ namespace carlos {
                 delete shader;
                 delete material;
                 delete mainTexture;
+            }
+
+            void update() {
+                IInputSystem* input = DefaultServiceLocator::getSystem<IInputSystem>();
+                if (input != nullptr) {
+                    //INSTEAD OF THIS:
+                    // if (glfwGetKey(static_cast<GLFWwindow*>(windows[0]->getPtr()), GLFW_KEY_0) == GLFW_PRESS)
+                    //     cout << "0 is down!" << endl;
+                    // if (glfwGetKey(static_cast<GLFWwindow*>(windows[0]->getPtr()), GLFW_KEY_KP_0) == GLFW_PRESS)
+                    //     cout << "Numpad 0 is down!" << endl;
+
+                    //NOW I CAN DO THIS!!
+                    if (input->getKeyDown(Key::ALPHA0))
+                        cout << "0 is down!" << endl;
+                    if (input->getKeyDown(Key::NUMPAD0))
+                        cout << "Numpad 0 is down!" << endl;
+                }
             }
     };
 }

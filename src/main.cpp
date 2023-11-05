@@ -14,6 +14,7 @@
 #include "interfaces/IGameLoopSystem.h"
 #include "systems/WindowSystem.h"
 #include "systems/TimeSystem.h"
+#include "systems/InputSystem.h"
 #include "systems/ExampleRenderSystem.h"
 #include "systems/GameObjectTester.h"
 #include "systems/GUISystem.h"
@@ -64,6 +65,8 @@ int main(int argCount, char** args) {
         fprintf(stderr, "%s\n", "Failed to create main window.");
         return 1;
     }
+
+    locator->addSystem<IInputSystem>(new InputSystem());
     
     locator->addSystem<TimeSystem>(new TimeSystem());
     locator->addSystem<GUISystem>(new GUISystem());

@@ -10,7 +10,7 @@
 namespace carlos {
     class CSharpTestSystem : public IGameLoopSystem {
         private:
-            static string_t getCurrentDirectory(int argCount, platform_char** args);
+            static string_t getCurrentDirectory(int argCount, char_t** args);
 
         private:
             IInputSystem* input;

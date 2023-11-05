@@ -35,62 +35,67 @@ using std::string;
 using namespace carlos;
 
 #if defined(WINDOWS)
-//TODO: What was __cdecl about?
+    //TODO: What was __cdecl about?
     #define MAIN_PROGRAM wmain
 #else
     #define MAIN_PROGRAM main
 #endif
 
-int MAIN_PROGRAM(int argCount, platform_char** args) {
+int MAIN_PROGRAM(int argCount, char_t** args) {
     ServiceLocator::createInstance();
     ServiceLocator* locator = ServiceLocator::getInstance();
-    AppSystem* app = new AppSystem(argCount, args);
-    IWindowSystem* windowing = new WindowSystem();
-    SceneSystem* scenes = new SceneSystem();
 
-    //TODO: Clean up to keep this initialization order in sync with system ordering (ISystem.getOrder())
-    locator->addSystem<AppSystem>(app);
-    locator->addSystem<IWindowSystem>(windowing);
+    try {
+        AppSystem* app = new AppSystem(argCount, args);
+        IWindowSystem* windowing = new WindowSystem();
+        SceneSystem* scenes = new SceneSystem();
 
-    Window* mainWindow;
-    if (!windowing->tryCreateWindow("Advanced C++", 800, 600, mainWindow)) {
-        fprintf(stderr, "%s\n", "Failed to create main window.");
-        return 1;
+        //TODO: Clean up to keep this initialization order in sync with system ordering (ISystem.getOrder())
+        locator->addSystem<AppSystem>(app);
+        locator->addSystem<IWindowSystem>(windowing);
+
+        Window* mainWindow;
+        if (!windowing->tryCreateWindow("Advanced C++", 800, 600, mainWindow)) {
+            fprintf(stderr, "%s\n", "Failed to create main window.");
+            return 1;
+        }
+
+        locator->addSystem<IInputSystem>(new InputSystem());
+        
+        locator->addSystem<TimeSystem>(new TimeSystem());
+        locator->addSystem<GUISystem>(new GUISystem());
+        locator->addSystem<SceneSystem>(scenes);
+
+        // locator->addSystem<ExampleRenderSystem>(new ExampleRenderSystem());
+        
+        locator->addSystem<GameObjectTester>(new GameObjectTester());
+        locator->addSystem<CSharpTestSystem>(new CSharpTestSystem()); //TODO: For some reason, adding this line crashes the program sometimes immediately on launch.
+
+        IGameLoopSystem* test = scenes;
+        vector<IGameLoopSystem*> systems = { };
+
+        while (windowing->anyWindowOpen()) {
+            locator->getSystems(systems, SortMode::BY_ORDER);
+            for (IGameLoopSystem* s : systems)
+                s->earlyUpdate();
+            for (IGameLoopSystem* s : systems)
+                s->update();
+
+            for (IGameLoopSystem* s : systems)
+                s->render();
+            for (IGameLoopSystem* s : systems)
+                s->postRender();
+
+            if (app->isQuitRequested())
+                break;
+        }
+
+        locator->getSystems(systems, SortMode::BY_REVERSE_ORDER);
+        for (IGameLoopSystem* s : systems)
+            delete s;
+    } catch (...) {
+        cout << "An exception was thrown. TODO: Handle this properly..." << endl;
     }
-
-    locator->addSystem<IInputSystem>(new InputSystem());
-    
-    locator->addSystem<TimeSystem>(new TimeSystem());
-    locator->addSystem<GUISystem>(new GUISystem());
-    locator->addSystem<SceneSystem>(scenes);
-
-    // locator->addSystem<ExampleRenderSystem>(new ExampleRenderSystem());
-    
-    locator->addSystem<GameObjectTester>(new GameObjectTester());
-    locator->addSystem<CSharpTestSystem>(new CSharpTestSystem()); //TODO: For some reason, adding this line crashes the program sometimes immediately on launch.
-
-    IGameLoopSystem* test = scenes;
-    vector<IGameLoopSystem*> systems = { };
-
-    while (windowing->anyWindowOpen()) {
-        locator->getSystems(systems, SortMode::BY_ORDER);
-        for (IGameLoopSystem* s : systems)
-            s->earlyUpdate();
-        for (IGameLoopSystem* s : systems)
-            s->update();
-
-        for (IGameLoopSystem* s : systems)
-            s->render();
-        for (IGameLoopSystem* s : systems)
-            s->postRender();
-
-        if (app->isQuitRequested())
-            break;
-    }
-
-    locator->getSystems(systems, SortMode::BY_REVERSE_ORDER);
-    for (IGameLoopSystem* s : systems)
-        delete s;
     ServiceLocator::destroyInstance();
     return 0;
 }

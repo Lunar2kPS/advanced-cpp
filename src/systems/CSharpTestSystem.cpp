@@ -1,7 +1,7 @@
 ﻿#include "systems/CSharpTestSystem.h"
 
 namespace carlos {
-    string_t CSharpTestSystem::getCurrentDirectory(int argCount, platform_char** args) {
+    string_t CSharpTestSystem::getCurrentDirectory(int argCount, char_t** args) {
         //Get the current executable's directory
         //This assumes the managed assembly to load and its runtime configuration file are next to the host
         char_t rootPath[MAX_PATH];

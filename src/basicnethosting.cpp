@@ -26,7 +26,7 @@ namespace carlos {
         int result = get_hostfxr_path(buffer, &bufferSize, nullptr);
         if (result != 0)
             cerr << "(ERROR) get_hostfxr_path result = " << hex << showbase << result << dec << noshowbase << endl;
-        PLATFORM_OUT << "hostfxr path = " << ((platform_char_t*) buffer) << endl;
+        PLATFORM_OUT << "hostfxr path = " << ((char_t*) buffer) << endl;
         void* library = loadLibrary(buffer);
 
         initFunction = (hostfxr_initialize_for_runtime_config_fn) getExport(library, "hostfxr_initialize_for_runtime_config");

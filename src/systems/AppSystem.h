@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <iostream>
 
@@ -23,7 +23,9 @@ namespace carlos {
         private:
             int argCount;
             char_t** args;
-            bool quitFlag;
+            bool quitFlag = false;  //NOTE: the "= false" part is very important!
+                                    //  Otherwise this may contain undefined/garbage memory, and may be true, or false, you'd never know!
+                                    //  (And then the app may think it needs to immediately quit!)
 
         public:
             int getArgCount() { return argCount; }

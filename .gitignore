@@ -1,6 +1,9 @@
 # The final build directory
 out
 
+# Visual Studio config files
+.vs
+
 # From the pre-build.sh and post-build.sh scripts
 temp-cs-build-instructions.sh
 

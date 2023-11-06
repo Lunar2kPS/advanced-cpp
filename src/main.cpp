@@ -69,7 +69,7 @@ int MAIN_PROGRAM(int argCount, char_t** args) {
         // locator->addSystem<ExampleRenderSystem>(new ExampleRenderSystem());
         
         locator->addSystem<GameObjectTester>(new GameObjectTester());
-        locator->addSystem<CSharpTestSystem>(new CSharpTestSystem()); //TODO: For some reason, adding this line crashes the program sometimes immediately on launch.
+        locator->addSystem<CSharpTestSystem>(new CSharpTestSystem());
 
         IGameLoopSystem* test = scenes;
         vector<IGameLoopSystem*> systems = { };

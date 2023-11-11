@@ -3,6 +3,7 @@
 #include "interfaces/ISystem.h"
 
 namespace carlos {
+    /// @brief An interface of a system that can run during the program's game loop.
     class IGameLoopSystem : public ISystem {
         public:
             //I guess this always has "virtual" behavior by default, so we can't mark constructors virtual:

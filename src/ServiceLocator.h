@@ -25,6 +25,9 @@ namespace carlos {
     };
 
     //TODO: Make this ServiceLocator generic, to let you operate on IGameLoopSystems, OR any custom base class type!
+
+    /// @brief Represents a main center point for accessing the major systems of a program.
+    /// @note (This is based upon the common service locator programming design pattern).
     class ServiceLocator {
         private:
             static ServiceLocator* instance;

@@ -3,6 +3,9 @@
 namespace carlos {
     //NOTE: Naming conflict with #define DELETE on Windows
 
+    /// @brief Represents keys on the keyboard.
+    /// @note Note for Key::DELETE_KEY, we were forced to append "_KEY" at the end of it,
+    ///     because Windows has a macro define as DELETE, which was conflicting with our enum definition.
     enum class Key {
         UNKNOWN             = -1,                   //#define GLFW_KEY_UNKNOWN              -1
         SPACE               = 32,                   //#define GLFW_KEY_SPACE                32

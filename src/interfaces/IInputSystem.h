@@ -4,6 +4,7 @@
 #include "interfaces/IGameLoopSystem.h"
 
 namespace carlos {
+    /// @brief An interface representing a system that handles user input from the keyboard.
     class IInputSystem : public IGameLoopSystem {
         public:
             int getOrder() { return -9900; }

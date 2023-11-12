@@ -19,8 +19,7 @@ I hope this project helps to provide a human-friendly, more understandable examp
 This project is very much in-progress. Here are some things I'd like to do next:
 
 - Features/Bugs:
-    - Abstract an InputSystem class (using GLFW behind the scenes) and re-implement pressing 0 key for testing C# scripting.
-    - Create a CSharpScriptingSystem to encapsulate the .NET hosting logic
+    - 🔥 Learn how to measure performance/memory usage for the GameObjects I've created so far... the grass tiles seem to really eat a ton of performance, and they're barely doing anything!
     - Upgrade the ServiceLocator implementation (in the main program under `/src`) to use templates to let you define the base class that all your systems must inherit from, rather than hard-coding it to use IGameLoopSystems.
     - Dear ImGUI:
         - 🐛 I need to somehow fix an issue with Dear IMGUI where Tab/Shift + Tab navigation on the keyboard is not working at all.

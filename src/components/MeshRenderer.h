@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "openglutility.h"
+#include "glmutility.h"
 #include "components/Component.h"
 
 #include "rendering/Material.h"

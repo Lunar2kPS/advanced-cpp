@@ -72,9 +72,7 @@ namespace carlos {
     }
 
     WindowSystem::WindowSystem() {
-        //NOTE: V-Sync: Wait 1 frame before rendering each frame --
-        //      don't waste CPU resources trying to render at 2000 FPS when our screens can't even display that fast!
-        glfwSwapInterval(1);
+        
     }
 
     WindowSystem::~WindowSystem() {
@@ -137,12 +135,20 @@ namespace carlos {
 #elif defined(GRAPHICS_API_GLES)
             printf("Loaded OpenGL ES %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
 #endif
+
+            //NOTE: V-Sync: Wait 1 frame before rendering each frame --
+            //      don't waste CPU resources trying to render at 2000 FPS when our screens can't even display that fast!
+            glfwSwapInterval(0);
         }
 
         outWindow = new Window(window, api, width, height);
         windows.push_back(outWindow);
         glfwInitialized = true;
         return true;
+    }
+
+    void WindowSystem::setTitle(Window& window, const char* title) {
+        glfwSetWindowTitle(static_cast<GLFWwindow*>(window.getPtr()), title);
     }
 
     Window* WindowSystem::getMainWindow() {

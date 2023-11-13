@@ -66,8 +66,10 @@ namespace carlos {
                 createRenderingObjects();
 
                 stringstream ss = { };
-                for (int y = 0; y < 4; y++) {
-                    for (int x = 0; x < 10; x++) {
+                const int TILE_COUNT_X = 32;
+                const int TILE_COUNT_Y = 32;
+                for (int y = 0; y < TILE_COUNT_Y; y++) {
+                    for (int x = 0; x < TILE_COUNT_X; x++) {
                         ss << "G (" << x << ", " << y << ")";
                         GameObject* current = new GameObject(ss.str());
                         scenes->add(current);

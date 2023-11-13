@@ -3,6 +3,7 @@
 #include <thread>
 #include <string>
 #include <vector>
+#include <sstream>
 
 //NOTE: basicnethosting.h includes Windows OS headers, and
 //      #include <Windows.h> NEEDS to be included FIRST before glfw!
@@ -19,6 +20,7 @@
 #include "systems/GameObjectTester.h"
 #include "systems/GUISystem.h"
 #include "systems/AppSystem.h"
+#include "systems/CameraSystem.h"
 #include "systems/SceneSystem.h"
 #include "systems/CSharpTestSystem.h"
 #include "GameObject.h"
@@ -31,6 +33,7 @@ using std::endl;
 
 using std::vector;
 using std::string;
+using std::stringstream;
 
 using namespace carlos;
 
@@ -63,7 +66,9 @@ int MAIN_PROGRAM(int argCount, char_t** args) {
         locator->addSystem<IInputSystem>(new InputSystem());
         
         locator->addSystem<TimeSystem>(new TimeSystem());
-        locator->addSystem<GUISystem>(new GUISystem());
+        // locator->addSystem<GUISystem>(new GUISystem());
+
+        locator->addSystem<CameraSystem>(new CameraSystem());
         locator->addSystem<SceneSystem>(scenes);
 
         // locator->addSystem<ExampleRenderSystem>(new ExampleRenderSystem());
@@ -73,6 +78,12 @@ int MAIN_PROGRAM(int argCount, char_t** args) {
 
         IGameLoopSystem* test = scenes;
         vector<IGameLoopSystem*> systems = { };
+        
+        stringstream ss = { };
+        const int AVG_FRAME_COUNT = 256;
+        int index = 0;
+        int frameCount = 0;
+        float fps[AVG_FRAME_COUNT];
 
         while (windowing->anyWindowOpen()) {
             locator->getSystems(systems, SortMode::BY_ORDER);
@@ -85,6 +96,22 @@ int MAIN_PROGRAM(int argCount, char_t** args) {
                 s->render();
             for (IGameLoopSystem* s : systems)
                 s->postRender();
+
+            if (frameCount < AVG_FRAME_COUNT)
+                frameCount++;
+            fps[index] = 1 / locator->getSystem<TimeSystem>()->deltaTime();
+            index = (index + 1) % AVG_FRAME_COUNT;
+
+            float avgFPS = 0;
+            for (int i = 0; i < frameCount; i++)
+                avgFPS += fps[i];
+            avgFPS /= frameCount;
+
+            ss << "Advanced C++" << " (FPS = " << (int) avgFPS << ")";
+            windowing->setTitle(*mainWindow, ss.str().c_str());
+
+            ss.str(""); //NOTE: Sets the entire contents back to the empty string
+            ss.clear(); //NOTE: Only clears error flags
 
             if (app->isQuitRequested())
                 break;

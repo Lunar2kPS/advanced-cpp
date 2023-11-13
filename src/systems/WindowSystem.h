@@ -17,6 +17,7 @@ namespace carlos {
             ~WindowSystem();
 
             bool tryCreateWindow(const char* title, int width, int height, Window*& outWindow);
+            void setTitle(Window& window, const char* title);
             Window* getMainWindow();
             bool anyWindowOpen();
 

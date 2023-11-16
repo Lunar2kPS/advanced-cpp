@@ -15,6 +15,7 @@ using std::pair;
 using std::move; //NOTE: May require #include <utility> on its own.
 
 namespace carlos {
+    /// @brief Represents a Shader program that has a bunch of preset variable name -> value pairs.
     class Material {
         private:
             template <typename V>

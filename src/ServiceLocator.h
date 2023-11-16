@@ -49,37 +49,37 @@ namespace carlos {
             /// @brief Gets the total number of systems currently registered.
             int getCount();
 
-            /// @brief Gets a system from the internal list of systems, if one exists of this given (exact) type.
-            /// @note Note that polymorphism is NOT supported here. Only the exact data type you used with addSystem<T>(T*) works.
-            /// @tparam T The type of system to search for.
-            /// @return A pointer to the system, if any, or nullptr otherwise.
             template <typename T>
             T* getSystem();
 
-            /// @brief Adds a system to the ServiceLocator's internal list of systems, allowing it to be retrieved by getSystem<T>().
-            /// @tparam T The type to bind this system to. This is important, as only this exact type will be usable to search for this system again (with the current implementation).
-            /// @param system A pointer to the existing object to add as a system.
             template <typename T>
             void addSystem(T* system);
 
             void getSystems(vector<IGameLoopSystem*>& results, SortMode mode, Condition condition = nullptr);
     };
 
+    /// @brief Gets a system from the internal list of systems, if one exists of this given (exact) type.
+    /// @note Note that polymorphism is NOT supported here. Only the exact data type you used with addSystem<T>(T*) works.
+    /// @note This uses the default ServiceLocator.
+    /// @tparam T The type of system to search for.
+    /// @return A pointer to the system, if any, or nullptr otherwise.
     template <typename T>
     T* DefaultServiceLocator::getSystem() {
-        return ServiceLocator::getSystem<T>(ServiceLocator::getInstance());
-    }
-
-    template <typename T>
-    T* ServiceLocator::getSystem(ServiceLocator* locator) {
+        ServiceLocator* locator = ServiceLocator::getInstance();
         if (locator == nullptr)
             return nullptr;
         return locator->getSystem<T>();
+        // return ServiceLocator::getSystem<T>(ServiceLocator::getInstance());
     }
 
     //WARNING: For some reason, the compiler and/or linker need these template functions to be available immediately in the .h header file,
     //      Cause it won't be able to automatically "extend" this template function for all the different types
     //      used with it from the caller's code unless this is present here (instead of in the .cpp file):
+
+    /// @brief Gets a system from the internal list of systems, if one exists of this given (exact) type.
+    /// @note Note that polymorphism is NOT supported here. Only the exact data type you used with addSystem<T>(T*) works.
+    /// @tparam T The type of system to search for.
+    /// @return A pointer to the system, if any, or nullptr otherwise.
     template <typename T>
     T* ServiceLocator::getSystem() {
         //NOTE: According to https://en.cppreference.com/w/cpp/types/type_info
@@ -92,6 +92,9 @@ namespace carlos {
         return nullptr;
     }
 
+    /// @brief Adds a system to the ServiceLocator's internal list of systems, allowing it to be retrieved by getSystem<T>().
+    /// @tparam T The type to bind this system to. This is important, as only this exact type will be usable to search for this system again (with the current implementation).
+    /// @param system A pointer to the existing object to add as a system.
     template <typename T>
     void ServiceLocator::addSystem(T* system) {
         size_t key = typeid(T).hash_code();

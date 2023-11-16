@@ -7,6 +7,8 @@
 using std::string;
 
 namespace carlos {
+    /// @brief Represents a program that runs on the GPU (graphics card), specifically that has a vertex shader program and a fragment (pixel) shader program.
+    /// Shaders are used to customize how your meshes are rendered.
     class Shader {
         private:
             static bool parseShader(const string& filePath, string& vertexShader, string& fragmentShader);

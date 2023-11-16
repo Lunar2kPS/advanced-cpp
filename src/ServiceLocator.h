@@ -18,6 +18,7 @@ namespace carlos {
 
     typedef bool (*Condition)(IGameLoopSystem*);
 
+    /// @brief Provides easy access to the default ServiceLocator.
     class DefaultServiceLocator {
         public:
             template <typename T>
@@ -32,6 +33,8 @@ namespace carlos {
         private:
             static ServiceLocator* instance;
         public:
+            /// @brief Gets a singleton instance for easy use of the service locator pattern across the entire application.
+            /// @note Note that it is up to the caller to call ServiceLocator::createInstance() and ServiceLocator::destroyInstance().
             static ServiceLocator* getInstance();
             static bool createInstance();
             static bool destroyInstance();
@@ -43,11 +46,19 @@ namespace carlos {
         public:
             ServiceLocator();
 
+            /// @brief Gets the total number of systems currently registered.
             int getCount();
 
+            /// @brief Gets a system from the internal list of systems, if one exists of this given (exact) type.
+            /// @note Note that polymorphism is NOT supported here. Only the exact data type you used with addSystem<T>(T*) works.
+            /// @tparam T The type of system to search for.
+            /// @return A pointer to the system, if any, or nullptr otherwise.
             template <typename T>
             T* getSystem();
 
+            /// @brief Adds a system to the ServiceLocator's internal list of systems, allowing it to be retrieved by getSystem<T>().
+            /// @tparam T The type to bind this system to. This is important, as only this exact type will be usable to search for this system again (with the current implementation).
+            /// @param system A pointer to the existing object to add as a system.
             template <typename T>
             void addSystem(T* system);
 

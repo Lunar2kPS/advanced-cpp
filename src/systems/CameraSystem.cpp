@@ -16,7 +16,7 @@ namespace carlos {
                 if (w != previousWidth || h != previousHeight) {
                     previousWidth = w;
                     previousHeight = h;
-                    proj = glm::ortho<float>(0, w / pxScale, 0, h / pxScale, -1, 1);
+                    proj = glm::ortho<float>(0, w / pixelScale, 0, h / pixelScale, -1, 1);
                 }
             }
         }

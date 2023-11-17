@@ -3,6 +3,8 @@
 namespace carlos {
     class GameObject;
 
+    /// @brief An object that defines data and/or behavior, and attaches to an GameObject.
+    /// Without Components, GameObjects would be empty.
     class Component {
         private:
             GameObject* gameObject;

@@ -1,4 +1,4 @@
-# Advanced C++ (Learning)
+# Advanced C++ Learning -- Game Engine Foundation
 **Purpose:** I'm disappointed in the direction that Unity (as a game engine, and as a company) has been going for a while. However, it's taught me so much about game development and API design, and inspired my interest in free, open source, stable, and extensible software with a focus on RPGs for PC and console gaming.
 
 I'm deciding to learn an immense amount of C++, to give me much more freedom as a developer, and perhaps even potential to contribute someday to open source projects like the [Godot engine](https://godotengine.org/), or learn [Unreal engine](https://www.unrealengine.com).
@@ -32,16 +32,19 @@ This project is very much in-progress. Here are some things I'd like to do next:
         - Programming design patterns
     - 🐛 For some reason, I've noticed that changing the shader from our source code's "resources" folder updates the already-built builds upon next run. The C++ program should really be reading from the /out folder's resources folder instead.
 
+- C++ Learning:
+    - HTTP Networking
+    - TCP/UDP Networking
+
 - Documentation:
-    - I want to document the main classes/methods/structure/API design that I'm using in the code.
-    - I want to better document how I switch between using OpenGL and OpenGL ES, and the pros/cons of the current approach's use of "pre-assumptions" about the current platform.
-    - I need to document the setup better for .NET hosting.
-    - I want to document and measure the most performant way(s) of calling out to C# code, especially during the game loop.
+    - I'd like to better document what this repo shows off. Currently my notes are a little bit unorganized for a first-time viewer.
     - I'd like to upgrade the **Project Dependencies** section,
         - To make it easier to see which methods are used to include the libraries (single-file header, source with existing CMakeLists.txt, etc.)
         - To mention licenses
-    - I'd like to better document what this repo shows off. Currently my notes are a little bit unorganized for a first-time viewer.
     - I want to better document what the setup was for getting the [small example UTF-8 program](./small-examples/utf-8) to work.
+    - I want to better document how I switch between using OpenGL and OpenGL ES, and the pros/cons of the current approach's use of "pre-assumptions" about the current platform.
+    - I want to document and measure the most performant way(s) of calling out to C# code, especially during the game loop.
+    - I need to document the setup better for .NET hosting.
 
 See my [backlog](/BACKLOG.md) for other, lower priority learning goals.
 

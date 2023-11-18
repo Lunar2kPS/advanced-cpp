@@ -18,7 +18,6 @@ namespace carlos {
         public:
             ExampleRenderSystem();
             ~ExampleRenderSystem();
-            void update();
             void render();
     };
 }

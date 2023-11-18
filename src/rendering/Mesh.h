@@ -7,6 +7,7 @@
 using std::vector;
 
 namespace carlos {
+    /// @brief Represents a collection of vertices (including vertex data), which can be used for drawing 2D and 3D shapes (made out of triangles).
     class Mesh {
         private:
             int vertexCount;

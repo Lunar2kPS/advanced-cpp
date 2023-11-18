@@ -7,6 +7,7 @@
 using std::string;
 
 namespace carlos {
+    /// @brief Contains 2D, pixel-based image data.
     class Texture {
         private:
             GLuint id;
@@ -20,6 +21,9 @@ namespace carlos {
                 height(height),
                 imageData(imageData) { }
         public:
+            /// @brief Loads a texture from an image file.
+            /// @param filePath The file path of the image file.
+            /// @return A pointer to the newly-loaded Texture, or nullptr if it was unable to load.
             static Texture* loadFrom(const string& filePath);
             ~Texture();
 

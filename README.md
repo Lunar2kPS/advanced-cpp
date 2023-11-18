@@ -15,8 +15,32 @@ I hope this project helps to provide a human-friendly, more understandable examp
 - ✅ Raspberry Pi (tested on arm64 (Debian-based))
 
 
+## ⭐ Building and Running The Project
+Note that I use the Git Bash with VS Code.
+
+**1:** This repo uses Git submodules for my C++ CMake build scripts, some of the libraries, so you may need to run:
+```sh
+git submodule update --init --recursive
+```
+
+**2:** You can make the build and run commands more easily available using the following command to set some shortcut ("alias") commands for your current terminal session:
+```sh
+source ./cmake-scripts/aliases.sh
+```
+
+It will tell you the newly-available commands.
+
+**3:** Then, you can simply just run the following to build and run the release mode of this project:
+```sh
+build && run-release
+```
+
+ℹ️ _For more details on what those build and run scripts are doing, check out the **cmake-scripts** Git submodule under `/cmake-scripts` and read its [README.md](https://github.com/Lunar2kPS/cmake-scripts)._
+
+
 ## 📕 [Project Dependencies](./LIBRARIES.md)
 See this for descriptions of the libraries/dependencies I use.
+
 
 ## 📁 Subfolders in this Project
 - [Small (C++ Program) Examples](./small-examples/README.md)
@@ -33,6 +57,7 @@ Here are some things I'd like to do next:
 
 - Features/Bugs:
     - Upgrade the ServiceLocator implementation (in the main program under `/src`) to use templates to let you define the base class that all your systems must inherit from, rather than hard-coding it to use IGameLoopSystems.
+    - (A lot of work) Investigate into performance -- For some reason, the OpenGL draw calls I have with grass tiles are really heavy. I not only want to employ optimization techniques like frustum culling, draw call batching, and GPU instancing, but I also want to understand if there's any ways to optimize the code as-is if my game actually did need to keep 100s of draw calls per frame.
     - 🐛 For some reason, I've noticed that changing the shader from our source code's "resources" folder updates the already-built builds upon next run. The C++ program should really be reading from the /out folder's resources folder instead.
     - Dear ImGUI:
         - 🐛 Dear ImGUI's `ImGui_ImplOpenGL3_RenderDrawData(...)` function throws a 1280 (0x500) GL_INVALID_ENUM OpenGL error during drawing on 64bit Raspberry Pi (OpenGL ES 3.1).
@@ -47,6 +72,7 @@ Here are some things I'd like to do next:
     - I want to better document what the setup was for getting the [small example UTF-8 program](./small-examples/utf-8) to work.
 
 See my [backlog](/BACKLOG.md) for other, lower priority learning goals.
+
 
 ## Resources
 - [OpenGL Docs](https://docs.gl/)

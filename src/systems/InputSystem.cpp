@@ -9,7 +9,26 @@ using std::cout;
 using std::endl;
 
 namespace carlos {
-    //TODO: C++ 20 Upgrade!
+    //NOTE: See these for GLFW-based input handling:
+    //  - https://www.glfw.org/docs/3.3/input_guide.html
+    //  - https://www.glfw.org/docs/3.3/group__keys.html
+
+    //NOTE: For later when using input callbacks:
+    // glfwSetKeyCallback(window, keyCallback);
+
+    // void keyCallback(GLFWwindow* window, int key, int scancode, int action, int modifiers) {
+    //     switch (key) {
+    //         case GLFW_KEY_0:
+    //             if (action == GLFW_PRESS) {
+    //                 future task = async(std::launch::async, []() {
+    //                     carlos::runManagedCode(path);
+    //                 });
+    //             }
+    //             break;
+    //     }
+    // }
+
+    //TODO: (Eventually) C++ 20 Upgrade!
     //We should be able to use a range-based for loop with enum_values to iterate over all enum values instead of re-hardcoding them all!
     // for (const auto& key : std::ranges::enum_values<carlos::Key>) {
     //     std::cout << static_cast<int>(key) << std::endl;

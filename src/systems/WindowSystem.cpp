@@ -21,27 +21,6 @@ namespace carlos {
         fprintf(stderr, "%s", message);
     }
 
-    //TODO: Later, make an InputSystem based off of this:
-    //  - https://www.glfw.org/docs/3.3/input_guide.html
-    //  - https://www.glfw.org/docs/3.3/group__keys.html
-    //  - https://stackoverflow.com/questions/55573238/how-do-i-do-a-proper-input-class-in-glfw-for-a-game-engine
-
-    //NOTE: For later when using input callbacks:
-    // glfwSetKeyCallback(window, keyCallback);
-
-    // void keyCallback(GLFWwindow* window, int key, int scancode, int action, int modifiers) {
-    //     switch (key) {
-    //         case GLFW_KEY_0:
-    //             if (action == GLFW_PRESS) {
-    //                 future task = async(std::launch::async, []() {
-    //                     carlos::runManagedCode(path);
-    //                 });
-    //             }
-    //             break;
-    //     }
-    // }
-
-
     void prepareForOpenGL() {
         //NOTE: Let's require a certain (old) version of OpenGL or newer...
         //Like OpenGL 3.0+. HOWEVER,

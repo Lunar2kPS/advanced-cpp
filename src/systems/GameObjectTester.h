@@ -16,6 +16,9 @@ using std::vector;
 using std::stringstream;
 
 namespace carlos {
+    /// @brief Demonstrates creating GameObjects with some basic rendering components
+    /// (Transforms and MeshRenderers) to draw grass tiles on the screen without
+    /// needing to get into the weeds of OpenGL-specific calls.
     class GameObjectTester : public IGameLoopSystem {
         private:
             Mesh* mesh;
@@ -66,8 +69,8 @@ namespace carlos {
                 createRenderingObjects();
 
                 stringstream ss = { };
-                const int TILE_COUNT_X = 32;
-                const int TILE_COUNT_Y = 32;
+                const int TILE_COUNT_X = 16;
+                const int TILE_COUNT_Y = 16;
                 for (int y = 0; y < TILE_COUNT_Y; y++) {
                     for (int x = 0; x < TILE_COUNT_X; x++) {
                         ss << "G (" << x << ", " << y << ")";

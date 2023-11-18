@@ -1,7 +1,9 @@
 # Libraries (Project Dependencies)
+These are the libraries currently used by this C++ project:
+
 | 📕 Library                | 🔑 License                   | ℹ️ Description             |
 | ------------------------- | ---------------------------- | ------------------------- |
-| [.NET 7+ Hosting API]     | MIT                          | The .NET hosting header files enable our C++ program to host a .NET runtime. Basically, we want this so we can use C# scripting on top of our C++ game engine, since C# code can run in the .NET runtime. |
+| [.NET 7+ Hosting API]     | MIT                          | The .NET hosting header files enable our C++ program to host a .NET runtime. Basically, I need this so we I use C# scripting on top of the C++ game engine, since C# code can run in the .NET runtime. |
 | [Nlohmann's JSON Library] | MIT                          | Nlohmann's Json Library allows you to easily read and write to [JSON _(JavaScript Object Notation)_](https://www.json.org/json-en.html), which is a widely used text-based format for saving and loading data into any program that supports reading/writing to it. |
 | [EnTT]                    | MIT                          | EnTT is a library for ECS _(Entity-Component System)_ architecture, similar to Unity GameObjects (entities) and MonoBehaviours (components). |
 | [GLAD]                    | Public Domain, CC0 (according to [glad](https://github.com/Dav1dde/glad/tree/glad2#License)) | GLAD _(GL Loader-Generator)_ is used to load modern OpenGL functions on a variety of machines and environments, to make it much easier to get started using OpenGL features in cross-platform projects. |
@@ -38,3 +40,11 @@
 - [stb_image](https://github.com/nothings/stb)
     - Download their single-file header include ([stb_image.h](https://github.com/nothings/stb/blob/master/stb_image.h)) directly, and choose one of their [licenses](https://github.com/nothings/stb/blob/master/LICENSE).
 
+## Related Resources to These Libraries
+- [C# .NET Hosting from Native C++](https://learn.microsoft.com/en-us/dotnet/core/tutorials/netcore-hosting)
+    - See their GitHub docs on [Native hosting (Calling managed function)](https://github.com/dotnet/runtime/blob/main/docs/design/features/native-hosting.md#calling-managed-function-net-5-and-above) and a brief explanation of [the components involved](https://github.com/dotnet/runtime/blob/main/docs/design/features/host-components.md).
+    - [Discussion on (inability to) unload .NET runtime host](https://github.com/dotnet/runtime/issues/70229)
+- [Arbitrary type JSON serialization](https://json.nlohmann.me/features/arbitrary_types/)
+- [EnTT Crash Course](https://skypjack.github.io/entt/md_docs_md_entity.html)
+- [Discussion on proper use of GLAD](https://github.com/Dav1dde/glad/issues/443)
+- Dear ImGui styles ([here](https://github.com/GraphicsProgramming/dear-imgui-styles) and [here](https://github.com/ocornut/imgui/issues/707))

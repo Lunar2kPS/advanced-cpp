@@ -97,13 +97,15 @@ namespace carlos {
 
         if (!glfwInitialized) {
             glfwMakeContextCurrent(window);
-            int version =
+             int version =
 #if defined(GRAPHICS_API_GL)
-                gladLoadGL(glfwGetProcAddress)
+                gladLoadGL(glfwGetProcAddress);
 #elif defined(GRAPHICS_API_GLES)
                 gladLoadGLES2(glfwGetProcAddress);
+#else
+                0;
 #endif
-            ;
+
             if (version == 0) {
                 printf("Failed to initialize OpenGL context with GLAD!\n");
                 return false;

@@ -17,5 +17,6 @@
         "libraries/imgui",
         "libraries/imgui/backends",
         "libraries/nethosting"
-    ]
+    ],
+    "dotnet.defaultSolution": "disable"
 }

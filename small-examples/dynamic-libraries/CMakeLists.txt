@@ -9,5 +9,4 @@ include("../SmallExamples.cmake")
 
 add_executable("${PROJECT_NAME}" main.cpp)
 
-add_library("${DYNAMIC_LIBRARY_NAME}" SHARED "library/SomeClass.h")
-set_target_properties("${DYNAMIC_LIBRARY_NAME}" PROPERTIES LINKER_LANGUAGE CXX)
+add_library("${DYNAMIC_LIBRARY_NAME}" SHARED "library/SomeClass.cpp")

@@ -29,13 +29,12 @@ namespace nlohmann {
         }
     };
 }
-    
 
 int main() {
     cout << "Json Example!" << endl;
 
     ExampleData position = { 2, -9, 6 };
-    json jPosition = position; //ERROR: no suitable user-defined conversion from "glm::ExampleData" to "json" existsC/C++(312)
+    json jPosition = json(position);
 
     cout << jPosition.dump(4) << endl;
     cout << endl;

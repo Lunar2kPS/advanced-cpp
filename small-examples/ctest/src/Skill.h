@@ -30,23 +30,7 @@ namespace carlos {
                     return 0;
                 return expForNext - exp;
             }
-            void gainEXP(int exp) {
-                if (exp <= 0)
-                    return;
-                if (level >= MAX_LEVEL)
-                    return;
-
-                int sum = this->exp + exp;
-                int expForNext = getEXPForNextLevel();
-                if (sum < expForNext) {
-                    this->exp = sum;
-                    return;
-                }
-
-                //TODO: Fix case where you gain enough EXP for multiple-level-ups!
-                level++;
-                this->exp = sum - expForNext;
-            }
+            void gainEXP(int amount);
 
             friend ostream& operator <<(ostream& output, const Skill& skill);
     };

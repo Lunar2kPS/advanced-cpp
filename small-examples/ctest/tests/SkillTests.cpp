@@ -59,7 +59,7 @@ int main() {
 
     attack.gainEXP(40);
     if (attack.getLevel() != Skill::MIN_LEVEL + 1 || attack.getEXP() != 0) {
-        cerr << "[ERROR] Unexpected level and/or EXP after gaining exactly the amount needed for 1 level-up!" << endl;
+        cerr << "[ERROR] Unexpected level and/or EXP after gaining exactly the amount needed for 1 level-up! " << attack << endl;
         return 5;
     }
     cout << "[INFO] SUCCESS! Skill gains EXP for 1 level-up properly." << endl;
@@ -67,10 +67,18 @@ int main() {
     Skill magic = Skill("Magic");
     magic.gainEXP(55 + 87);
     if (magic.getLevel() != Skill::MIN_LEVEL + 2 || magic.getEXP() != 0) {
-        cerr << "[ERROR] Unexpected level and/or EXP after gaining exactly the amount needed for 2 level-ups!" << endl;
+        cerr << "[ERROR] Unexpected level and/or EXP after gaining exactly the amount needed for 2 level-ups! " << magic << endl;
         return 6;
     }
     cout << "[INFO] SUCCESS! Skill gains EXP for 2 level-ups properly." << endl;
+
+    Skill archery = Skill("Archery");
+    archery.gainEXP(55 + 100);
+    if (archery.getLevel() != Skill::MIN_LEVEL + 2 || archery.getEXP() != 13) {
+        cerr << "[ERROR] Unexpected level and/or EXP after gaining a bit more than 2 level-up's worth of EXP! " << archery << endl;
+        return 7;
+    }
+    cout << "[INFO] SUCCESS! Skill gains EXP for a bit more than 2 level-ups properly." << endl;
 
     return 0;
 }

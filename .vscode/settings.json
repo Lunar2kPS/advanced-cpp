@@ -16,7 +16,8 @@
         "libraries/glm",
         "libraries/imgui",
         "libraries/imgui/backends",
-        "libraries/nethosting"
+        "libraries/nethosting",
+        "small-examples/ctest/src"
     ],
     "dotnet.defaultSolution": "disable"
 }

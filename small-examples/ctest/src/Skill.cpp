@@ -8,10 +8,14 @@ namespace carlos {
         return 4 * (int) floorf(powf(currentLevel + 1, 2.4f)) + 35;
     }
 
-    ostream& operator<<(ostream& output, const Skill& skill) {
-        output << skill.name << ": LVL " << skill.level << ", EXP: " << skill.exp;
+    ostream& operator <<(ostream& output, const Skill& skill) {
+        if (!skill.name.empty()) {
+            output << skill.name << " ";
+        }
+        output << "Lv. " << skill.level << " (EXP: " << skill.exp;
         if (skill.level >= Skill::MIN_LEVEL && skill.level < Skill::MAX_LEVEL)
             output << " / " << skill.getEXPForNextLevel();
+        output << ")";
         return output;
     }
 }

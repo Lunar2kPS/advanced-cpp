@@ -5,7 +5,8 @@ file(GLOB_RECURSE SRC_FILES "src/*.cpp")
 add_executable("${PROJECT_NAME}" "${SRC_FILES}")
 target_include_directories("${PROJECT_NAME}" PUBLIC src)
 
-if (BUILD_TESTS)
+if (EXAMPLE_BUILD_TESTS)
+    message("Building CTest unit tests...\n")
     enable_testing()
 
     # WARNING: Hmm.. Ew, I'd either need to make a SHARED/STATIC library
@@ -15,7 +16,6 @@ if (BUILD_TESTS)
 
     set(SKILL_TESTS_FILES "${COMMON_TEST_FILES}")
     list(APPEND SKILL_TESTS_FILES "tests/skilltests.cpp")
-    message("SKILL_TESTS_FILES = ${SKILL_TESTS_FILES}")
 
     add_executable(SkillTests "${SKILL_TESTS_FILES}")
     add_test(

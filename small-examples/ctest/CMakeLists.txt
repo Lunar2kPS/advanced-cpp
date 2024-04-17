@@ -14,10 +14,10 @@ if (EXAMPLE_BUILD_TESTS)
     list(APPEND COMMON_TEST_FILES "${SRC_FILES}")
     list(FILTER COMMON_TEST_FILES EXCLUDE REGEX "src/main.cpp")
 
-    set(SKILL_TESTS_FILES "${COMMON_TEST_FILES}")
-    list(APPEND SKILL_TESTS_FILES "tests/SkillTests.cpp")
+    set(SKILL_TEST_FILES "${COMMON_TEST_FILES}")
+    list(APPEND SKILL_TEST_FILES "tests/SkillTests.cpp")
 
-    add_executable(SkillTests "${SKILL_TESTS_FILES}")
+    add_executable(SkillTests "${SKILL_TEST_FILES}")
     target_include_directories(SkillTests PUBLIC src)
     add_test(
         NAME SkillTests

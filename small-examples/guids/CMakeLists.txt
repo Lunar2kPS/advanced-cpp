@@ -13,7 +13,7 @@ set(SRC_FILES
 add_library("${PROJECT_NAME}" SHARED "${SRC_FILES}")
 target_include_directories("${PROJECT_NAME}" PUBLIC library)
 if (WINDOWS)
-    target_link_libraries("${PROJECT_NAME}" PUBLIC Rpcrt4.lib)
+    target_link_libraries("${PROJECT_NAME}" PUBLIC rpcrt4.lib)
 endif()
 
 if (EXAMPLE_BUILD_TESTS)

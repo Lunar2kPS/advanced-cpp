@@ -17,6 +17,13 @@ using std::string;
 using std::wstring;
 using stringconverter = std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>>;
 
+bool isLittleEndian() {
+    int n = 1;
+    char* charPtr = (char*) &n;
+    bool isFirstByteOne = *charPtr == 1;
+    return isFirstByteOne;
+}
+
 int main() {
     stringconverter converter = { };
     string fromUTF8 = "Carlos";
@@ -47,9 +54,12 @@ int main() {
             wchar_t current = currentWide & (wchar_t) (0xFF << inner * CHAR_BIT);
             cout << "0x" << setw(2) << current << " ";
         }
+        cout << "  ";
     }
     cout << endl;
     cout << setfill(' ') << dec;
+
+    cout << "isLittleEndian() = " << (isLittleEndian() ? "true" : "false") << endl;
 
     return 0;
 }

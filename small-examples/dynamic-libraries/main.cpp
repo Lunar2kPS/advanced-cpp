@@ -1,14 +1,14 @@
 ﻿#include <iostream>
-#include "library/SomeClass.h"
+#include "library/Player.h"
 
 using std::cout;
 using std::endl;
 
-using namespace examplelibrary;
+using namespace carlos;
 
 int main() {
     cout << "(Small) main program!" << endl;
-    SomeClass c = SomeClass("Test");
-    cout << "c.getName() = " << c.getName() << endl;
+    Player me = Player("ModLunar");
+    cout << "me.getName() = " << me.getName() << endl;
     return 0;
 }

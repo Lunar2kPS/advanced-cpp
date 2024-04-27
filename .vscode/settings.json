@@ -18,7 +18,9 @@
         "libraries/imgui/backends",
         "libraries/nethosting",
         "small-examples/ctest/src",
-        "small-examples/guids/library"
+        "small-examples/guids/library",
+        "small-examples/dynamic-libraries/library",
+        "small-examples/dynamic-libraries/src"
     ],
     "dotnet.defaultSolution": "disable"
 }

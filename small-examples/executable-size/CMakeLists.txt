@@ -22,8 +22,17 @@ if (WIN32)
 else()
     # TODO: I wonder how to print out the value of the generator expression below?
     #   $<TARGET_FILE:${PROJECT_NAME}>
-    add_custom_command(TARGET "${PROJECT_NAME}"
-        POST_BUILD COMMAND strip -v --strip-all $<TARGET_FILE:${PROJECT_NAME}>
-        COMMENT "Code stripping..."
-    )
+
+    if (APPLE)
+        # NOTE: MacOS doesn't seem to have the --strip-all option
+        add_custom_command(TARGET "${PROJECT_NAME}"
+            POST_BUILD COMMAND strip -v $<TARGET_FILE:${PROJECT_NAME}>
+            COMMENT "Code stripping..."
+        )
+    else()
+        add_custom_command(TARGET "${PROJECT_NAME}"
+            POST_BUILD COMMAND strip -v --strip-all $<TARGET_FILE:${PROJECT_NAME}>
+            COMMENT "Code stripping..."
+        )
+    endif()
 endif()

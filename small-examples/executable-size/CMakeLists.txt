@@ -14,11 +14,11 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "(GNU)|(Clang)")
     target_compile_options("${PROJECT_NAME}" PRIVATE "-O3")
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     message("Setting optimization level to /O2 for MSVC")
-    target_compile_options("${PROJECT_NAME}" "/O2")
+    target_compile_options("${PROJECT_NAME}" PRIVATE "/O2")
 endif()
 
 if (WIN32)
-    target_link_options("${PROJECT_NAME}" PRIVATE "/ENTRY:main.cpp")
+    target_link_options("${PROJECT_NAME}" PRIVATE "/ENTRY:main")
 else()
     # TODO: I wonder how to print out the value of the generator expression below?
     #   $<TARGET_FILE:${PROJECT_NAME}>

@@ -20,7 +20,8 @@
         "small-examples/ctest/src",
         "small-examples/guids/library",
         "small-examples/dynamic-libraries/library",
-        "small-examples/dynamic-libraries/src"
+        "small-examples/dynamic-libraries/src",
+        "small-examples/x11-windowing/libraries/glad/include"
     ],
     "dotnet.defaultSolution": "disable"
 }

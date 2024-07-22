@@ -1,9 +1,7 @@
 # Advanced C++ Learning -- Game Engine Foundation
-**Purpose:** I'm disappointed in the direction that Unity (as a game engine, and as a company) has been going for a while. However, it's taught me so much about game development and API design, and inspired my interest in free, open source, stable, and extensible software with a focus on RPGs for PC and console gaming.
+This repo gives an overview of my C/C++ learning, and small example programs integrating libraries with CMake, particularly with my interest in gaming/RPGs, 2D and 3D graphics, and networking.
 
-I'm deciding to learn an immense amount of C++, to give me much more freedom as a developer, and perhaps even potential to contribute someday to open source projects like the [Godot engine](https://godotengine.org/), or learn [Unreal engine](https://www.unrealengine.com).
-
-I hope this project helps to provide a human-friendly, more understandable example of working with many C++ libraries to create a small, specialized game engine.
+I want to encourage free, open source, stable, and extensible software with a focus on RPGs for PC and console gaming. Perhaps I may be able to contribute someday to open source projects like the [Godot engine](https://godotengine.org/), or learn [Unreal engine](https://www.unrealengine.com).
 
 ![Project Overview Screenshot](/docs/images/Project%20Overview.png)
 
@@ -56,7 +54,6 @@ My complete game engine is private, but this Git repo gives you a lot of the bas
 Here are some things I'd like to do next:
 
 - Features/Bugs:
-    - Upgrade the ServiceLocator implementation (in the main program under `/src`) to use templates to let you define the base class that all your systems must inherit from, rather than hard-coding it to use IGameLoopSystems.
     - (A lot of work) Investigate into performance -- For some reason, the OpenGL draw calls I have with grass tiles are really heavy. I not only want to employ optimization techniques like frustum culling, draw call batching, and GPU instancing, but I also want to understand if there's any ways to optimize the code as-is if my game actually did need to keep 100s of draw calls per frame.
     - 🐛 For some reason, I've noticed that changing the shader from our source code's "resources" folder updates the already-built builds upon next run. The C++ program should really be reading from the /out folder's resources folder instead.
     - Dear ImGUI:

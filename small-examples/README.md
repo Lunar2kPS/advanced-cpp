@@ -11,6 +11,7 @@ Programs:
     - [Singleton](./patterns/singleton)
     - [Service Locator](./patterns/service-locator)
     - _More coming soon!_
+- [Win32 File System Watcher](./win32-file-system-watcher)
 
 
 ## 📜 How to Run These Programs

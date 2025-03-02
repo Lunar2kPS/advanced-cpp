@@ -8,7 +8,7 @@
             "name": "C++ Test Launch (Windows)",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/small-examples/win32-file-system-watcher/out/Debug/Win32FileSystemWatcher.exe",
+            "program": "${workspaceFolder}/small-examples/game-coroutines/out/Debug/GameCoroutines.exe",
             "stopAtEntry": false
         }
     ]

@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.19)
 project("JsonExample2" VERSION 1.0.0)
 
-# NOTE: Nlohmann's Json library seems to require at least C++ 11+, but we'll move forward with C++ 17+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 

@@ -4,7 +4,8 @@ These are the libraries currently used by this C++ project:
 | 📕 Library                | 🔑 License                   | ℹ️ Description             |
 | ------------------------- | ---------------------------- | ------------------------- |
 | [.NET 7+ Hosting API]     | MIT                          | The .NET hosting header files enable our C++ program to host a .NET runtime. Basically, I need this so we I use C# scripting on top of the C++ game engine, since C# code can run in the .NET runtime. |
-| [Nlohmann's JSON Library] | MIT                          | Nlohmann's Json Library allows you to easily read and write to [JSON _(JavaScript Object Notation)_](https://www.json.org/json-en.html), which is a widely used text-based format for saving and loading data into any program that supports reading/writing to it. |
+| [Nlohmann's JSON Library] | MIT                          | Nlohmann's Json Library allows you to easily read and write to [JSON _(JavaScript Object Notation)_](https://www.json.org/json-en.html), which is a widely used text-based format for saving and loading data into any program that supports reading/writing to it. ❌ From my research, this library does NOT support decimal place rounding. Use RapidJSON instead. |
+| [RapidJSON]               | MIT                           | RapidJSON allows you to easily read and write to [JSON _(JavaScript Object Notation)_](https://www.json.org/json-en.html), which is a widely used text-based format for saving and loading data into any program that supports reading/writing to it. ❗ This library allows you to provide rounding in decimal places, so you don't end up with ugly serialization containing numbers like 0.999847593827 if you wish to avoid it. |
 | [EnTT]                    | MIT                          | EnTT is a library for ECS _(Entity-Component System)_ architecture, similar to Unity GameObjects (entities) and MonoBehaviours (components). |
 | [GLAD]                    | Public Domain, CC0 (according to [glad](https://github.com/Dav1dde/glad/tree/glad2#License)) | GLAD _(GL Loader-Generator)_ is used to load modern OpenGL functions on a variety of machines and environments, to make it much easier to get started using OpenGL features in cross-platform projects. |
 | [GLFW]                    | ZLib                         | GLFW _(Graphics Library Framework)_ is used for creating our game window in a cross-platform way, with support for mouse/keyboard input. |
@@ -28,6 +29,8 @@ These are the libraries currently used by this C++ project:
     - The sources for these files are documented [here](/libraries/nethosting/source.md).
 - [Nlohmann's JSON Library v3.11.2](https://github.com/nlohmann/json/releases/tag/v3.11.2)
     - Download the `include.zip` (from one of the GitHub releases), delete the `include` folder and `meson.build` file, and change the folder structure to easily `#include "nlohmann/json.hpp"`
+- [RapidJSON v1.1.0](https://github.com/Tencent/rapidjson/releases/tag/v1.1.0) _(Header-only library)_
+    - Download the source code (.zip) from one of the GitHub releases, and copy the include/rapidjson folder of .h files, and their license.txt alongside your project.
 - [EnTT v3.12.2](https://github.com/skypjack/entt)
     - Download their single-file header include ([entt.hpp](https://github.com/skypjack/entt/blob/v3.12.2/single_include/entt/entt.hpp))
 - [GLAD v2.0.4](https://github.com/Dav1dde/glad/tree/v2.0.4)

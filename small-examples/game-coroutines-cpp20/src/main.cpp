@@ -4,6 +4,7 @@
 using std::cout;
 using std::endl;
 using std::boolalpha;
+using std::nullptr_t;
 
 using std::suspend_always;
 using std::suspend_never;
@@ -53,17 +54,37 @@ struct IntEnumerator {
         coroutine_handle<promise_type> handle;
         IntEnumerator(coroutine_handle<promise_type> handle) : handle(handle) { }
     public:
-        ~IntEnumerator() { cout << "!?" << endl;}
-        int getValue() const { return handle.done() ? -1 : handle.promise().value; }
-        bool isDone() const { return handle.done(); }
+        ~IntEnumerator() {
+            if (handle.address() != nullptr)
+                handle.destroy();
+        }
+        bool isDone() const { return handle.address() == nullptr || handle.done(); }
         void resume() { handle.resume(); }
+        
+        //ITERATOR PART:
+        struct iterator {
+            IntEnumerator* enumerator;
+            bool operator!=(nullptr_t) const { return !enumerator->isDone(); }
+            iterator& operator++() { enumerator->moveNext(); return *this; }
+            int operator*() const { return enumerator->current(); }
+        };
+        iterator begin() {
+            return iterator { this };
+        }
+        nullptr_t end() { return nullptr; }
+        int current() const { return handle.promise().value; }
+        bool moveNext() {
+            if (isDone())
+                return false;
+            resume();
+            return !isDone();
+        }
 };
 
 IntEnumerator customRange(int start, int end, int step) {
-    for (int i = start; i < end; i += step) {
-        cout << "co_yield..." << endl;
+    for (int i = start; i < end; i += step)
         co_yield i;
-    }
+
     //NOTE: This will reach final_suspend() and -1 will never actually be used by the caller:
     //  co_return at the end avoids undefined behavior for going off the end of the coroutine!
     co_return -1;
@@ -81,11 +102,18 @@ int main() {
     //  Otherwise, we'll never be done() and may enter undefined behavior!
     //SEE: https://en.cppreference.com/w/cpp/coroutine/coroutine_handle/done
     cout << "The coroutine is now done? " << boolalpha << task.handle.done() << endl;
+    cout << endl;
 
     IntEnumerator enumerator = customRange(0, 10, 2);
     while (!enumerator.isDone()) {
-        cout << "Range element: " << enumerator.getValue() << " is done? " << boolalpha << enumerator.isDone() << endl;
+        cout << "Range element: " << enumerator.current() << endl;
         enumerator.resume();
     }
+    cout << endl;
+
+    cout << "Foreach loop with a coroutine + iterator in one!" << endl;
+    for (int value : customRange(5, 17, 3))
+        cout << "    " << value << "\n";
+    cout << endl;
     return 0;
 }

@@ -1,5 +1,7 @@
 ﻿#include <iostream>
 #include <coroutine>
+#include <chrono>
+#include <thread>
 
 using std::cout;
 using std::endl;
@@ -9,6 +11,17 @@ using std::nullptr_t;
 using std::suspend_always;
 using std::suspend_never;
 using std::coroutine_handle;
+
+namespace this_thread = std::this_thread;
+namespace chrono = std::chrono;
+using chrono::time_point;
+using chrono::steady_clock;
+using chrono::duration_cast;
+
+//NOTE: Order of API calls for C++ 20 Coroutines:
+//1. get_return_object()            This constructs your custom coroutine class/struct initially.
+//2. initial_suspend()              This decides whether or not to suspend initially (lazy vs. eager coroutine).
+//3. coroutine_handle<>.resume()    This makes the coroutine continue from where it last left off.
 
 
 
@@ -34,6 +47,7 @@ CustomTask exampleCoroutine() {
 
 
 struct IntEnumerator {
+    //NOTE: It's recommended to store data inside the inner promise_type, since it keeps up-to-date with the yields/returns of the coroutine:
     struct promise_type {
         int value;
         IntEnumerator get_return_object() { return IntEnumerator(coroutine_handle<promise_type>::from_promise(*this)); }
@@ -92,6 +106,101 @@ IntEnumerator customRange(int start, int end, int step) {
 
 
 
+//NOTE:
+//When I tried to use co_await and get a value back at the same time,
+//  I realized they really didn't design it that way. The best way was in
+//  my custom awaiter to spawn a thread from await_suspend, but I didn't want to use another thread.
+// So I think I might want to use co_yield instead, so I can poll on the same thread,
+//  and pass the instructions from the co_yield statement back to the caller, for example,
+//  if I want to co_yield WaitForSeconds(2) almost like a Unity C# coroutine.
+
+// struct TimedAwaiter {
+//     float duration = 0;
+//     time_point<steady_clock> startTime;
+//     coroutine_handle<> handle;
+//     bool ready = false;
+
+//     TimedAwaiter(float duration) : duration(duration) {
+//         startTime = steady_clock::now();
+//     }
+
+//     bool await_ready() const noexcept { return ready; }
+//     void await_suspend(coroutine_handle<> handle) noexcept {
+//         cout << "await_suspend?" << endl;
+//         this->handle = handle;
+//         startTime = steady_clock::now();
+//     }
+//     void await_resume() const noexcept { }
+
+//     bool shouldResume() {
+//         chrono::seconds elapsed = duration_cast<chrono::seconds>(steady_clock::now() - startTime);
+//         long long elapsedL = elapsed.count();
+//         cout << "shouldResume? " << elapsedL << endl;
+//         return elapsedL >= duration;
+//     }
+
+//     bool poll() {
+//         cout << "poll..." << boolalpha << (handle.address() != nullptr) << " " << (!(handle.address() != nullptr && handle.done())) << endl;
+//         if (handle.address() != nullptr && !handle.done() && shouldResume()) {
+//             cout << "RESUMING AFTER 2 SEC!" << endl;
+//             handle.resume();
+//             handle = nullptr; //NOTE: Prevent double resumption
+//             return true;
+//         }
+//         return false;
+//     }
+// };
+
+struct WaitForSeconds {
+    float duration = 0;
+    time_point<steady_clock> startTime;
+    bool ready = false;
+
+    WaitForSeconds(float duration) : duration(duration) {
+        startTime = steady_clock::now();
+    }
+
+    bool shouldResume() {
+        chrono::milliseconds elapsedMS = duration_cast<chrono::milliseconds>(steady_clock::now() - startTime);
+        long long elapsedMSInt = elapsedMS.count();
+        cout << "shouldResume? " << elapsedMSInt << endl;
+        return (float) elapsedMSInt / 1000 >= duration;
+    }
+};
+
+struct ComplexCustomTask {
+    struct promise_type {
+        WaitForSeconds value = WaitForSeconds(0);
+
+        ComplexCustomTask get_return_object() { return ComplexCustomTask(coroutine_handle<promise_type>::from_promise(*this)); }
+        suspend_never initial_suspend() { return { }; }
+        suspend_always final_suspend() noexcept { return { }; }
+
+        suspend_always yield_value(WaitForSeconds value) {
+            this->value = value;
+            return suspend_always { };
+        }
+        void return_value(nullptr_t value) {
+            this->value = WaitForSeconds(0);
+        }
+        void unhandled_exception() { }
+    };
+
+    coroutine_handle<promise_type> handle;
+    ComplexCustomTask(coroutine_handle<promise_type> handle) : handle(handle) { }
+};
+
+ComplexCustomTask moreComplexCoroutine() {
+    cout << "Statement A" << endl;
+    for (int i = 0; i < 3; i++) {
+        co_yield WaitForSeconds(2);
+        cout << "Statement after iteration " << i << "!" << endl;
+    }
+    co_return nullptr;
+}
+
+
+
 //NOTE: See tutorial series: https://www.youtube.com/watch?v=soHQAVYTmCE&list=PL2EnPlznFzmhKDBfE0lqMAWyr74LZsFVY&index=1
 int main() {
     CustomTask task = exampleCoroutine();
@@ -115,5 +224,14 @@ int main() {
     for (int value : customRange(5, 17, 3))
         cout << "    " << value << "\n";
     cout << endl;
+
+    cout << "Testing custom awaiter..." << endl;
+    ComplexCustomTask complexTask = moreComplexCoroutine();
+    while (!complexTask.handle.done()) {
+        if (complexTask.handle.promise().value.shouldResume())
+            complexTask.handle.resume();
+        this_thread::sleep_for(chrono::milliseconds(100));
+    }
+
     return 0;
 }

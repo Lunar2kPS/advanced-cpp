@@ -7,7 +7,17 @@ using std::endl;
 
 bool getCLIArg(int argCount, char** args, const char* name);
 int main(int argCount, char** args) {
-    cout << "Win32 Sockets Example Program!" << endl;
+    bool isClient = true; //NOTE: This program is a client by default.
+    if (getCLIArg(argCount, args, "--server"))
+        isClient = false;
+    bool isServer = !isClient;
+
+    cout << "Win32 Sockets Example Program!" << (isClient ? " (CLIENT)" : "") << (isServer ? " (SERVER)" : "") << endl;
+    for (int i = 0; i < argCount; i++) {
+        cout << "    args[" << i << "] = " << args[i] << "\n";
+    }
+    cout << endl;
+
 
     //NOTE: The current WSA (Windows Sockets API) version is 2.2 and the current DLL is Ws2_32.dll.
     //  See: https://learn.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup
@@ -40,4 +50,11 @@ int main(int argCount, char** args) {
     }
 
     return 0;
+}
+
+bool getCLIArg(int argCount, char** args, const char* name) {
+    for (int i = 0; i < argCount; i++)
+        if (strcmp(args[i], name) == 0)
+            return true;
+    return false;
 }

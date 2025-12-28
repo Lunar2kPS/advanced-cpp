@@ -82,3 +82,5 @@ See my [backlog](/BACKLOG.md) for other, lower priority learning goals.
     - [In C#](https://refactoring.guru/design-patterns/csharp)
     - [In C++](https://refactoring.guru/design-patterns/cpp)
 - [Game Programming Design Patterns](https://gameprogrammingpatterns.com/contents.html)
+- [(Video Lecture) C++ Network Programming Part 1: Sockets](https://www.youtube.com/watch?v=gntyAFoZp-E)
+- [(Video Lecture) C++ Network Programming Part 2: TCP & UDP](https://www.youtube.com/watch?v=sXW_sNGvqcU)

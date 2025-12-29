@@ -220,7 +220,7 @@ int main(int argCount, char** args) {
             char message[MESSAGE_BUFFER_SIZE] = { 0 };
             int bytesReceived = recv(client, message, MESSAGE_BUFFER_SIZE, 0);
             if (bytesReceived == SOCKET_ERROR) {
-                cerr << "Failed to receive data from the server. Error code: " << WSAGetLastError() << "." << endl;
+                cerr << "Failed to receive data from the server. Error code: " << WSAGetLastError() << "." << endl; //TESTCASE: Error 10054 (WSAECONNRESET) when the server closes and we're still waiting here with recv(...).
                 goto ClientEnd;
             }
             cout << "Successfully received a message from the server at 127.0.0.1:8085 containing " << bytesReceived << " bytes!\n    ";

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SocketsExample": {
+      "commandName": "Project",
+      "commandLineArgs": "--udp"
+    }
+  }
+}

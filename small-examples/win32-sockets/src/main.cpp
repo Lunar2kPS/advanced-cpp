@@ -3,18 +3,27 @@
 #include <WS2tcpip.h> //Windows Sockets TCP/IP header. Contains inet_ntop + inet_pton helper functions to convert between Network and Presentation representation (binary and string, respectively) of IP addresses.
 
 using std::cout;
+using std::cin;
 using std::cerr;
 using std::endl;
+using std::flush;
 
 bool tryGetCLIArg(int argCount, char** args, const char* name);
 
+//COMMAND LINE USAGE:
+//  ./Win32SocketsExample.exe [--server] [--udp]
+//  The program defaults to being a CLIENT, and using TCP. However, you may mix and match, and use the SERVER program with the --server option, and in either case, change it to use UDP with the --udp option.
 int main(int argCount, char** args) {
     bool isClient = true; //NOTE: This program is a client by default.
     if (tryGetCLIArg(argCount, args, "--server"))
         isClient = false;
     bool isServer = !isClient;
 
-    cout << "Win32 Sockets Example Program!" << (isClient ? " (CLIENT)" : "") << (isServer ? " (SERVER)" : "") << endl;
+    bool useTCP = true; //NOTE: This program uses TCP by default.
+    if (tryGetCLIArg(argCount, args, "--udp"))
+        useTCP = false;
+
+    cout << "Win32 Sockets Example Program!" << (isClient ? " (CLIENT)" : "") << (isServer ? " (SERVER)" : "") << (useTCP ? " (TCP)" : "") << endl;
     for (int i = 0; i < argCount; i++) {
         cout << "    args[" << i << "] = " << args[i] << "\n";
     }
@@ -95,7 +104,7 @@ int main(int argCount, char** args) {
         //  Also, we can use the following:
         //  getsockname(...)    Gets local address/port of a socket.
         //  getpeername(...)    Gets remote address/port of a socket.
-        sockaddr_in clientInfo = { };
+        sockaddr_in clientInfo;
         int clientInfoLength = sizeof(clientInfo);
         SOCKET client = accept(server, (sockaddr*) &clientInfo, &clientInfoLength); //NOTE: We pass null because we don't have any filter for what client address (or etc.) we want to accept.
         if (client == INVALID_SOCKET) {
@@ -108,12 +117,37 @@ int main(int argCount, char** args) {
         inet_ntop(AF_INET, &(clientInfo.sin_addr), ipString, INET_ADDRSTRLEN); //Internal Network (binary) to Presentation format
 
         cout << "Successfully accepted a client from " << ipString << ":" << (int) ntohs(clientInfo.sin_port) << "!" << endl;
-
+//0123456789ABCDEF
         //STEP 6 on SERVER: Send and receive data
         //  (vaguely. Is it the same as the client below?)
 
+        if (useTCP) {
+            //NOTE: TCP ONLY ALLOWS sending data when a connection between a client AND server is established -- so we CANNOT send TCP data over the "server" socket, ONLY on the duplicated, connected "client" socket here on the SERVER.
+            const int MESSAGE_BUFFER_SIZE = 16; //NOTE: This means if the buffer size is 16, the max message length (strlen) is actually 15, due to the required NUL terminator as the 16th character. This is consistent with cin.getline(...) behavior.
+            char message[MESSAGE_BUFFER_SIZE] = { 0 };
+            cout << "[SERVER] Enter your message: " << flush;
+            cin.getline(message, MESSAGE_BUFFER_SIZE);
+            int messageLength = strlen(message);
+            cout << "You entered " << messageLength << " / " << MESSAGE_BUFFER_SIZE << " bytes." << endl;
+
+            //NOTE: I noticed the client was able to successfully closesocket(...) from their end, and the SERVER here called send(...), but OUR side still thought it was successful and returned 16 (16 bytes sent).
+            //  I later tested the same way, but waiting significantly (minutes) longer before sending the data, and THEN we (the SERVER) were able to get a 10053 WSA error (WSAECONNABORTED (See: https://learn.microsoft.com/en-us/windows/win32/winsock/windows-sockets-error-codes-2)).
+            //NOTE: strlen(...) is the length of the string WITHOUT the NUL terminator, so +1 here to ensure we send a NUL terminator. cin.getline(...) will always ensure a NUL is at the last char of our message buffer if it WOULD have overflowed from long user input, so we're GOOD!
+            int bytesSent = send(client, message, messageLength + 1, 0);
+            if (bytesSent == SOCKET_ERROR) {
+                if (bytesSent == WSAECONNABORTED) {
+                    cout << "The client likely closed the connection from their end already." << endl;
+                } else {
+                    cerr << "Failed to send data to client at " << ipString << ":" << (int) ntohs(clientInfo.sin_port) << ": Error code: " << WSAGetLastError() << "." << endl;
+                }
+                goto ServerEnd;
+            }
+            cout << "Sent " << bytesSent << " bytes to client at " << ipString << ":" << (int) ntohs(clientInfo.sin_port) << "." << endl;
+        }
+
         //STEP 7 on SERVER: Close the socket
         //  or equivalently, you may check if closesocket(...) == SOCKET_ERROR (-1)
+        ServerEnd:
         if (closesocket(server) != 0) {
             cerr << "Failed to gracefully close server listening socket. Error code: " << WSAGetLastError() << "." << endl;
             delayedExitCode = 507;
@@ -144,9 +178,28 @@ int main(int argCount, char** args) {
         }
         cout << "Successfully connected to the server at 127.0.0.1:8085!" << endl;
 
+        sockaddr_in clientInfo;
+        int clientInfoLength = sizeof(clientInfo);
+        getsockname(client, (sockaddr*) &clientInfo, &clientInfoLength);
+
+        char ipString[INET_ADDRSTRLEN]; //NOTE: This requires WS2tcpip.h
+        inet_ntop(AF_INET, &(clientInfo.sin_addr), ipString, INET_ADDRSTRLEN);
+        cout << "The client automatically bound to " << ipString << ":" << (int) ntohs(clientInfo.sin_port) << "!" << endl;
+
         //STEP 4 on CLIENT: Send and receive data
         //  (recv, send, recvfrom, sendto)
+        const int MESSAGE_BUFFER_SIZE = 16;
+        char message[MESSAGE_BUFFER_SIZE] = { 0 };
+        int bytesReceived = recv(client, message, MESSAGE_BUFFER_SIZE, 0);
+        if (bytesReceived == SOCKET_ERROR) {
+            cerr << "Failed to receive data from the server. Error code: " << WSAGetLastError() << "." << endl;
+            goto ClientEnd;
+        }
+        cout << "Successfully received a message containing " << bytesReceived << " bytes!\n    ";
+        cout.write(message, bytesReceived);
+        cout << endl;
 
+        ClientEnd:
         //STEP 5 on CLIENT: Close the socket
         if (closesocket(client) != 0) {
             cerr << "Failed to gracefully close client socket. Error code: " << WSAGetLastError() << "." << endl;

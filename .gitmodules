@@ -10,3 +10,6 @@
 [submodule "libraries/glfw"]
 	path = libraries/glfw
 	url = https://github.com/glfw/glfw
+[submodule "libraries/lua"]
+	path = libraries/lua
+	url = https://github.com/lua/lua

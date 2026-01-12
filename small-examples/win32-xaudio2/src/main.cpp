@@ -10,7 +10,9 @@ using std::cout;
 using std::cerr;
 using std::cin;
 using std::endl;
+using std::ios;
 using std::ifstream;
+using std::streampos;
 using std::ios;
 using std::string;
 using std::strncmp;
@@ -75,7 +77,7 @@ struct MainProgramData {
 
     ~MainProgramData() {
         if (voice != nullptr)
-        voice->DestroyVoice();
+            voice->DestroyVoice();
         if (master != nullptr)
             master->DestroyVoice();
         if (audio != nullptr)
@@ -84,7 +86,7 @@ struct MainProgramData {
         if (audioData != nullptr)
             delete[] audioData;
         if (initializedXAudio2)
-        CoUninitialize();
+            CoUninitialize();
     }
 };
 
@@ -101,8 +103,16 @@ bool loadWavFile(const char* filePath, WavHeader* result, BYTE** data) {
         return false;
     }
 
-    *data = new BYTE[result->dataSize];
-    file.read(reinterpret_cast<char*>(*data), result->dataSize);
+    streampos dataStartPos = file.tellg();
+    file.seekg(0, ios::end);
+    streampos endPos = file.tellg();
+    file.seekg(dataStartPos);
+
+    size_t remainingBytes = static_cast<size_t>(endPos - dataStartPos);
+    size_t bytesToRead = (result->dataSize == 0 || result->dataSize < remainingBytes) ? remainingBytes : result->dataSize;
+
+    *data = new BYTE[bytesToRead];
+    file.read(reinterpret_cast<char*>(*data), bytesToRead);
     file.close();
 
     return true;
@@ -115,7 +125,7 @@ int main() {
         //NOTE: Required for XAudio2
         HRESULT result = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
         if (result != S_OK) {
-            cerr << "Failed to initialize XAudio2." << endl;
+            cerr << "Failed to initialize Windows COM." << endl;
             throw 1;
         }
         data.initializedXAudio2 = true;

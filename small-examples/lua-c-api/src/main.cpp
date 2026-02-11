@@ -10,6 +10,8 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
+//SEEALSO: https://edw.is/using-lua-with-cpp/
+//SEEALSO: https://www.codingwiththomas.com/blog/a-lua-c-api-cheat-sheet
 int main() {
     lua_State* lua = luaL_newstate();
     luaL_openlibs(lua);

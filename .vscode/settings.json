@@ -21,7 +21,8 @@
         "small-examples/guids/library",
         "small-examples/dynamic-libraries/library",
         "small-examples/dynamic-libraries/src",
-        "small-examples/x11-windowing/libraries/glad/include"
+        "small-examples/x11-windowing/libraries/glad/include",
+        "C:/Program Files (x86)/aws-cpp-sdk-all/include"
     ],
     "dotnet.defaultSolution": "disable"
 }

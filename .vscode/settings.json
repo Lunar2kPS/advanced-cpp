@@ -24,5 +24,8 @@
         "small-examples/x11-windowing/libraries/glad/include",
         "C:/Program Files (x86)/aws-cpp-sdk-all/include"
     ],
+    "Lua.diagnostics.disable": [
+        "lowercase-global"
+    ],
     "dotnet.defaultSolution": "disable"
 }

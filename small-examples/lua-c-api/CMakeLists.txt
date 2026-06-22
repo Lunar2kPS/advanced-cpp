@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.19)
-project("LuaExample")
+project("LuaExample" VERSION 1.0.0 LANGUAGES C)
 
-set(CXX_STANDARD 20)
-set(CXX_STANDARD_REQUIRED True)
+set(CMAKE_C_STANDARD 23) # NOTE: C standards include C17 and C23. There is no C20 like there is C++20.
+set(CMAKE_C_STANDARD_REQUIRED True)
 
-file(GLOB_RECURSE SRC_FILES "src/*.cpp")
+file(GLOB_RECURSE SRC_FILES "src/*.c")
 add_executable("${PROJECT_NAME}" "${SRC_FILES}")
 
 # Resources-like file that gets copied alongside the build executable:

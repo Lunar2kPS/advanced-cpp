@@ -10,6 +10,7 @@ void printLuaStackContents(lua_State* lua);
 //SEE: Lua C API YouTube Tutorial Series: https://www.youtube.com/watch?v=xrLQ0OXfjaI&list=PLLwK93hM93Z3nhfJyRRWGRXHaXgNX0Itk
 void example3LuaStack();
 void example4LuaFunctions();
+void example5LuaFunctionParams();
 
 void customExampleLuaFile();
 
@@ -21,6 +22,7 @@ int main() {
     printf("--- %s ---\n", LUA_VERSION);
     example3LuaStack();
     example4LuaFunctions();
+    example5LuaFunctionParams();
     customExampleLuaFile();
     return 0;
 }
@@ -92,8 +94,8 @@ void example4LuaFunctions() {
     printf("\n--- Lua Example 4: Functions ---\n");
     
     lua_State* lua = luaL_newstate();
-    const char* fileName = "lua/Example 4 - Functions.lua";
-    if (luaL_dofile(lua, fileName) == LUA_OK) {
+    const char* filePath = "lua/Example 4 - Functions.lua";
+    if (luaL_dofile(lua, filePath) == LUA_OK) {
         printLuaStackContents(lua);
         lua_getglobal(lua, "return4"); //+1 on stack (function)
         printLuaStackContents(lua);
@@ -111,15 +113,40 @@ void example4LuaFunctions() {
             //  function
             //FORM: lua_pcall(lua_State* L, int nargs, int nresults, int msgh);
             lua_pcall(lua, 0, 1, 0);    //-1 on stack (function)
-                                        //+1 on stack (int (return value))
+                                        //+1 on stack (int -- return value)
             printLuaStackContents(lua);
             int result = lua_tointeger(lua, -1);
             printf("return4() => %d\n", result);
-            lua_remove(lua, -1); //-1 on stack (int (return value))
+            lua_remove(lua, -1); //-1 on stack (int -- return value)
         }
     } else {
         const char* error = lua_tostring(lua, -1);
-        fprintf(stderr, "An error occurred while trying to run %s! %s\n", fileName, error);
+        fprintf(stderr, "An error occurred while trying to run %s! %s\n", filePath, error);
+    }
+    lua_close(lua);
+}
+
+void example5LuaFunctionParams() {
+    printf("\n--- Lua Example 5: Function Parameters ---\n");
+
+    lua_State* lua = luaL_newstate();
+    const char* filePath = "lua/Example 5 - Function Params.lua";
+    if (luaL_dofile(lua, filePath) == LUA_OK) {
+        lua_getglobal(lua, "pythagoras"); //+1 on stack (function)
+        const int ARG_COUNT = 2;
+        const int RETURN_COUNT = 1;
+        lua_pushnumber(lua, 3); //+1 on stack (int)
+        lua_pushnumber(lua, 4); //+1 on stack (int)
+        printLuaStackContents(lua);
+        lua_pcall(lua, ARG_COUNT, RETURN_COUNT, 0); //-3 on stack (function, int, int)
+                                                    //+1 on stack (int -- return value)
+        printLuaStackContents(lua);
+        int result = lua_tointeger(lua, -1);
+        lua_remove(lua, -1);
+        printf("pythagoras(3, 4) => %d\n", result);
+    } else {
+        const char* error = lua_tostring(lua, -1);
+        fprintf(stderr, "An error occurred while trying to run %s! %s\n", filePath, error);
     }
     lua_close(lua);
 }
@@ -134,8 +161,8 @@ void customExampleLuaFile() {
     lua_pushinteger(lua, 64); //This pushes a value (64) onto the stack.
     lua_setglobal(lua, "otherValue"); //This pops the value from the stack and assigns it to a variable in the Lua state.
 
-    const char* fileName = "lua/Custom Example.lua";
-    if (luaL_dofile(lua, fileName) == LUA_OK) {
+    const char* filePath = "lua/Custom Example.lua";
+    if (luaL_dofile(lua, filePath) == LUA_OK) {
         printLuaStackContents(lua);
 
         //NOTE: This is an example of GETTING variables previously-set from Lua:
@@ -145,7 +172,7 @@ void customExampleLuaFile() {
         printf("(C++) hp = %d", hp);
     } else {
         const char* error = lua_tostring(lua, -1);
-        fprintf(stderr, "An error occurred while trying to run %s! %s\n", fileName, error);
+        fprintf(stderr, "An error occurred while trying to run %s! %s\n", filePath, error);
         lua_pop(lua, 1);
     }
     lua_close(lua);

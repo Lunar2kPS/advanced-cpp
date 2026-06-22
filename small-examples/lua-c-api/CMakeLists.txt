@@ -10,6 +10,7 @@ add_executable("${PROJECT_NAME}" "${SRC_FILES}")
 # Resource files that get copied alongside the build executable:
 set(RESOURCE_FILES
     "lua/Example 4 - Functions.lua"
+    "lua/Example 5 - Function Params.lua"
     "lua/Custom Example.lua"
 )
 

@@ -7,13 +7,29 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 file(GLOB_RECURSE SRC_FILES "src/*.c")
 add_executable("${PROJECT_NAME}" "${SRC_FILES}")
 
-# Resources-like file that gets copied alongside the build executable:
-message(STATUS "Copying example.lua...")
-configure_file(
-    "${PROJECT_SOURCE_DIR}/example.lua"
-    "${PROJECT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/example.lua"
-    COPYONLY
+# Resource files that get copied alongside the build executable:
+set(RESOURCE_FILES
+    "lua/Example 4 - Functions.lua"
+    "lua/Custom Example.lua"
 )
+
+foreach (resourceFile ${RESOURCE_FILES})
+    message(STATUS "    + ${resourceFile}")
+    # NOTE: Don't use this, because this is for config headers, version files, templated scripts, or other static assets that DON'T depend on the final build output location.
+    # configure_file(
+    #     "${PROJECT_SOURCE_DIR}/${resourceFile}"
+    #     "${PROJECT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${resourceFile}"
+    #     COPYONLY
+    # )
+
+    # NOTE: Use THIS when you DO want assets next to final binary(ies), including game data, shaders, lua scripts, DLLs, or anything else next to the executable that it loads at runtime:
+    add_custom_command(TARGET "${PROJECT_NAME}" POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${PROJECT_SOURCE_DIR}/${resourceFile}"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/${resourceFile}"
+        && ${CMAKE_COMMAND} -E echo "    + ${resourceFile}" # NOTE: COMMENT does not support newline (\n) characters, so we do this echo command instead, one-per-line/file.
+    )
+endforeach()
 
 include("../SmallExamples.cmake")
 

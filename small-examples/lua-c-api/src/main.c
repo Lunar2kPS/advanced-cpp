@@ -6,11 +6,13 @@
 
 //Helpers:
 void printLuaStackContents(lua_State* lua);
+int nativePythagoras(lua_State* lua);
 
 //SEE: Lua C API YouTube Tutorial Series: https://www.youtube.com/watch?v=xrLQ0OXfjaI&list=PLLwK93hM93Z3nhfJyRRWGRXHaXgNX0Itk
 void example3LuaStack();
 void example4LuaFunctions();
 void example5LuaFunctionParams();
+void example6LuaNativeFunctions();
 
 void customExampleLuaFile();
 
@@ -23,6 +25,7 @@ int main() {
     example3LuaStack();
     example4LuaFunctions();
     example5LuaFunctionParams();
+    example6LuaNativeFunctions();
     customExampleLuaFile();
     return 0;
 }
@@ -67,6 +70,13 @@ void printLuaStackContents(lua_State* lua) {
                 break;
         }
     }
+}
+
+int nativePythagoras(lua_State* lua) {
+    lua_Number a = lua_tonumber(lua, -2);
+    lua_Number b = lua_tonumber(lua, -1);
+    lua_pushnumber(lua, (a * a ) + (b * b));
+    return 1;
 }
 
 void example3LuaStack() {
@@ -144,6 +154,42 @@ void example5LuaFunctionParams() {
         int result = lua_tointeger(lua, -1);
         lua_remove(lua, -1);
         printf("pythagoras(3, 4) => %d\n", result);
+    } else {
+        const char* error = lua_tostring(lua, -1);
+        fprintf(stderr, "An error occurred while trying to run %s! %s\n", filePath, error);
+    }
+    lua_close(lua);
+}
+
+void example6LuaNativeFunctions() {
+    printf("\n--- Lua Example 6: Native Functions ---\n");
+
+    lua_State* lua = luaL_newstate();
+
+    lua_pushcfunction(lua, nativePythagoras); //+1 on stack (function)
+    printLuaStackContents(lua);
+    lua_setglobal(lua, "nativePythagoras"); //-1 on stack (function)
+    printLuaStackContents(lua);
+
+    const char* filePath = "lua/Example 6 - Native Functions.lua";
+    if (luaL_dofile(lua, filePath) == LUA_OK) {
+        lua_getglobal(lua, "pythagoras"); //+1 on stack (function)
+        const int ARG_COUNT = 2;
+        const int RETURN_COUNT = 3;
+        lua_pushnumber(lua, 3); //+1 on stack (int)
+        lua_pushnumber(lua, 4); //+1 on stack (int)
+        printf("About to lua_pcall(lua, %d, %d, 0)\n", ARG_COUNT, RETURN_COUNT);
+        printLuaStackContents(lua);
+        lua_pcall(lua, ARG_COUNT, RETURN_COUNT, 0); //-3 on stack (function, int, int)
+                                                    //+3 on stack (number, number, number -- return values)
+        printf("post-lua_pcall(...):\n");
+        printLuaStackContents(lua);
+        float c = lua_tonumber(lua, -3);
+        float a = lua_tonumber(lua, -2);
+        float b = lua_tonumber(lua, -1);
+        lua_pop(lua, 3);
+        printf("pythagoras(%.2f, %.2f) => %.2f\n", a, b, c);
+        printLuaStackContents(lua);
     } else {
         const char* error = lua_tostring(lua, -1);
         fprintf(stderr, "An error occurred while trying to run %s! %s\n", filePath, error);

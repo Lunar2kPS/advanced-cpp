@@ -11,6 +11,7 @@ add_executable("${PROJECT_NAME}" "${SRC_FILES}")
 set(RESOURCE_FILES
     "lua/Example 4 - Functions.lua"
     "lua/Example 5 - Function Params.lua"
+    "lua/Example 6 - Native Functions.lua"
     "lua/Custom Example.lua"
 )
 

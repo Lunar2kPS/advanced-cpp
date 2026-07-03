@@ -18,6 +18,7 @@ void example4LuaFunctions();
 void example5LuaFunctionParams();
 void example6LuaNativeFunctions();
 void example7LuaNativeTypes();
+void example8LuaTables();
 
 //SEEALSO: Lua 5.5 Manual: https://lua.org/manual/5.5/
 //  This includes the Lua 5.5 C API reference.
@@ -31,6 +32,7 @@ int main() {
     example5LuaFunctionParams();
     example6LuaNativeFunctions();
     example7LuaNativeTypes();
+    example8LuaTables();
     return 0;
 }
 
@@ -279,6 +281,46 @@ void example7LuaNativeTypes() {
             lua_pop(lua, 1);
             printLuaStackContents(lua);
         }
+    }
+    lua_close(lua);
+}
+
+void example8LuaTables() {
+    printf("\n--- Lua Example 8: Tables ---\n");
+
+    lua_State* lua = luaL_newstate();
+    
+    const char* filePath = "lua/Example 8 - Tables.lua";
+    if (luaL_dofile(lua, filePath) == LUA_OK) {
+        lua_getglobal(lua, "exampleTable"); //+1 on stack (table)
+        printLuaStackContents(lua);
+        lua_pushstring(lua, "name"); //+1 on stack (string)
+        printLuaStackContents(lua);
+
+        //NOTE: This expects the following on the stack:
+        //  (table, propertyKey)
+        lua_gettable(lua, -2);  //-1 on stack (string)
+                                //+1 on stack (string)
+        printLuaStackContents(lua);
+        lua_pop(lua, 2);
+
+        //An alternative, slightly-simpler syntax to get a table property:
+        lua_getglobal(lua, "exampleTable");
+        lua_getfield(lua, -1, "age");
+        printLuaStackContents(lua);
+        lua_pop(lua, 2);
+
+        lua_getglobal(lua, "exampleTable"); //+1 on stack (table)
+        lua_pushinteger(lua, 29); //+1 on stack (int)
+        lua_setfield(lua, -2, "age"); //-1 on stack (int)
+        printLuaStackContents(lua);
+        lua_pop(lua, 1);
+
+        lua_getglobal(lua, "exampleTable");
+        lua_getfield(lua, -1, "age");
+        printf("Age is now set to %lld!\n", lua_tointeger(lua, -1));
+        printLuaStackContents(lua);
+        lua_pop(lua, 2);
     }
     lua_close(lua);
 }

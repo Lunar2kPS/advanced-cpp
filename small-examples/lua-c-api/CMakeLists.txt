@@ -8,13 +8,7 @@ file(GLOB_RECURSE SRC_FILES "src/*.c")
 add_executable("${PROJECT_NAME}" "${SRC_FILES}")
 
 # Resource files that get copied alongside the build executable:
-set(RESOURCE_FILES
-    "lua/Custom Example.lua"
-    "lua/Example 4 - Functions.lua"
-    "lua/Example 5 - Function Params.lua"
-    "lua/Example 6 - Native Functions.lua"
-    "lua/Example 7 - Native Types.lua"
-)
+file(GLOB_RECURSE RESOURCE_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "lua/*.lua")
 
 foreach (resourceFile ${RESOURCE_FILES})
     message(STATUS "    + ${resourceFile}")

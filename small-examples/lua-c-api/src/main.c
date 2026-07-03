@@ -4,17 +4,20 @@
 #include "lua/lauxlib.h"
 #include "lua/lualib.h"
 
+void customExampleLuaFile();
+
 //Helpers:
 void printLuaStackContents(lua_State* lua);
 int nativePythagoras(lua_State* lua);
+int createSprite(lua_State* lua);
+int setSprite(lua_State* lua);
 
 //SEE: Lua C API YouTube Tutorial Series: https://www.youtube.com/watch?v=xrLQ0OXfjaI&list=PLLwK93hM93Z3nhfJyRRWGRXHaXgNX0Itk
 void example3LuaStack();
 void example4LuaFunctions();
 void example5LuaFunctionParams();
 void example6LuaNativeFunctions();
-
-void customExampleLuaFile();
+void example7LuaNativeTypes();
 
 //SEEALSO: Lua 5.5 Manual: https://lua.org/manual/5.5/
 //  This includes the Lua 5.5 C API reference.
@@ -22,12 +25,40 @@ void customExampleLuaFile();
 //SEEALSO: https://www.codingwiththomas.com/blog/a-lua-c-api-cheat-sheet
 int main() {
     printf("--- %s ---\n", LUA_VERSION);
+    customExampleLuaFile();
     example3LuaStack();
     example4LuaFunctions();
     example5LuaFunctionParams();
     example6LuaNativeFunctions();
-    customExampleLuaFile();
+    example7LuaNativeTypes();
     return 0;
+}
+
+void customExampleLuaFile() {
+    printf("\n--- (Custom) Lua File Example! ---\n");
+
+    lua_State* lua = luaL_newstate();
+    luaL_openlibs(lua);
+
+    //NOTE: This is an example of SETTING variables from C++:
+    lua_pushinteger(lua, 64); //This pushes a value (64) onto the stack.
+    lua_setglobal(lua, "otherValue"); //This pops the value from the stack and assigns it to a variable in the Lua state.
+
+    const char* filePath = "lua/Custom Example.lua";
+    if (luaL_dofile(lua, filePath) == LUA_OK) {
+        printLuaStackContents(lua);
+
+        //NOTE: This is an example of GETTING variables previously-set from Lua:
+        lua_getglobal(lua, "hp");
+        int hp = (int) lua_tointeger(lua, -1); //This takes a value from the top of the stack (-1) as an integer, WITHOUT popping it off the stack.
+        lua_pop(lua, 1); //This takes ONE value off of the top of the stack.
+        printf("(C++) hp = %d", hp);
+    } else {
+        const char* error = lua_tostring(lua, -1);
+        fprintf(stderr, "An error occurred while trying to run %s! %s\n", filePath, error);
+        lua_pop(lua, 1);
+    }
+    lua_close(lua);
 }
 
 void printLuaStackContents(lua_State* lua) {
@@ -77,6 +108,34 @@ int nativePythagoras(lua_State* lua) {
     lua_Number b = lua_tonumber(lua, -1);
     lua_pushnumber(lua, (a * a ) + (b * b));
     return 1;
+}
+
+//NOTE: If you only define it as `struct Sprite { ... };`, then you have to write `struct Sprite` everywhere it's used in C!
+//  Therefore, let's use a typedef to let C know that we can just write the type name `Sprite` everywhere instead:
+typedef struct Sprite {
+    int x;
+    int y;
+} Sprite;
+
+void Sprite_set(Sprite* this, int x, int y) {
+    this->x = x;
+    this->y = y;
+}
+
+int createSprite(lua_State* lua) {
+    //NOTE: Lua manages the memory FOR us! GC'd in the lua_State.
+    Sprite* sprite = (Sprite*) lua_newuserdata(lua, sizeof(Sprite)); //+1 on stack (userdata)
+    sprite->x = 0;
+    sprite->y = 0;
+    return 1;
+}
+
+int setSprite(lua_State* lua) {
+    Sprite* sprite = (Sprite*) lua_touserdata(lua, -3);
+    int x = lua_tointeger(lua, -2);
+    int y = lua_tointeger(lua, -1);
+    Sprite_set(sprite, x, y);
+    return 0;
 }
 
 void example3LuaStack() {
@@ -197,29 +256,29 @@ void example6LuaNativeFunctions() {
     lua_close(lua);
 }
 
-void customExampleLuaFile() {
-    printf("\n--- (Custom) Lua File Example! ---\n");
+void example7LuaNativeTypes() {
+    printf("\n--- Lua Example 7: Native Types ---\n");
 
     lua_State* lua = luaL_newstate();
-    luaL_openlibs(lua);
 
-    //NOTE: This is an example of SETTING variables from C++:
-    lua_pushinteger(lua, 64); //This pushes a value (64) onto the stack.
-    lua_setglobal(lua, "otherValue"); //This pops the value from the stack and assigns it to a variable in the Lua state.
+    lua_pushcfunction(lua, createSprite); //+1 on stack (function)
+    lua_setglobal(lua, "createSprite"); //-1 on stack (function)
+    lua_pushcfunction(lua, setSprite); //+1 on stack (function)
+    lua_setglobal(lua, "setSprite"); //-1 on stack (function)
 
-    const char* filePath = "lua/Custom Example.lua";
+    printLuaStackContents(lua);
+
+    const char* filePath = "lua/Example 7 - Native Types.lua";
     if (luaL_dofile(lua, filePath) == LUA_OK) {
+        lua_getglobal(lua, "sprite");
         printLuaStackContents(lua);
 
-        //NOTE: This is an example of GETTING variables previously-set from Lua:
-        lua_getglobal(lua, "hp");
-        int hp = (int) lua_tointeger(lua, -1); //This takes a value from the top of the stack (-1) as an integer, WITHOUT popping it off the stack.
-        lua_pop(lua, 1); //This takes ONE value off of the top of the stack.
-        printf("(C++) hp = %d", hp);
-    } else {
-        const char* error = lua_tostring(lua, -1);
-        fprintf(stderr, "An error occurred while trying to run %s! %s\n", filePath, error);
-        lua_pop(lua, 1);
+        if (lua_isuserdata(lua, -1)) {
+            Sprite* sprite = (Sprite*) lua_touserdata(lua, -1);
+            printf("Created a Sprite* from Lua with coordinates (%d, %d)!\n", sprite->x, sprite->y);
+            lua_pop(lua, 1);
+            printLuaStackContents(lua);
+        }
     }
     lua_close(lua);
 }

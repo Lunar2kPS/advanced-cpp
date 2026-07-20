@@ -63,6 +63,10 @@ void customExampleLuaFile() {
     lua_close(lua);
 }
 
+//The Lua stack operates 2 ways:
+//  Given stackSize = lua_gettop(lua),
+//      index -1 starts at the top of the stack (the first to be removed next), going down to -stackSize (inclusive) as the bottom of the stack.
+//      index 1 starts at the bottom of the stack, going up to stackSize (inclusive) as the top of the stack.
 void printLuaStackContents(lua_State* lua) {
     int stackSize = lua_gettop(lua);
     printf("Stack size: %d\n", stackSize);
@@ -292,29 +296,42 @@ void example8LuaTables() {
     
     const char* filePath = "lua/Example 8 - Tables.lua";
     if (luaL_dofile(lua, filePath) == LUA_OK) {
-        lua_getglobal(lua, "exampleTable"); //+1 on stack (table)
+        printf("Initial state after evaluating the file:\n");
         printLuaStackContents(lua);
+        printf("\n");
+
+        lua_getglobal(lua, "exampleTable"); //+1 on stack (table)
+        printf("We put the table on the stack with lua_getglobal(lua, \"exampleTable\"):\n");
+        printLuaStackContents(lua);
+        printf("\n");
+        
+        printf("Then, we push the field name onto the stack that we want to get the value of (lua_pushstring(lua, \"name\")):\n");
         lua_pushstring(lua, "name"); //+1 on stack (string)
         printLuaStackContents(lua);
+        printf("\n");
 
+        printf("Now, we can get a table property with lua_gettable(lua, -2):\n");
         //NOTE: This expects the following on the stack:
         //  (table, propertyKey)
         lua_gettable(lua, -2);  //-1 on stack (string)
                                 //+1 on stack (string)
         printLuaStackContents(lua);
         lua_pop(lua, 2);
+        printf("--- --- ---\n\n");
 
-        //An alternative, slightly-simpler syntax to get a table property:
+        printf("An alternative, slightly-simpler syntax to get a table property uses:\n    lua_getglobal(lua, \"exampleTable\");\n    lua_getfield(lua, -1, \"age\");\n");
         lua_getglobal(lua, "exampleTable");
         lua_getfield(lua, -1, "age");
         printLuaStackContents(lua);
         lua_pop(lua, 2);
+        printf("--- --- ---\n\n");
 
+        printf("We can SET a field with:\n    lua_getglobal(lua, \"exampleTable\");\n    lua_pushinteger(lua, 29);\n    lua_setfield(lua, -2, \"age\");\n");
         lua_getglobal(lua, "exampleTable"); //+1 on stack (table)
         lua_pushinteger(lua, 29); //+1 on stack (int)
         lua_setfield(lua, -2, "age"); //-1 on stack (int)
-        printLuaStackContents(lua);
         lua_pop(lua, 1);
+        printf("--- --- ---\n\n");
 
         lua_getglobal(lua, "exampleTable");
         lua_getfield(lua, -1, "age");
